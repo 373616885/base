@@ -86,6 +86,14 @@ apt-get install openssh-server
 apt-get install vim
 ```
 
+
+
+#### 编辑sshd_config文件
+
+```shell
+vim /etc/ssh/sshd_config
+```
+
 修改：
 
 PermitRootLogin yes
