@@ -158,3 +158,17 @@ docker run --name ubuntu-qin -it -d -p 3316:22 ubuntu-qin:20.04
 
 
 
+### 下载MobaXterm
+
+https://mobaxterm.mobatek.net/download-home-edition.html
+
+
+
+### 链接
+
+IP: 127.0.0.1
+
+port : 3316
+
+
+
