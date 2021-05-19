@@ -88,7 +88,7 @@ apt-get install vim
 
 
 
-#### 编辑sshd_config文件
+### 编辑sshd_config文件
 
 ```shell
 vim /etc/ssh/sshd_config
