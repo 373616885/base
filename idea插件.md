@@ -54,10 +54,24 @@
 添加如下内容到最后一行
 
 ```
-     -Drecreate.x11.input.method=true
+-Drecreate.x11.input.method=true
 ```
 
+### IDEA控制台中文乱码解决
 
+点击菜单 "Help | Edit Custom VM options..."
+
+```
+-Dfile.encoding=UTF-8
+```
+
+IntelliJ IDEA>File>Setting>Editor>File Encodings，将Global Encoding、Project Encoding、Default encodeing for properties files这三项都设置成UTF-8
+
+vm option参数为： -Dfile.encoding=utf-8
+
+Build and run     -->  Modify opotions --> add  vm options
+
+run->Edit Configrations，设置 vm option为 -Dfile.encoding=utf-8
 
 
 
