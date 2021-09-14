@@ -35,7 +35,7 @@
 
 ## aixcoder   代码提示
 
-### jclasslib Bytecode viewer  查看汇编的插件 view 中可以看到show bytecode
+### jclasslib Bytecode viewer  查看汇编的插件 view 中可以看到show bytecode (javap)
 
 ### VisualVM Launcher
 
@@ -44,6 +44,10 @@
 ###  AllFormat  格式化插件
 
 # MybatisLog   將mybatis 控制台的sql 打印
+
+### GenerateAllSetter 自动生成set方法
+
+
 
 
 
@@ -74,6 +78,17 @@ Build and run     -->  Modify opotions --> add  vm options
 run->Edit Configrations，设置 vm option为 -Dfile.encoding=utf-8
 
 
+
+
+
+java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dfile.encoding=UTF-8 -jar app.jar
+
+-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps
+
+-Xlog:gc* -Xlog:gc+region=trace -Xlog:gc+heap=trace -Xlog:task*=debug
+
+
+-Duser.timezone=GMT+08, -Dfile.encoding=UTF-8
 
 
 
