@@ -47,7 +47,7 @@
 
 ### GenerateAllSetter 自动生成set方法
 
-
+### any-rule 基于IDEA平台的常用正则表达式插件
 
 
 
