@@ -1,4 +1,4 @@
-### 升级到Spring 5.3.x之后，使用BeanUtils 导致GC次数急剧增加
+### 升级到Spring 5.3.x之后，使用BeanUtils 导致性能下降，GC次数急剧增加
 
 从 Spring 5.3.x 开始，BeanUtils  开始通过创建 ResolvableType这个 进行属性复制
 
