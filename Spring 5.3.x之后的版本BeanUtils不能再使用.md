@@ -261,8 +261,9 @@ https://github.com/spring-projects/spring-framework/issues/27246
 
 BeanUtils.copyProperties 的地方，替换成使用 BeanCopier，并且封装了一个简单类：
 
-```
+```java
 public class BeanUtils {
+    
     private static final Cache<String, BeanCopier> CACHE = Caffeine.newBuilder().build();
 
     public static void copyProperties(Object source, Object target) {
@@ -274,6 +275,16 @@ public class BeanUtils {
         beanCopier.copy(source, target, null);
     }
 }
+
+耗时：性能相对最好
+StopWatch '': running time = 1076779400 ns
+---------------------------------------------
+ns         %     Task name
+---------------------------------------------
+1076779400  100%  
+
+1076
+
 ```
 
 或者 hutool 的 BeanUtil
@@ -323,6 +334,16 @@ public PropDesc setValue(Object bean, Object value) {
     }
     return this;
 }
+
+hutool BeanUtil 耗时：
+StopWatch '': running time = 8414185100 ns
+---------------------------------------------
+ns         %     Task name
+---------------------------------------------
+8414185100  100%  
+
+8414
+
 
 ```
 
