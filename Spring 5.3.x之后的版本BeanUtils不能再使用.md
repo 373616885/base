@@ -210,7 +210,7 @@ spring-beans 5.2.16.RELEASE 和 spring-beans 5.3.9 这两个依赖去执行这�
 
 最大堆内存是 32m
 
-在内存耗尽之前，**不同版本的** `**BeanUtils.copyProperties**` **分别能执行多少次**
+在内存耗尽之前，**不同版本的** `BeanUtils.copyProperties` **分别能执行多少次**
 
 
 
