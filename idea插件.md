@@ -49,6 +49,10 @@
 
 ### any-rule 基于IDEA平台的常用正则表达式插件
 
+## GitToolBox 在Idea的状态栏显示git状态，还提供了定时fecth等功能
+
+
+
 
 
 ### IDEA 无法输入中文
