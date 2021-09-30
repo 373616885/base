@@ -26,28 +26,28 @@
 
 ## FindBugs
 
-# idea2020.2.2.x搜索：IDE Eval Reset插件进行安装
+## idea2020.2.2.x搜索：IDE Eval Reset插件进行安装
 
-### PMD 是一个开源静态源代码分析器
+## PMD 是一个开源静态源代码分析器
 ## idea2020.2.2.x搜索：IDE Eval Reset插件进行安装
 
 ## Kite AI  代码提示
 
 ## aixcoder   代码提示
 
-### jclasslib Bytecode viewer  查看汇编的插件 view 中可以看到show bytecode (javap)
+## jclasslib Bytecode viewer  查看汇编的插件 view 中可以看到show bytecode (javap)
 
-### VisualVM Launcher
+## VisualVM Launcher
 
 # Git Commit Template  Git Commit提交规范
 
-###  AllFormat  格式化插件
+##  AllFormat  格式化插件
 
-# MybatisLog   將mybatis 控制台的sql 打印
+## MybatisLog   將mybatis 控制台的sql 打印
 
-### GenerateAllSetter 自动生成set方法
+## GenerateAllSetter 自动生成set方法
 
-### any-rule 基于IDEA平台的常用正则表达式插件
+## any-rule 基于IDEA平台的常用正则表达式插件
 
 ## GitToolBox 在Idea的状态栏显示git状态，还提供了定时fecth等功能
 
@@ -55,7 +55,7 @@
 
 
 
-### IDEA 无法输入中文
+## IDEA 无法输入中文
 
 点击菜单 "Help | Edit Custom VM options..."
 
@@ -65,7 +65,7 @@
 -Drecreate.x11.input.method=true
 ```
 
-### IDEA控制台中文乱码解决
+## IDEA控制台中文乱码解决
 
 点击菜单 "Help | Edit Custom VM options..."
 
@@ -83,24 +83,33 @@ run->Edit Configrations，设置 vm option为 -Dfile.encoding=utf-8
 
 
 
-
+## 远程bug
 
 java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dfile.encoding=UTF-8 -jar app.jar
 
+## 开启日志
+
 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps
 
+## JDK 11 开启日志
+
 -Xlog:gc* -Xlog:gc+region=trace -Xlog:gc+heap=trace -Xlog:task*=debug
+
 
 
 -Duser.timezone=GMT+08, -Dfile.encoding=UTF-8
 
 
 
-## 代码学习 https://www.codota.com/code 
+## 代码学习 
 
-## 命名 https://unbug.github.io/codelf/
+## https://www.codota.com/code 
 
->>>>>>> 3e418bdc15c66758ff859341c9168a09ff3356c4
+## https://www.tabnine.com/code
+
+## 命名
+## https://unbug.github.io/codelf/
+
 
 
 
