@@ -126,6 +126,14 @@ Spring 5.3.x 开始，BeanUtils  开始通过创建 ResolvableType这个进行�
 
 
 
+目的：是为了支持泛型  
+
+https://github.com/spring-projects/spring-framework/issues/24187
+
+
+
+
+
 ### 测试
 
 ```java
