@@ -1,5 +1,11 @@
 ### [Mysql中tinyint(1)和tinyint(4)到底有什么区别?](https://my.oschina.net/DavidRicardo/blog/869169)
 
+
+
+### int (1) 和int(10) 也是一样的道理
+
+
+
 答：
 
 存储的方面没有任何关系
