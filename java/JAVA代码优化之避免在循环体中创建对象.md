@@ -180,6 +180,7 @@ Metaspace 方法区： 循环体外比循环体内多了 10K
 **用 javap 寻找原因（个人猜测）**
 
 ```java
+javac -encoding UTF-8 -g:vars Loop.java
 javac -g:vars Loop.java
 javap -v Loop   
     
