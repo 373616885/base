@@ -122,7 +122,7 @@ Editor--General--Auto import --java模块
 
 一个自动删除无用的包
 
-![img\164023856320214.jpg](img\164023856320214.jpg)
+![img/164023856320214.jpg](img\164023856320214.jpg)
 
 
 
@@ -130,7 +130,7 @@ Editor--General--Auto import --java模块
 
 Build,Execution,Deployment--Compiler
 
-![img\2021-12-23-135716.png](img\2021-12-23-135716.png)
+![img/2021-12-23-135716.png](img\2021-12-23-135716.png)
 
 
 
@@ -138,16 +138,16 @@ Build,Execution,Deployment--Compiler
 
 Editor--General--Code Completion
 
-![img\20200416203833802.png](img\20200416203833802.png)
+![img/20200416203833802.png](img\20200416203833802.png)
 
 
 
 ## **双斜杠注释改成紧跟代码头**
 
-![img\20211223140235.jpg](img\20211223140235.jpg)
+![img/20211223140235.jpg](img\20211223140235.jpg)
 
 
 
 ## **优化版本控制的目录颜色展示**
 
-![img\2021-12-23-140604.png](img\2021-12-23-140604.png)
+![img/2021-12-23-140604.png](img\2021-12-23-140604.png)
