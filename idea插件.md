@@ -39,7 +39,7 @@
 
 ## VisualVM Launcher
 
-# Git Commit Template  Git Commit提交规范
+## Git Commit Template  Git Commit提交规范
 
 ##  AllFormat  格式化插件
 
@@ -50,6 +50,8 @@
 ## any-rule 基于IDEA平台的常用正则表达式插件
 
 ## GitToolBox 在Idea的状态栏显示git状态，还提供了定时fecth等功能
+
+## CheckStyle-IDEA插件
 
 
 
@@ -112,10 +114,34 @@ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dfile.e
 
 
 
+## 自动导包
+
+Editor--General--Auto import --java模块
+
+一个自动导包
+
+一个自动删除无用的包
+
+![img\164023856320214.jpg](img\164023856320214.jpg)
 
 
 
+## 自动编译设置
+
+Build,Execution,Deployment--Compiler
+
+![img\2021-12-23-135716.png](img\2021-12-23-135716.png)
 
 
 
+## 不区分大小写提示代码
 
+Editor--General--Code Completion
+
+![img\20200416203833802.png](img\20200416203833802.png)
+
+
+
+## **双斜杠注释改成紧跟代码头**
+
+![img\20211223140235.jpg](img\20211223140235.jpg)
