@@ -53,6 +53,8 @@
 
 ## CheckStyle-IDEA插件
 
+## **BinEd - Binary/Hexadecimal Edito**  二进制/十六进制编辑器
+
 
 
 
