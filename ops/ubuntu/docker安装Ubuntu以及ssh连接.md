@@ -44,6 +44,12 @@ docker ps
 
 ```shell
 docker exec -it iubuntu /bin/bash
+
+
+如果出现：
+the input device is not a TTY.  If you are using mintty, try prefixing the command with 'winpty'
+
+winpty docker exec -it iubuntu bash
 ```
 
 
@@ -99,6 +105,8 @@ vim /etc/ssh/sshd_config
 PermitRootLogin yes
 
 Port 22
+
+PasswordAuthentication yes
 
 保存退出 ESC + : + WQ
 
@@ -177,6 +185,23 @@ https://mobaxterm.mobatek.net/download-home-edition.html
 IP: 127.0.0.1
 
 port : 3316
+
+
+
+
+
+### 无法登录SSH问题-ssh: connect to host localhost port 22: Connection refused
+
+可能没有启动 ： openssh-server
+
+```
+docker exec -it ubuntu-qin /bin/bash
+ps -ef|grep sshd
+service ssh restart
+再次
+ps -ef|grep sshd
+
+```
 
 
 

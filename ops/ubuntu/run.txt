@@ -1,0 +1,17 @@
+docker run --name ubuntu-qin-v1.0 -it -d -p 3316:22 ubuntu-qin:v1.0
+
+docker logs ubuntu-qin-v1.0 
+
+docker build -t ubuntu-qin:v1.0 .
+
+
+mvn clean install -P dev -Dmaven.test.skip=true
+cd ./docker
+// 根据Dockerfile构建镜像
+docker build . -t docker-qin:0.0.1
+// 查看本地images
+docker images 
+// 给镜像重新打标签
+$ docker tag docker-qin:0.0.1 hub.docker.com/docker-qin:0.0.1
+// 推送到registry
+$ docker push hub.docker.com/docker-qin:0.0.1 
