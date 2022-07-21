@@ -40,7 +40,11 @@ public class Server {
         // server 启动过程中的一段逻辑
         //serverBootstrap.handler(new LoggingHandler());
         serverBootstrap.handler(new ServerHandler());
+        // 设置TCP连接个数--完成握手和没完成握手队列之和 ，默认是50
+        serverBootstrap.option(ChannelOption.SO_BACKLOG,128);
         // 给每条连接设置TCP属性
+        serverBootstrap.childOption(ChannelOption.TCP_NODELAY, true);
+         // 给每条连接设置TCP属性
         serverBootstrap.childOption(ChannelOption.TCP_NODELAY, true);
         // 自定义基本属性
         serverBootstrap.childAttr(AttributeKey.newInstance("childAttr"), "qjp");
@@ -150,3 +154,4 @@ telnet 127.0.0.1 8085
 
 
 
+​	

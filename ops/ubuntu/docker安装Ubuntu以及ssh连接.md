@@ -194,7 +194,7 @@ port : 3316
 
 可能没有启动 ： openssh-server
 
-```
+```shell
 docker exec -it ubuntu-qin /bin/bash
 ps -ef|grep sshd
 service ssh restart
