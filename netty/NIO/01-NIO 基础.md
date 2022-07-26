@@ -166,6 +166,185 @@ mmap：memory-mapped device 内存映射设备
 
 
 
+#### strace 查看系统调用指令
+
+```shell
+strace -ff -o log java BioServer.java
+```
 
 
-​	
+
+```java
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+
+public class BioServer {
+
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(8080);
+        System.out.println("服务启动完成");
+        while (true) {
+            // 这里会阻塞-等待新的客户端进来
+            Socket socket = serverSocket.accept();
+            System.out.println("新的连接------" + socket.getRemoteSocketAddress());
+
+            InputStream inputStream = socket.getInputStream();
+            OutputStream outputStream = socket.getOutputStream();
+            String result = "收到数据：";
+            byte[] date = new byte[1024];
+            int len;
+            // inputStream.read 会阻塞等待再次输入
+            while ((len = inputStream.read(date)) != -1) {
+                String message = new String(date, 0, len);
+                result = result + message;
+            }
+            // 返回客户端数据  "\n" 标示结束符，客户端自己处理
+            result = result + "\n";
+            System.out.println("客户端传来消息：" + result);
+            // 给客户端返回数据
+            outputStream.write(result.getBytes(StandardCharsets.UTF_8));
+
+            outputStream.flush();
+            System.out.println("传递客户端消息结束");
+
+            inputStream.close();
+            outputStream.close();
+            socket.close();
+        }
+
+    }
+}
+
+```
+
+
+
+```shell
+root@qinjp-Virtual-Machine:/usr/local/java# strace -ff -o log java BioServer.java
+服务启动完成
+打开新窗口
+
+root@qinjp-Virtual-Machine:/usr/local/java# ll
+total 183748
+drwxr-xr-x  3 root root      4096  7月 26 12:34 ./
+drwxr-xr-x 11 root root      4096  7月 26 11:18 ../
+-rw-r--r--  1 root root      1639  7月 26 12:24 BioServer.java
+-rw-r--r--  1 root root       250  7月 26 11:45 BolckDemo.java
+drwxr-xr-x  8 root root      4096  7月 26 11:27 jdk-17/
+-rw-r--r--  1 root root     15614  7月 26 12:34 log.1757
+-rw-r--r--  1 root root    247535  7月 26 12:34 log.1758
+-rw-r--r--  1 root root      9171  7月 26 12:34 log.1759
+-rw-r--r--  1 root root      1413  7月 26 12:34 log.1760
+-rw-r--r--  1 root root      1074  7月 26 12:34 log.1761
+-rw-r--r--  1 root root      1110  7月 26 12:34 log.1762
+-rw-r--r--  1 root root      1641  7月 26 12:34 log.1763
+-rw-r--r--  1 root root      2693  7月 26 12:34 log.1764
+-rw-r--r--  1 root root    243521  7月 26 12:34 log.1765
+-rw-r--r--  1 root root    876560  7月 26 12:34 log.1766
+-rw-r--r--  1 root root       916  7月 26 12:34 log.1767
+-rw-r--r--  1 root root      1077  7月 26 12:34 log.1768
+-rw-r--r--  1 root root       909  7月 26 12:34 log.1769
+-rw-r--r--  1 root root     32654  7月 26 12:34 log.1770
+
+一般最大的就是Java main方法的线程
+root@qinjp-Virtual-Machine:/usr/local/java# less log.1758
+关键代码
+socket(AF_INET6, SOCK_STREAM, IPPROTO_IP) = 4
+bind(4, {sa_family=AF_INET6, sin6_port=htons(8080), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::", &sin6_addr), sin6_scope_id=0}, 28) = 0
+listen(4, 50)                           = 0
+accept(4,
+
+```
+
+
+
+socket 方法标示创建一个ServerSocket  ，返回一个 等于4的FD 
+
+bind 绑定4号FD到8080
+
+listen 对4号FD的监听 ，队列长度为 50
+
+accept  接收一个socket连接
+
+
+
+```shell
+man listen
+
+listen(int sockfd, int backlog);
+```
+
+参数：backlog 标示服务器可连接的队列个数
+
+>Linux 内核中TCP连接维护两个队列，SYN queue 队列 和 Accept queue 队列 
+>
+>SYN queue 队列 ：3次握手没有完成的
+>
+>Accept queue 队列 ：3次握手完成的
+>
+>backlog：标示这两个队列之和，超过这个数，新的TCP连接就会被拒绝
+>
+>注意如果连接处于休眠状态即没有数据传输是不属于服务处理中的连接，所以不会计算在内
+
+
+
+对应 Java backlog，Netty ChannelOption.SO_BACKLOG,128
+
+```java
+java：
+ServerSocket serverSocket = new ServerSocket(8080, 50);
+public ServerSocket(int port, int backlog) throws IOException {
+    this(port, backlog, null);
+}
+netty：
+ServerBootstrap serverBootstrap = new ServerBootstrap();
+serverBootstrap.option(ChannelOption.SO_BACKLOG,128);
+```
+
+
+
+#### 给服务器发生消息
+
+nc loaclhost 8080
+
+```shell
+root@qinjp-Virtual-Machine:~# nc localhost 8080
+asdasda
+
+
+
+```
+
+回到之前的less窗口shift
+
+```shell
+root@qinjp-Virtual-Machine:/usr/local/java# less log.1758
+
+接收到 6 号FD
+accept(4, {sa_family=AF_INET6, sin6_port=htons(53894), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_scope_id=0}, [28]) = 6
+读取6号FD内容,这里阻塞了，对应Java的read
+read(6, 
+
+
+
+接收到 asdasda
+read(6, "asdasda\n", 1024)              = 8
+接着等待新的输入
+read(6, 
+
+read(6, "", 1024)                       = 0
+断开连接后回写客户端
+write(6, "\346\224\266\345\210\260\346\225\260\346\215\256\357\274\232asdasda\n\n", 24) = 24
+关闭连接
+shutdown(6, SHUT_WR)                    = -1 ENOTCONN (Transport endpoint is not connected)
+close(6)                                = 0
+
+4号FD等待新socket连接
+accept(4, 
+
+```
+
