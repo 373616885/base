@@ -73,7 +73,7 @@ Linux操作系统就将权限等级分为了2个等级，实际上这个态代�
 
 #### linux 系统调用
 
-```
+```shell
 man syscalls
 ## 2 标示系统调用
 man 2 select
@@ -95,9 +95,77 @@ Linux中一切皆文件，指的就是FD
 
 
 
+#### 跟踪fd
+
+简单java
+
+```java
+import java.util.Scanner;
+
+public class BolckDemo {
+
+    public static void main(String[] args) {
+        final Scanner scanner = new Scanner(System.in);
+        final String s = scanner.nextLine();
+        System.out.println(s);
+    }
+}
+```
+
+jps 查询Linux系统当前所有java进程pid的命令
+
+lsof命令用于查看你进程开打的文件
+
+```shell
+
+root@qinjp-Virtual-Machine:/usr/local/java# java BolckDemo.java
+
+root@qinjp-Virtual-Machine:/usr/local/java# jps
+1531 Jps
+1517 Main
+
+root@qinjp-Virtual-Machine:/usr/local/java# lsof -p 1517
+lsof: WARNING: can't stat() fuse.gvfsd-fuse file system /run/user/126/gvfs
+      Output information may be incomplete.
+COMMAND  PID USER   FD   TYPE             DEVICE  SIZE/OFF    NODE NAME
+java    1517 root  cwd    DIR                8,3      4096  526185 /usr/local/java
+java    1517 root  rtd    DIR                8,3      4096       2 /
+java    1517 root  txt    REG                8,3     12368  526191 /usr/local/java/jdk-17/bin/java
+java    1517 root  mem    REG                8,3  13672448  658806 /usr/local/java/jdk-17/lib/server/classes.jsa
+java    1517 root  mem    REG                8,3   8876560  395661 /usr/lib/locale/locale-archive
+java    1517 root  mem    REG                8,3 126407125  526905 /usr/local/java/jdk-17/lib/modules
+java    1517 root  mem    REG                8,3    108432  526894 /usr/local/java/jdk-17/lib/libnet.so
+java    1517 root  mem    REG                8,3     99680  526895 /usr/local/java/jdk-17/lib/libnio.so
+java    1517 root  mem    REG                8,3    866128  526901 /usr/local/java/jdk-17/lib/libsvml.so
+java    1517 root  mem    REG                8,3    190104  526881 /usr/local/java/jdk-17/lib/libjava.so
+java    1517 root  mem    REG                8,3    145528  526885 /usr/local/java/jdk-17/lib/libjimage.so
+java    1517 root  mem    REG                8,3    940560  395423 /usr/lib/x86_64-linux-gnu/libm.so.6
+java    1517 root  mem    REG                8,3     14664  395458 /usr/lib/x86_64-linux-gnu/librt.so.1
+java    1517 root  mem    REG                8,3  22784488  658809 /usr/local/java/jdk-17/lib/server/libjvm.so
+java    1517 root  mem    REG                8,3   2216304  395418 /usr/lib/x86_64-linux-gnu/libc.so.6
+java    1517 root  mem    REG                8,3     14432  395421 /usr/lib/x86_64-linux-gnu/libdl.so.2
+java    1517 root  mem    REG                8,3     21448  395454 /usr/lib/x86_64-linux-gnu/libpthread.so.0
+java    1517 root  mem    REG                8,3     73056  526886 /usr/local/java/jdk-17/lib/libjli.so
+java    1517 root  mem    REG                8,3    108936  402600 /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+java    1517 root  mem    REG                8,3     32768 1324088 /tmp/hsperfdata_root/1517
+java    1517 root  mem    REG                8,3    240936  395406 /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+java    1517 root    0u   CHR              136,0       0t0       3 /dev/pts/0
+java    1517 root    1u   CHR              136,0       0t0       3 /dev/pts/0
+java    1517 root    2u   CHR              136,0       0t0       3 /dev/pts/0
+java    1517 root    3r   REG                8,3 126407125  526905 /usr/local/java/jdk-17/lib/modules
+java    1517 root    5u  unix 0xffff8ffe430fe000       0t0   41191 type=STREAM
+
+### 
+cwd：表示current work dirctory 当前工作的目录
+rtd：root directory 跟目录
+txt: 当前运行程序的指令
+mem：memory-mapped file 内存映射文件 
+mmap：memory-mapped device 内存映射设备 
+
+```
 
 
 
 
 
-
+​	
