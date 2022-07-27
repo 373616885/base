@@ -485,7 +485,7 @@ epoll_create1(EPOLL_CLOEXEC)            = 6
 # 4号socket 注册到 selector上,事件为EPOLL_CTL_ADD 
 # 对应java: serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 epoll_ctl(6, EPOLL_CTL_ADD, 4, {events=EPOLLIN, data={u32=4, u64=140694538682372}}) = 0
-# 多路复用器等待客户端连接 对应java : int select = selector.select();
+# 多路复用器等待客户端产生输入事件 对应java : int select = selector.select();
 epoll_wait(6,
 
 
@@ -502,7 +502,7 @@ epoll_wait(6,
 root@qinjp-Virtual-Machine:/usr/local/java# nc localhost 8080
 
 less log.1758
-# 接上面的 多路复用器等待客户端连接
+# 接上面的 多路复用器等待客户端产生输入事件
 epoll_wait(6, [{events=EPOLLIN, data={u32=4, u64=140694538682372}}], 1024, -1) = 1
 # 8号 nc 客户端新的连接  SocketChannel newSocketChannel = serverSocketChannel.accept();
 accept(4, {sa_family=AF_INET6, sin6_port=htons(44850), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_scope_id=0}, [28]) = 8
@@ -515,7 +515,7 @@ read(8, "12345\n", 1024)                = 6
 # 回写
 write(8, "\346\234\215\345\212\241\347\253\257\346\224\266\345\210\260\346\266\210\346\201\257\357\274\23212345\n\0\0"..., 1048) = 1048
 
-# 6号多路复用器等待新的客户端连接
+# 6号多路复用器等待新的客户端产生输入事件
 epoll_wait(6,
 
 
