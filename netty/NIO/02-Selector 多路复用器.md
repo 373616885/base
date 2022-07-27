@@ -1,1 +1,3 @@
-### 
+### Selector 多路复用器
+
+Selector 允许单线程处理多个Channel，会不断地轮询注册在其上的Channel，如果某个Channel上面有新的TCP连接接入、读和写事件，这个Channel就处于就绪状态，会被Selector轮询出来，然后通过SelectionKey可以获取就绪Channel的集合，进行后续的I/O操作。
