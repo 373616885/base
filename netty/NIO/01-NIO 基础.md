@@ -35,6 +35,12 @@ void doWork(Sockect sockect) {
 }
 ```
 
+上层Java应用只是通过多线程的手段使得主线程没有卡在read函数，可系统为我们提供的read还是阻塞的
+
+而一个客户端就开一个线程，对服务器消耗是很大的。所以这种小把戏，并不能真正提高BIO的性能
+
+
+
 多路复用是操作系统内核的概念并不是一种实现效果
 
 简单认为：只有使用了select ，pull , epull 三个系统调用才能称为多路复用
@@ -112,9 +118,9 @@ public class BolckDemo {
 }
 ```
 
-jps 查询Linux系统当前所有java进程pid的命令
+**jps 查询Linux系统当前所有java进程pid的命令**
 
-lsof命令用于查看你进程开打的文件
+**lsof命令用于查看你进程开打的文件**
 
 ```shell
 
@@ -345,6 +351,173 @@ close(6)                                = 0
 
 4号FD等待新socket连接
 accept(4, 
+
+```
+
+
+
+
+
+#### 系统层解决BIO阻塞的问题
+
+通过上面的分析，BIO的阻塞点在 accept 函数 和  read 函数
+
+操作系统提供的非阻塞的方式
+
+```shell
+fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK)    = 0
+```
+
+
+
+### NIO系统调用
+
+#### Java 代码
+
+```java
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+
+public class NioServer {
+
+    public static void main(String[] args) throws IOException {
+        // 绑定端口，开启服务
+        final ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        serverSocketChannel.configureBlocking(false);
+        serverSocketChannel.socket().bind(new InetSocketAddress(8080));
+
+        final Selector selector = Selector.open();
+        // 服务端的serverSocketChannel注册到 selector上
+        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+
+        System.out.println("服务器启动成功");
+
+        while (true) {
+            // 阻塞等待客户端事件发送，这里有超时时间设置
+            int select = selector.select();
+            if (select < 1) {
+                System.out.println("当前没有连接进来");
+            }
+            // 注册上了的 channel 都对应一个 SelectionKey
+            Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+            while (iterator.hasNext()) {
+                SelectionKey key = iterator.next();
+                // selector多路复用器接收到一个accept事件
+                if (key.isAcceptable()) {
+                    // 接受请求
+//                    ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
+//                    SocketChannel newSocketChannel = serverSocketChannel.accept();
+                    // 这里会接收一个客户端SocketChannel的连接请求，并返回对应的SocketChannel
+                    // 注意这里如果没有对应的客户端Channel就会返回null
+                    SocketChannel newSocketChannel = serverSocketChannel.accept();
+                    System.out.println("收到客户端请求：" + newSocketChannel.getRemoteAddress());
+                    // 每一个新的客户端请求都设置成非阻塞
+                    newSocketChannel.configureBlocking(false);
+                    // 将与客户端对接好的newSocketChannel注册到select上，并关注读事件
+                    // 注册读事件，需要绑定一个buffer相当于附件，所有的事件交互都通过这个buffer
+                    newSocketChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
+                }
+                // 数据读取事件
+                if (key.isReadable()) {
+                    // 其他的代码基本都是这个模板，只是这个处理客户端请求需要定制
+                    // accept事件是ServerSocketChannel
+                    // read事件是SocketChannel
+                    SocketChannel socketChannel = (SocketChannel) key.channel();
+                    ByteBuffer buffer = (ByteBuffer) key.attachment();
+                    buffer.clear();
+                    socketChannel.read(buffer);
+                    String request = new String(buffer.array(), StandardCharsets.UTF_8);
+                    System.out.println("收到客户端消息：" + request);
+
+                    // 回写
+                    String str = "服务端收到消息：" + request;
+                    socketChannel.write(ByteBuffer.wrap(str.getBytes(StandardCharsets.UTF_8)));
+
+                }
+                // 已经处理完的事件要清除，防止重复处理
+                // 不然的话，对应连接请求，服务端还是会去accept产生一个SocketChannel
+                // 但此时客户端没有开对接，就会返回一个null
+                iterator.remove();
+
+            }
+
+        }
+    }
+}
+
+```
+
+
+
+####  查看NIO系统调用指令
+
+```shell
+
+root@qinjp-Virtual-Machine:/usr/local/java# strace -ff -o log java NioServer.java
+服务器启动成功
+
+
+
+```
+
+
+
+```shell
+
+新窗口
+less log.1758
+关键代码
+# socket 4 
+socket(AF_INET6, SOCK_STREAM, IPPROTO_IP) = 4
+# 设置 4号socket为非阻塞: 对应java : serverSocketChannel.configureBlocking(false);
+fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK)    = 0
+# 绑定4号到端口8080
+bind(4, {sa_family=AF_INET6, sin6_port=htons(8080), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::", &sin6_addr), sin6_scope_id=0}, 28
+) = 0
+# 监听4号socket，最大50个连接
+listen(4, 50) 
+# 创建一个多路复用器 就是 select: 对应java :  Selector selector = Selector.open();
+epoll_create1(EPOLL_CLOEXEC)            = 6
+# 4号socket 注册到 selector上,事件为EPOLL_CTL_ADD 
+# 对应java: serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+epoll_ctl(6, EPOLL_CTL_ADD, 4, {events=EPOLLIN, data={u32=4, u64=140694538682372}}) = 0
+# 多路复用器等待客户端连接 对应java : int select = selector.select();
+epoll_wait(6,
+
+
+
+
+
+```
+
+
+
+```shell
+
+新窗口
+root@qinjp-Virtual-Machine:/usr/local/java# nc localhost 8080
+
+less log.1758
+# 接上面的 多路复用器等待客户端连接
+epoll_wait(6, [{events=EPOLLIN, data={u32=4, u64=140694538682372}}], 1024, -1) = 1
+# 8号 nc 客户端新的连接  SocketChannel newSocketChannel = serverSocketChannel.accept();
+accept(4, {sa_family=AF_INET6, sin6_port=htons(44850), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_scope_id=0}, [28]) = 8
+# 8号新连接：注册到6号多路复用器中   newSocketChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
+epoll_ctl(6, EPOLL_CTL_ADD, 8, {events=EPOLLIN, data={u32=8, u64=140694538682376}}) = 0
+# 8号新连接设置成非阻塞   newSocketChannel.configureBlocking(false);
+fcntl(8, F_SETFL, O_RDWR|O_NONBLOCK)    = 0
+# 读到8号连接客户发送的数据 socketChannel.read(buffer);
+read(8, "12345\n", 1024)                = 6
+# 回写
+write(8, "\346\234\215\345\212\241\347\253\257\346\224\266\345\210\260\346\266\210\346\201\257\357\274\23212345\n\0\0"..., 1048) = 1048
+
+# 6号多路复用器等待新的客户端连接
+epoll_wait(6,
+
 
 ```
 
