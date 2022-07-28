@@ -482,7 +482,7 @@ bind(4, {sa_family=AF_INET6, sin6_port=htons(8080), sin6_flowinfo=htonl(0), inet
 listen(4, 50) 
 # 创建一个多路复用器 就是 select: 对应java :  Selector selector = Selector.open();
 epoll_create1(EPOLL_CLOEXEC)            = 6
-# 4号socket 注册到 selector上,事件为EPOLL_CTL_ADD 
+# 4号socket的回调函数注册到 selector上,事件为EPOLL_CTL_ADD 
 # 对应java: serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 epoll_ctl(6, EPOLL_CTL_ADD, 4, {events=EPOLLIN, data={u32=4, u64=140694538682372}}) = 0
 # 多路复用器等待客户端产生输入事件 对应java : int select = selector.select();
@@ -506,7 +506,7 @@ less log.1758
 epoll_wait(6, [{events=EPOLLIN, data={u32=4, u64=140694538682372}}], 1024, -1) = 1
 # 8号 nc 客户端新的连接  SocketChannel newSocketChannel = serverSocketChannel.accept();
 accept(4, {sa_family=AF_INET6, sin6_port=htons(44850), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_scope_id=0}, [28]) = 8
-# 8号新连接：注册到6号多路复用器中   newSocketChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
+# 8号新连接的回调函数：注册到6号多路复用器中   newSocketChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
 epoll_ctl(6, EPOLL_CTL_ADD, 8, {events=EPOLLIN, data={u32=8, u64=140694538682376}}) = 0
 # 8号新连接设置成非阻塞   newSocketChannel.configureBlocking(false);
 fcntl(8, F_SETFL, O_RDWR|O_NONBLOCK)    = 0
