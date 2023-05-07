@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--    <bean id="myTestBean" class="com.qin.demo.bean.MyTestBean">-->
+<!--        <constructor-arg ref="myBean"/>-->
+<!--    </bean>-->
+    <bean id="myTestBean" class="com.qin.demo.bean.MyTestBean">
+        <constructor-arg index="0" ref="myBean"/>
+<!--        <property name="myBean" ref="myBean"/>-->
+    </bean>
+    <bean id="myBean" class="com.qin.demo.bean.MyBean">
+        <property name="dateValue" ><value>2019-07-01</value></property>
+        <property name="testStr"><value>78802581</value></property>
+        <property name="nameStr"><value>${myBean.name}</value></property>
+        <property name="localDate"><value>2019-07-01</value></property>
+    </bean>
+
+
+    <bean id="hello" class="com.qin.demo.bean.Hello"/>
+
+    <bean id ="helloBeanFactoryAware" class="com.qin.demo.bean.HelloBeanFactoryAware"/>
+    <bean id ="helloApplicationContextAware" class="com.qin.demo.bean.HelloApplicationContextAware" autowire="byType">
+    </bean>
+
+    <bean id ="learnListener" class="com.qin.demo.listener.LearnListener"/>
+    <bean id ="notifyListener" class="com.qin.demo.listener.NotifyListener"/>
+
+    <!-- 自定义的在实例化之前 处理 BeanDefinition 的  BeanFactoryPostProcessor -->
+    <!-- CustomEditorConfigurer 是 Spring自带的属性编辑器 CustomDateEditor属性 -->
+    <bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="propertyEditorRegistrars">
+            <list>
+                <bean id="datePropertyEditorRegistrar" class="com.qin.demo.config.DatePropertyEditorRegistrar"/>
+            </list>
+        </property>
+    </bean>
+    <!-- 自定义的在实例化之前 处理 BeanDefinition 的  BeanFactoryPostProcessor -->
+    <bean id="customBeanFactoryPostProcessor" class="com.qin.demo.listener.CustomBeanFactoryPostProcessor" />
+    <!-- 自定义的在实例化之前 处理 BeanDefinition 的  BeanFactoryPostProcessor -->
+    <bean id="updateBeanFactoryPostProcessor" class="com.qin.demo.listener.UpdateBeanFactoryPostProcessor"/>
+    <!-- 自定义的在实例化之前 处理 BeanDefinition 的  BeanFactoryPostProcessor -->
+    <bean id="obscenityRemovingBeanFactoryPostProcessor" class="com.qin.demo.listener.ObscenityRemovingBeanFactoryPostProcessor">
+        <property name="obscentities">
+            <set>
+                <value>qin</value>
+                <value>jie</value>
+                <value>peng</value>
+                <value>373616885</value>
+            </set>
+        </property>
+    </bean>
+
+    <!-- propertyPlaceholderConfigurer 这个类是典型的 BeanFactoryPostProcessor 应用 -->
+    <bean id="mesHandler" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:application.properties</value>
+        </property>
+    </bean>
+
+    <bean id="myInstantiationAwareBeanPostProcessor" class="com.qin.demo.listener.MyInstantiationAwareBeanPostProcessor">
+    </bean>
+
+    <bean id="stringToLocalDateConverter" class="com.qin.demo.config.StringToLocalDateConverter"/>
+
+    <bean id="conversionService"
+          class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <ref bean="stringToLocalDateConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="car" class="com.qin.demo.bean.CarFactoryBean">
+        <property name="info" value="超级跑车,400,200000"></property>
+    </bean>
+
+<!--    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">-->
+<!--        <property name="customEditors">-->
+<!--            <map>-->
+<!--                <entry key="java.util.Date" value="com.qin.demo.config.DatePropertyEditor">-->
+<!--                </entry>-->
+<!--            </map>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+
+    <!--    <bean id="car" class="com.qin.demo.bean.CarFactoryBean">-->
+<!--        <property name="info" value="超级跑车,400,200000"></property>-->
+<!--    </bean>-->
+</beans>

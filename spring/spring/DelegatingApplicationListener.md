@@ -1,0 +1,4 @@
+DelegatingApplicationListener
+DelegatingApplicationListener会监听ApplicationEnvironmentPreparedEvent事件（Environment已经准备好但是Context还没有创建事件），
+读取Environment中的context.listener.classes属性值( 配置文件: context.listener.classes) 
+来创建ApplicationListener处理器执行ononApplicationEvent 

@@ -1,0 +1,18 @@
+### 刷新DNS解析缓存
+ipconfig /flushdns
+
+### 查看DNS缓存记录
+ipconfig /displaydns
+
+
+ipconfig /flushdns命令后，显示“无法刷新DNS解析缓存
+这是因为没有启动本地的“DNS Client”服务
+
+启动本地的“DNS Client”服务
+
+在“控制面板”中，
+查看方式中选择“大图标”，
+选择“管理工具”、“服务”，
+进入服务管理窗口，
+选择“DNS Client”右击，
+选择“启动”或者“重新启动”。
