@@ -84,19 +84,52 @@ ThreadLocal：如何保证多个线程在并发环境下的安全性？典型应
 
 栈上存储：实例对象在堆中的地址指针（局部变量）
 
-堆中存储：实例对象，对象的类型指针指向，方法区的对象类型数据，堆中存储的是数据，并不存储数据的类型，数据的类型在方法区中存储
+堆中存储：实例对象，对象的类型指针指向，字符串常量池，方法区的对象类型数据，堆中存储的是数据，并不存储数据的类型，数据的类型在方法区中存储
 
-方法区：存储数据的类型，class对象
+方法区：instanceKlass对象（class元信息--数据的类型）与 运行时常量池
 
-
+注意：Class对象是  instanceKlass 的镜像在堆中
 
 ![image-20200708094747667](images/image-20200708094747667.png)
 
-- Person：存放在元空间，也可以说方法区
+- Person元信息（数据的类型）：存放在元空间，也可以说方法区
 - person：存放在Java栈的局部变量表中
 - new Person()：存放在Java堆中
+- Person.class 在堆中--是Person元信息镜像
+
+HotSpot并不把方法区的instanceKlass暴露给Java，而是暴露class对象给用户
+
+![](images\1606317801322.png)
 
 
+
+### JVM中OOP-KLASS模型
+
+在JVM中，使用了OOP-KLASS模型来表示java对象，即：
+
+- jvm在加载class时，创建instanceKlass，表示其元数据，包括常量池、字段、方法等，存放在方法区；
+
+  instanceKlass是jvm中的数据结构；
+
+- 在new一个对象时，jvm创建instanceOopDesc，来表示这个对象，存放在堆区，其引用，存放在栈区；
+
+  它用来表示对象的实例信息，看起来像个指针实际上是藏在指针里的对象；instanceOopDesc对应java中的对象实例；
+
+- HotSpot并不把方法区的instanceKlass暴露给Java，而会另外创建对应的instanceOopDesc来表示java.lang.Class对象，并将后者称为前者的“Java镜像”，klass持有指向oop引用(_java_mirror便是该instanceKlass（方法区的）对Class对象的引用)；
+
+- 要注意，new操作返回的instanceOopDesc类型指针指向方法区的instanceKlass，而方法区的instanceKlass指向了对应的类型的Class实例的instanceOopDesc；
+
+- 有点绕，简单说，就是Person实例——>Person的instanceKlass——>Person的Class。
+
+  
+
+instanceOopDesc，只包含数据信息，它包含三部分：
+
+1. 对象头，也叫Mark Word，主要存储对象运行时记录信息，如hashcode, GC分代年龄，锁状态标志，线程ID，时间戳等;
+2. 元数据指针，即指向方法区的instanceKlass实例
+3. 实例数据;
+4. 数据对齐
+5. 另外，如果是数组对象，还多了一个数组长度
 
 
 
@@ -557,7 +590,7 @@ SourceFile: "Order.java"
 
 ### 反编译
 
-javap -v -p   (-p 加上一些私有的才能看到)
+javap -v -c -p   (-p 加上一些私有的才能看到)
 
 ```java
 package com.qin.demo.methodarea;
@@ -1087,7 +1120,7 @@ public class MethodAreaDemo {
 }
 ```
 
-javap -v -p MethodAreaDemo.class > MethodAreaDemo.txt
+javap -v -p -c MethodAreaDemo.class > MethodAreaDemo.txt
 
 ```
 Classfile /D:/workspace/demo/target/classes/com/qin/demo/methodarea/MethodAreaDemo.class

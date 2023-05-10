@@ -1,18 +1,23 @@
 ### 栈、堆、方法区的交互关系
 
-栈上存储：实例对象在堆中的地址指针和基本数据类型
+栈上存储：实例对象在堆中的地址指针（局部变量）
 
-堆中存储：实例对象，对象的类型指针指向，方法区的对象类型数据，堆中存储的是数据，并不存储数据的类型，数据的类型在方法区中存储
+堆中存储：实例对象，对象的类型指针指向，字符串常量池，方法区的对象类型数据，堆中存储的是数据，并不存储数据的类型，数据的类型在方法区中存储
 
-方法区：存储数据的类型，Class对象
+方法区：instanceKlass对象（class元信息--数据的类型）与 运行时常量池
 
-![image-20200708094747667](D:/GitHub/base/jvm/vm/images/image-20200708094747667.png)
+注意：Class对象是  instanceKlass 的镜像在堆中
 
-- Person：存放在元空间，也可以说方法区
+![image-20200708094747667](images/image-20200708094747667.png)
+
+- Person元信息（数据的类型）：存放在元空间，也可以说方法区
 - person：存放在Java栈的局部变量表中
 - new Person()：存放在Java堆中
+- Person.class 在堆中--是Person元信息镜像
 
+HotSpot并不把方法区的instanceKlass暴露给Java，而是暴露class对象给用户
 
+![](images\1606317801322.png)
 
 
 
@@ -108,15 +113,15 @@ java映射的Test.class对象和ObjectHoldler.class对象也在堆中
 
 JDK6的时候
 
-![image-20200708211541300](D:/GitHub/base/jvm/vm/images/image-20200708211541300.png)
+![image-20200708211541300](images/image-20200708211541300.png)
 
 JDK7的时候
 
-![image-20200708211609911](D:/GitHub/base/jvm/vm/images/image-20200708211609911.png)
+![image-20200708211609911](images/image-20200708211609911.png)
 
 JDK8的时候，元空间大小只受物理内存影响
 
-![image-20200708211637952](D:/GitHub/base/jvm/vm/images/image-20200708211637952.png)
+![image-20200708211637952](images/image-20200708211637952.png)
 
 
 

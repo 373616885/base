@@ -208,7 +208,7 @@ return
 
 ```java
 /**
- * @author: 陌溪
+ * @author: qinjp
  * @create: 2020-07-05-9:14
  */
 public class DeadThreadTest {

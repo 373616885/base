@@ -2282,13 +2282,14 @@ method3 ：
         27: return
       Exception table:
          from    to  target type
-             7    19    22   any  
-            22    25    22   any  #循环到22一定要保证  7-19  monitorexit 成功
-             					#  如果7-19  monitorexit 失败 循环继续执行
+			//#如果7-19  monitorexit 失败 跳到22
+            //保证  7-19  monitorexit 一定被执行
+             7    19    22   any 
+            // 22-25 就保证 monitorexit 失败 继续到22循环执行
+             // 保证 monitorexit 一定被执行到
+            22    25    22   any  
 
 monitorenter 之后，为了防止异常没有执行monitorexit
-             加了Exception table的处理，保证一定会执行monitorexit
-         
-
+加了Exception table的处理，保证一定会执行monitorexit
 ```
 
