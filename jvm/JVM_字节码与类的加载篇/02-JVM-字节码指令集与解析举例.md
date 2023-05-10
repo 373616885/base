@@ -14,7 +14,7 @@
 
 ```java
 do {
-    // 上一天操作码流程结束，循环一个 +1 ，寻找下一个操作码
+    // 上一天操作码流程结束，循环一个 +1 ，寻找下一个地址
     自动计算PC寄存器的值加1;
     // 取出操作码
     根据PC寄存器的指示位置，从字节码流中取出操作码;
@@ -126,6 +126,72 @@ public void foo(long l, float f) {
 
 ##### 局部变量压栈指令
 
+> iload 从局部变量中装载int类型值
+>
+> lload 从局部变量中装载long类型值
+>
+> fload 从局部变量中装载float类型值
+>
+> dload 从局部变量中装载double类型值
+>
+> aload 从局部变量中装载引用类型值（refernce）
+>
+> iload_0 从局部变量0中装载int类型值
+>
+> iload_1 从局部变量1中装载int类型值
+>
+> iload_2 从局部变量2中装载int类型值
+>
+> iload_3 从局部变量3中装载int类型值
+>
+> lload_0 从局部变量0中装载long类型值
+>
+> lload_1 从局部变量1中装载long类型值
+>
+> lload_2 从局部变量2中装载long类型值
+>
+> lload_3 从局部变量3中装载long类型值
+>
+> fload_0 从局部变量0中装载float类型值
+>
+> fload_1 从局部变量1中装载float类型值
+>
+> fload_2 从局部变量2中装载float类型值
+>
+> fload_3 从局部变量3中装载float类型值
+>
+> dload_0 从局部变量0中装载double类型值
+>
+> dload_1 从局部变量1中装载double类型值
+>
+> dload_2 从局部变量2中装载double类型值
+>
+> dload_3 从局部变量3中装载double类型值
+>
+> aload_0 从局部变量0中装载引用类型值
+>
+> aload_1 从局部变量1中装载引用类型值
+>
+> aload_2 从局部变量2中装载引用类型值
+>
+> aload_3 从局部变量3中装载引用类型值
+>
+> iaload 从数组中装载int类型值
+>
+> laload 从数组中装载long类型值
+>
+> faload 从数组中装载float类型值
+>
+> daload 从数组中装载double类型值
+>
+> aaload 从数组中装载引用类型值
+>
+> baload 从数组中装载byte类型或boolean类型值
+>
+> caload 从数组中装载char类型值
+>
+> saload 从数组中装载short类型值
+
 - 局部变量压栈指令将给定的局部变量表中的数据压入操作数栈
 - 这类指令大体可以分为：
   - `xload_`(`x`为`i、l、f、d、a，n为 0 到 3`)
@@ -151,6 +217,44 @@ public class LoadAndStoreTest {
 ![1605751245517](images\1605751245517.png)
 
 ##### 常量入栈指令
+
+> aconst_null 将null对象引用压入栈
+>
+> iconst_m1 将int类型常量-1压入栈
+>
+> iconst_0 将int类型常量0压入栈
+>
+> iconst_1 将int类型常量1压入栈
+>
+> iconst_2 将int类型常量2压入栈
+>
+> iconst_3 将int类型常量3压入栈
+>
+> iconst_4 将int类型常量4压入栈
+>
+> iconst_5 将int类型常量5压入栈
+>
+> lconst_0 将long类型常量0压入栈
+>
+> lconst_1 将long类型常量1压入栈
+>
+> fconst_0 将float类型常量0压入栈
+>
+> fconst_1 将float类型常量1压入栈
+>
+> dconst_0 将double类型常量0压入栈
+>
+> dconst_1 将double类型常量1压入栈
+>
+> bipush 将一个8位带符号整数压入栈
+>
+> sipush 将16位带符号整数压入栈
+>
+> ldc 把常量池中的项压入栈
+>
+> ldc_w 把常量池中的项压入栈（使用宽索引）
+>
+> ldc2_w 把常量池中long类型或者double类型的项压入栈（使用宽索引）
 
 - 常量入栈指令的功能是将常数压入操作数栈，根据数据类型和入栈内容的不同，又可以分为 const 系列、push 系列和 ldc 指令
 - **指令 const 系列：**用于对特定的常量入栈，入栈的常量隐含在指令本身里。指令有：`iconst_(i从-1到5)、lconst_(l从0到1)、fconst_(f从0到2)、dconst_(d从0到1)、aconst_null`
@@ -219,6 +323,76 @@ Date d = null      aconst_null
 
 
 ##### 出栈装入局部变量表
+
+> istore 将int类型值存入局部变量
+>
+> lstore 将long类型值存入局部变量
+>
+> fstore 将float类型值存入局部变量
+>
+> dstore 将double类型值存入局部变量
+>
+> astore 将将引用类型或returnAddress类型值存入局部变量
+>
+> istore_0 将int类型值存入局部变量0
+>
+> istore_1 将int类型值存入局部变量1
+>
+> istore_2 将int类型值存入局部变量2
+>
+> istore_3 将int类型值存入局部变量3
+>
+> lstore_0 将long类型值存入局部变量0
+>
+> lstore_1 将long类型值存入局部变量1
+>
+> lstore_2 将long类型值存入局部变量2
+>
+> lstore_3 将long类型值存入局部变量3
+>
+> fstore_0 将float类型值存入局部变量0
+>
+> fstore_1 将float类型值存入局部变量1
+>
+> fstore_2 将float类型值存入局部变量2
+>
+> fstore_3 将float类型值存入局部变量3
+>
+> dstore_0 将double类型值存入局部变量0
+>
+> dstore_1 将double类型值存入局部变量1
+>
+> dstore_2 将double类型值存入局部变量2
+>
+> dstore_3 将double类型值存入局部变量3
+>
+> astore_0 将引用类型或returnAddress类型值存入局部变量0
+>
+> astore_1 将引用类型或returnAddress类型值存入局部变量1
+>
+> astore_2 将引用类型或returnAddress类型值存入局部变量2
+>
+> astore_3 将引用类型或returnAddress类型值存入局部变量3
+>
+> iastore 将int类型值存入数组中
+>
+> lastore 将long类型值存入数组中
+>
+> fastore 将float类型值存入数组中
+>
+> dastore 将double类型值存入数组中
+>
+> aastore 将引用类型值存入数组中
+>
+> bastore 将byte类型或者boolean类型值存入数组中
+>
+> castore 将char类型值存入数组中
+>
+> sastore 将short类型值存入数组中
+>
+> wide指令
+>
+> wide 使用附加字节扩展局部变量索引
 
 - 出栈装入局部变量表指令用于将操作数栈中栈顶元素弹出后，装入局部变量表的指定位置，用于给局部变量赋值
 - 这类指令主要以 store 的形式存在，比如 xstore (x 为 i、l、f、d、a)、xstore_n(x 为 i、l、f、d、a，n 为0至3)和 pasture(x 为 i、l、f、d、a、b、c、s)
@@ -292,6 +466,90 @@ public class LoadAndStoreTest {
 
 
 #### 算术运算符指令以及举例
+
+> ## 整数运算
+>
+> iadd 执行int类型的加法
+>
+> ladd 执行long类型的加法
+>
+> isub 执行int类型的减法
+>
+> lsub 执行long类型的减法
+>
+> imul 执行int类型的乘法
+>
+> lmul 执行long类型的乘法
+>
+> idiv 执行int类型的除法
+>
+> ldiv 执行long类型的除法
+>
+> irem 计算int类型除法的余数
+>
+> lrem 计算long类型除法的余数
+>
+> ineg 对一个int类型值进行取反操作
+>
+> lneg 对一个long类型值进行取反操作
+>
+> iinc 把一个常量值加到一个int类型的局部变量上
+>
+> ## 逻辑运算
+>
+> ### 移位操作
+>
+> ishl 执行int类型的向左移位操作
+>
+> lshl 执行long类型的向左移位操作
+>
+> ishr 执行int类型的向右移位操作
+>
+> lshr 执行long类型的向右移位操作
+>
+> iushr 执行int类型的向右逻辑移位操作
+>
+> lushr 执行long类型的向右逻辑移位操作
+>
+> ### 按位布尔运算
+>
+> iand 对int类型值进行“逻辑与”操作
+>
+> land 对long类型值进行“逻辑与”操作
+>
+> ior 对int类型值进行“逻辑或”操作
+>
+> lor 对long类型值进行“逻辑或”操作
+>
+> ixor 对int类型值进行“逻辑异或”操作
+>
+> lxor 对long类型值进行“逻辑异或”操作
+>
+> ### 浮点运算
+>
+> fadd 执行float类型的加法
+>
+> dadd 执行double类型的加法
+>
+> fsub 执行float类型的减法
+>
+> dsub 执行double类型的减法
+>
+> fmul 执行float类型的乘法
+>
+> dmul 执行double类型的乘法
+>
+> fdiv 执行float类型的除法
+>
+> ddiv 执行double类型的除法
+>
+> frem 计算float类型除法的余数
+>
+> drem 计算double类型除法的余数
+>
+> fneg 将一个float类型的数值取反
+>
+> dneg 将一个double类型的数值取反
 
 - **作用**：算术指令大都用于对两个操作数栈上的值进行某种特定的运算（也有一个的例如取反），**并把结果重新压入操作数栈**
 
@@ -400,9 +658,49 @@ public class IAdd {
 - 两个指令的不同之处在于，如果遇到 NaN 值，fcmpg 会压入1，而 fcmpl 会压入-1
 - 数值类型的数据才可以谈大小，boolean、引用数据类型不能比较大小
 
+**为什么没有int 比较指令呢？因为下面有 比较条件跳转指令 转们比较int值控制流程的**
+
+**数值类型的数据才可以谈大小**
+
+**boolean、引用数据类型不能比较大小**
+
 
 
 #### 类型转换指令
+
+> ## 宽化类型转换
+>
+> i2l 把int类型的数据转化为long类型
+>
+> i2f 把int类型的数据转化为float类型
+>
+> i2d 把int类型的数据转化为double类型
+>
+> l2f 把long类型的数据转化为float类型
+>
+> l2d 把long类型的数据转化为double类型
+>
+> f2d 把float类型的数据转化为double类型
+>
+> ## 窄化类型转换
+>
+> i2b 把int类型的数据转化为byte类型
+>
+> i2c 把int类型的数据转化为char类型
+>
+> i2s 把int类型的数据转化为short类型
+>
+> l2i 把long类型的数据转化为int类型
+>
+> f2i 把float类型的数据转化为int类型
+>
+> f2l 把float类型的数据转化为long类型
+>
+> d2i 把double类型的数据转化为int类型
+>
+> d2l 把double类型的数据转化为long类型
+>
+> d2f 把double类型的数据转化为float类型
 
 - **类型转换指令说明**
   - 类型转换指令可以将两种不同的数值类型进行相互转换
@@ -490,11 +788,39 @@ public class IAdd {
 
 #### 对象的创建和访问指令
 
-- Java是面向对象的程序设计语言，虚拟机平台从字节码层面就对面向对象做了深层次的支持。有一系列指令专门用于对象操作，可进一步细分为创建指令、字段访问指令、数组操作指令、类型检查指令
+> ## 对象操作指令
+>
+> new 创建一个新对象
+>
+> getfield 从对象中获取字段
+>
+> putfield 设置对象中字段的值
+>
+> getstatic 从类中获取静态字段
+>
+> putstatic 设置类中静态字段的值
+>
+> checkcast 确定对象为所给定的类型。后跟目标类，判断栈顶元素是否为目标类 / 接口的实例。如果不是便抛出异常
+>
+> instanceof 判断对象是否为给定的类型。后跟目标类，判断栈顶元素是否为目标类 / 接口的实例。是则压入 1，否则压入 0
+>
+>
+> ## 数组操作指令
+>
+> newarray 分配数据成员类型为基本上数据类型的新数组
+>
+> anewarray 分配数据成员类型为引用类型的新数组
+>
+> arraylength 获取数组长度
+>
+> multianewarray 分配新的多维数组
+
+Java是面向对象的程序设计语言，虚拟机平台从字节码层面就对面向对象做了深层次的支持。有一系列指令专门用于对象操作，可进一步细分为创建指令、字段访问指令、数组操作指令、类型检查指令
 
 ##### 创建指令
 
 - 虽然类实例和数组都是对象。但是Java虚拟机对类实例和数组的创建与操作使用了不同的字节码指令
+
 - **类创建实例的指令**
   - new
   
@@ -508,7 +834,7 @@ public class IAdd {
     }
     
     0 new #2 <java/lang/Object>   // 在堆中new一个对象，将引用地址压入操作数栈
-    3 dup   // 在栈中将引用地址再复制一个到栈中
+    3 dup   // 在栈中将引用地址再复制一个到栈中，因为下面调用构造器的时候，需要消耗一个操作数栈，所以多复制一个到操作数栈中
     4 invokespecial #1 <java/lang/Object.<init> : ()V> // 调用构造器方法
     7 astore_1 // 在局部变量 1 存储
     8 return
@@ -520,14 +846,47 @@ public class IAdd {
   - newarray：创建基本数据类型数组
   - anewarray：创建引用数据类型数组
   - multiannewarray：创建多维数组
+  
 - 上述指令可以用于创建对象或者数组，由于对象和数组再Java中的广泛使用，这些指令的使用频率也非常高。
+
+- ```java
+  public void newArray(){
+      int[] intArray = new int[10];
+      Object[] objtArray = new Object[10];
+      int[][] mulArry = new int[10][10];
+      String[][] strArr = new String[10][];//第二个参数是null,所以变成了创建一唯数组
+      String[][] mulArr = new String[10][10];//这才是创建二唯数组
+  }
+  
+   0 bipush 10
+   2 newarray 10 (int)
+   4 astore_1
+   5 bipush 10
+   7 anewarray #2 <java/lang/Object>
+  10 astore_2
+  11 bipush 10
+  13 bipush 10
+  15 multianewarray #24 <[[I> dim 2
+  19 astore_3
+  20 bipush 10
+  22 anewarray #26 <[Ljava/lang/String;>  //String[][] strArr = new String[10][];
+  25 astore 4
+  27 bipush 10
+  29 bipush 10
+  31 multianewarray #28 <[[Ljava/lang/String;> dim 2 //String[][] mulArr = new String[10][10];
+  35 astore 5
+  37 return
+  
+  ```
+
+  
 
 ##### 字段访问指令
 
 - 对象创建之后，就可以通过对象访问指令获取对象实例或者数组实例中的字段或者数组元素
 
-  - 访问类字段（static字段，或者称为类变量）的指令：getstatic、putstatic
-  - 访问类实例字段（费static字段，或者称为实例变量）的指令：getfield、purfield
+  - 访问类字段（static字段，或者称为类变量）的指令：getstatic（取出来）、putstatic （取出来赋值）
+  - 访问类实例字段（费static字段，或者称为实例变量）的指令：getfield（取出来）、purfield （取出来赋值）
 
 - **举例：**
 
@@ -558,12 +917,46 @@ public class IAdd {
 
   
 
+```java
+public void setOrder(){
+    Order order = new Order();
+    order.id = 100;
+    order.name = "qinjiepeng";
+    Order.address = "南山寺";
+    String address = Order.address;
+}
+
+
+ 0 new #30 <com/qin/Order>  //在堆中 new 一个 Order，将引用地址压入操作数栈
+ 3 dup		//再操作数栈中复制已发地址，让调用构造器的时候消耗
+ 4 invokespecial #32 <com/qin/Order.<init> : ()V>//调用构造器消耗 dup 复制的引用地址
+ 7 astore_1  //将生成的 order对象引用地址存储到 局部变量表中
+ 8 aload_1 //加载生成的 order对象引用地址压入操作数栈中
+ 9 bipush 100 // 100常量压入操作数栈
+11 putfield #33 <com/qin/Order.id : I> //调用 Order.id 赋值 栈顶的oder与100 （消耗两个栈顶）
+14 aload_1 // 加载 局部变量表中的 order对象引用地址  压入操作数栈中
+15 ldc #37 <qinjiepeng> //qinjiepeng常量压入操作数栈
+17 putfield #39 <com/qin/Order.name : Ljava/lang/String;>//调用 Order.name 赋值 栈顶的oder与100 （消耗两个栈顶）
+20 ldc #43 <南山寺> //南山寺常量压入操作数栈
+22 putstatic #45 <com/qin/Order.address : Ljava/lang/String;> //调用 Order.address 赋值 栈顶的oder与南山寺 （消耗两个栈顶）
+25 getstatic #45 <com/qin/Order.address : Ljava/lang/String;>//获取Order的静态属性address
+28 astore_2
+25 return
+
+
+```
+
+
+
+
+
 ##### 数组操作指令
 
 - 数组操作指令主要有：xastore和xaload指令。具体为：
 
   - 把一个数组元素加载到操作数栈的指令：baload、caload、saload、iaload、laload、faload、daload、aaload
   - 将一个操作数栈的值存储在数组元素中的指令：bastore、castore、sastore、iastore、lastore、fastore、dastore、aastore
+  - 注意 byte 和 boolean 使用的同一个操作指令
 
   ![1605776308517](images/1605776308517.png)
 
@@ -572,8 +965,66 @@ public class IAdd {
 
 - 说明
 
-  - 指令xaload表示将数组的元素压栈，比如saload、caload分别表示压入short数组和char数组。指令xoload在执行的时候，要求操作数中的栈顶元素为数组索引i，栈顶顺位第2个元素为数组引用a，该指令会弹出栈顶这两个元素，并将a[i]重新压入堆栈
+  - 指令xaload表示将数组的元素压栈，比如saload、caload分别表示压入short数组和char数组。指令xaload在执行的时候，要求操作数中的栈顶元素为数组索引   i ，栈顶顺位第2个元素为数组引用 a ，该指令会弹出栈顶这两个元素，并将 a[i] 重新压入堆栈
   - xastore则专门针对数组操作，以iastore为例，它用于给一个int数组的给定索引赋值。在iastore执行前，操作数栈顶需要以此准备3个元素：值、索引、数组引用，iastore会弹出这3个值，并且将值赋予给数组中指定索引位置。
+  - iastore  需要3个值：值、索引、数组引用
+  - ![](images\1606317801309.png)
+  
+- 代码
+
+- ```java
+  public void setArray() {
+      int[] intArray = new int[10];
+      intArray[3] = 10;
+  	System.out.println(intArray[1]);
+      //byte 和 boolean 一样的操作指令
+      boolean[] array = new boolean[10];
+      array[2] = true
+  }
+  
+   0 bipush 10  //常量 10 入栈
+   2 newarray 10 (int) //堆中创建一个数组，得到引用地址
+   4 astore_1 //将数组的引用地址存储到局部变量表1中
+   5 aload_1 //加载局部变量表1的数组引用地址到操作数栈中
+   6 iconst_3 // 常量 3 入栈
+   7 bipush 10 //常量 10 入栈
+   9 iastore //iastore 需要3个值：值 10 、索引 3 、数组引用地址 在堆中将数组[i]复制为10
+  10 getstatic #7 <java/lang/System.out : Ljava/io/PrintStream;>//获取静态变量out
+      
+  13 aload_1 //加载局部变量表1的数组引用地址到操作数栈中
+  14 iconst_1 // 常量 1 入栈
+  15 iaload //aload_1得到的数组，iconst_1得到的索引 i ，拿到a[i]在堆中的值，然后压入栈中
+      
+  16 invokevirtual #13 <java/io/PrintStream.println : (I)V>//执行 println 输出栈顶 的值
+      
+  19 bipush 10
+  21 newarray 4 (boolean)
+  23 astore_2
+  24 aload_2
+  25 iconst_2
+  26 iconst_1
+  27 bastore // byte 和 boolean 一样的操作指令
+  28 return
+  
+  ```
+
+- ```java
+  public void setArrayLength() {
+      boolean[] array = new boolean[10];
+      System.out.println(array.length);
+  }
+  
+   0 bipush 10
+   2 newarray 4 (boolean)
+   4 astore_1
+   5 getstatic #7 <java/lang/System.out : Ljava/io/PrintStream;>
+   8 aload_1
+   9 arraylength
+  10 invokevirtual #13 <java/io/PrintStream.println : (I)V>
+  13 return
+  ```
+
+
 
 ##### 类型检查指令
 
@@ -581,19 +1032,316 @@ public class IAdd {
   - 指令 checkcast 用于检查类型强制转换是否可以进行。如果可以进行，那么 checkcast 指令不会改变操作数栈，否则它会抛出 ClassCastException 异常
   - 指令 instanceof 用来判断给定对象是否是某一个类的实例，它会将判断结果压入操作数栈
 
+```java
+ public String chackCast(Object obj) {
+     if (obj instanceof String ) {
+         return (String) obj;
+     } else {
+         return null;
+     }
+ }
+
+ 0 aload_1  //加载局部变量表中1 的 obj
+ 1 instanceof #43 <java/lang/String> //消耗栈顶obj,判断类型是否相等将结果入栈
+ 4 ifeq 12 (+8) //不等则跳转 12 
+ 7 aload_1 ////加载局部变量表中1 的 obj
+ 8 checkcast #43 <java/lang/String> //检查是否是String类型，不是就会抛出 ClassCastException 异常
+11 areturn //返回栈顶 obj
+12 aconst_null //null 入操作数栈
+13 areturn //返回栈顶 null
+
+```
+
+
+
 #### 方法调用与返回值
+
+> ## 方法调用指令
+>
+> invokcvirtual 运行时按照对象的类来调用实例方法
+>
+> invokespecial 根据编译时类型来调用实例方法
+>
+> invokestatic 调用类（静态）方法
+>
+> invokcinterface 调用接口方法
+>
+> ## 方法返回指令
+>
+> ireturn 从方法中返回int类型的数据
+>
+> lreturn 从方法中返回long类型的数据
+>
+> freturn 从方法中返回float类型的数据
+>
+> dreturn 从方法中返回double类型的数据
+>
+> areturn 从方法中返回引用类型的数据
+>
+> return 从方法中返回，返回值为void
+
+
 
 ##### 方法调用指令
 
+非虚方法：运行时是不可变的
+
+静态方法、私有方法、final方法、实例构造器、父类方法都是非虚方法。
+
+其他方法称为虚方法
+
 - invokevirtual、invokeinterface、invokespecial、invokestatic、invokedynamic
 - 以下5条指令用于方法调用
-  - invokevirtual指令用于调用对象的实例方法，根据对象的实际类型进行分派（虚方法分派），支持多态。这也是Java语言中 **最常见的方法分派方式**
+  - invokevirtual 指令用于调用对象的实例方法，根据对象的实际类型进行分派（虚方法分派），支持多态。这也是Java语言中 **最常见的方法分派方式（有可能是多态场景下方法的重写的特殊情况）**
   - invokeinterface 指令用于 **调用接口方法**，它会在运行时候搜索由特定对象所实现的这个接口的方法，并找出适合的方法进行调用
-  - invokespecial 指令用于调用一些需要特殊处理的实例方法，包括 **实例初始化方法（构造器）、私有方法和父类方法**。这些方法都是 **静态类型绑定的**，不会在调用的时候进行动态分发。
-  - invokestatic指令用于调用命名中 **类中的类方法（sttaic方法）**。这是静态绑定的
-  - invokedynamic：调用动态绑定的方法，这个是动态绑定的方法，是JDK1.7后新加入的指令。用于在运行的时候解析调用点限定符的方法，并执行该方法。前面4条调用指令的分派逻辑都固化在Java虚拟机内部，而invokedynamic指令的分派逻辑是由用户所设定的引导方法决定的。
+  - invokespecial 指令用于调用一些需要特殊处理的实例方法，包括 **实例初始化方法（构造器）、私有方法和父类方法**。这些方法都是 **静态类型绑定的**，不会在调用的时候进行动态分发。（不存在方法重写，不能在运行中改变的）
+  - invokestatic指令用于调用命名中 **类中的类方法（staic方法）**。这是静态绑定的
+  - invokedynamic：调用动态绑定的方法，这个是动态绑定的方法，是JDK1.7后新加入的指令。用于在运行的时候解析调用点限定符的方法，并执行该方法。前面4条调用指令的分派逻辑都固化在Java虚拟机内部，而invokedynamic指令的分派逻辑是由用户所设定的引导方法决定的。到了 java 8 这条指令才第一次在 java 应用，用在 lambda表达式里
+
+invokevirtual  实例方法调用
+
+```java
+public void invokevirtual() {
+    Object obj = new Object();
+    obj.toString();
+}
+
+ 0 new #2 <java/lang/Object>
+ 3 dup
+     // 构造器的调用
+ 4 invokespecial #1 <java/lang/Object.<init> : ()V>
+ 7 astore_1 // ojb 存储在局部变量1中
+ 8 aload_1 // 加载 obj 到操作数栈中
+     // 调用实例对象obj的toString方法
+ 9 invokevirtual #48 <java/lang/Object.toString : ()Ljava/lang/String;>
+12 pop
+13 return
+
+```
+
+ invokespecial  只有 构造器方法和 父类方法，私有和final 已经不是invokespecial  了变成了invokevirtual
+
+```java
+ public void invokespecial() {
+     //情况1：构造器
+     Date date = new Date();
+     //情况2：父类方法
+     super.toString();
+     //情况3：私有方法
+     privateMethod();
+     //情况4：final方法
+     finalMethod();
+ }
+
+private void privateMethod(){
+
+}
+
+final void finalMethod(){
+
+}
+
+ 0 new #45 <java/util/Date>
+ 3 dup
+ 4 invokespecial #47 <java/util/Date.<init> : ()V>
+ 7 astore_1
+ 8 aload_0
+ 9 invokespecial #48 <java/lang/Object.toString : ()Ljava/lang/String;>
+12 pop
+13 aload_0
+14 invokevirtual #52 <com/qin/ClassCastTest.privateMethod : ()V>
+17 aload_0
+18 invokevirtual #57 <com/qin/ClassCastTest.finalMethod : ()V>
+21 return
+
+```
+
+invokestatic 调用静态方法：不管你什么权限，私有不私有
+
+```java
+private void invokestatic() {
+	staticMethod();
+}
+private static void staticMethod() {
+
+}
+// 调用ClassCastTest类的 静态方法 staticMethod
+0 invokestatic #60 <com/qin/ClassCastTest.staticMethod : ()V>
+3 return
+
+```
+
+invokeinterface 接口调用方法
+
+```java
+private void invokeinterface() {
+    Object obj = new Object();
+    Comparable c1 = new Comparable() {
+        @Override
+        public int compareTo(Object o) {
+            return 0;
+        }
+    };
+    c1.compareTo(obj);
+}
+
+ 0 new #2 <java/lang/Object>
+ 3 dup
+ 4 invokespecial #1 <java/lang/Object.<init> : ()V>
+ 7 astore_1 // obj 存储到局部变量表1中
+ 8 new #63 <com/qin/ClassCastTest$1> //匿名内部类
+11 dup
+12 aload_0
+13 invokespecial #65 <com/qin/ClassCastTest$1.<init> : (Lcom/qin/ClassCastTest;)V>
+16 astore_2 // 匿名内部类存储到局部变量表2中
+17 aload_2 //加载 匿名内部类接口 c1 
+18 aload_1 //加载 obj
+    // 执行 c1 接口的方法 参数 obj ,返回值 int 类型
+19 invokeinterface #68 <java/lang/Comparable.compareTo : (Ljava/lang/Object;)I> count 2
+24 pop //出栈
+25 return
+
+
+```
+
+特殊情况：接口的静态方法和 default 方法
+
+```java
+package com.qin;
+
+public class InterfaceTest {
+
+    public static void main(String[] args) {
+        A a = new B();
+        //接口调用使用：invokeinterface
+        a.defaultMethod();
+        //类调用使用：invokestatic
+        A.staticMethod();
+    }
+}
+
+interface A {
+    static void staticMethod() {
+
+    }
+
+    default void defaultMethod() {
+
+    }
+}
+
+class B implements A {
+
+}
+
+
+ 0 new #7 <com/qin/B>
+ 3 dup
+ 4 invokespecial #9 <com/qin/B.<init> : ()V>
+ 7 astore_1
+ 8 aload_1
+ 9 invokeinterface #10 <com/qin/A.defaultMethod : ()V> count 1
+14 invokestatic #15 <com/qin/A.staticMethod : ()V>
+17 return
+
+```
+
+invokedynamic：lambda表达式里
+
+```java
+private void invokedynamic() {
+    Object obj = new Object();
+    Comparable c1 = o -> 0;
+    c1.compareTo(obj);
+}
+ 0 new #2 <java/lang/Object>
+ 3 dup
+ 4 invokespecial #1 <java/lang/Object.<init> : ()V>
+ 7 astore_1
+ 8 invokedynamic #74 <compareTo, BootstrapMethods #0>
+13 astore_2
+14 aload_2
+15 aload_1
+16 invokeinterface #68 <java/lang/Comparable.compareTo : (Ljava/lang/Object;)I> count 2
+21 pop
+22 return
+
+```
+
+##### java.lang.invoke包和MethodHandle
+
+Method handles通常被认为是对反射api的包装，但是并不持有一些属性的描述信息，比如方法的描述符（公开还是私有）、方法的注解是无法获取到的。可以把Method handles理解为一个残缺的反射api。
+
+MethodType：来描述方法的类型
+
+```java
+public class MethodHandleTest{
+    static class ClassA{
+        public void println(String s){
+           System.out.println(s);
+        }
+    }
+    public static void main(String[] args)throws Throwable{
+        Object obj=System.currentTimeMillis()%2==0?System.out:new ClassA();
+        /*无论obj最终是哪个实现类，下面这句都能正确调用到println方法*/
+        getPrintlnMH(obj).invokeExact("icyfenix");
+    }
+    private static MethodHandle getPrintlnMH(Object reveiver) throws Throwable{
+        /*MethodType：代表“方法类型”，包含了方法的返回值（methodType（）的第一个参数）和具体参数（methodType（）第二个及以后的参数）*/
+        MethodType mt=MethodType.methodType(void.class,String.class);
+        /*lookup（）方法来自于MethodHandles.lookup，这句的作用是在指定类中查找符合给定的方法名称、方法类型，并且符合调用权限的方法句柄
+        因为这里调用的是一个虚方法，按照Java语言的规则，方法第一个参数是隐式的，代表该方法的接收者，也即是this指向的对象，
+　　　　这个参数以前是放在参数列表中进行传递的，而现在提供了bindTo（）方法来完成这件事情*/
+        return lookup().findVirtual(reveiver.getClass(),"println",mt).bindTo(reveiver);
+    }
+}
+```
+
+当使用MethodHandle. invokeExact ()调用时，编译器会根据传入的参数和返回值生成具体的方法，方法参数或者返回类型不同，调用的方法也是不一样的。和反射相比，少了封箱、拆箱操作，因此会提高一点性能。
+
+
+
+##### 创建invokedynamic调用点
+
+java8中的lambda表达式在编译成字节码时会生成`invokedynamic`调用点。虽然lambda表达式也可以通过转换成匿名内部类来解决调用问题，但是使用`invokedynamic`推迟了类似class的创建。
+
+
+
+##### Lambda表达式：借助 invokedynamic 来实现的
+
+当编译lambda方法时，编译器会创建一个class类，把labmda方法体放置在类中的私有方法里，方法的命名按如下所示的格式：
+
+```java
+lambda$X$Y
+```
+
+"X"指代声明lambda所在的方法名称，“Y”是一个从0开始递增的序列号。
+
+lambda表达式被`invokedynamic`调用点替换。当调用时，调用点首先请求绑定的工厂方法去生成lambda表达式所实现的接口的实例，比如：
+
+```csharp
+Runnable r = () -> System.out.println("hello lambda");
+```
+
+lambda实现的是Runnable接口，所以调用点会生成一个Runnable接口的实例。
+
+调用点会提供lambda表达式所实现的接口方法的所有参数。
+
+任何`invokedynamic`调用点都会执行到`LambdaMetafactory`类。
+
+该类存在于java类库中，该类可以创建一个lambda实现的接口方法的实例，该实例包含lambda的方法体。
+
+当调用时，`bootstrap`方法使用ASM库来创建lambda表达式所对应接口的实现类。
+
+最终，根据生成的class类创建“MethodHandle”句柄，该句柄被塞进`ConstantCallSite`对象里。如果lambda表达式是无状态的（不引用成员变量或其他方法），那么`LambdaMetafactory`返回一个所谓的“constant” method handle，该方法句柄指向生成类的一个实例，该实例被当作单例来处理，这样每次调用时，不需要重复创建对象，节约内存。
+
+
+
+
 
 ##### 方法返回指令
+
+弹出操作数栈的栈顶的数据给调用者的局部变量
 
 - 方法结束调用之前，需要进行返回。方法返回指令是 **根据返回值的类型区分的**
 
@@ -610,7 +1358,45 @@ public class IAdd {
 
   - 最后，会丢弃当前方法的整个帧，恢复调用者的帧，并将控制权转交给调用者
 
+```java
+public int methodReturn() {
+    int i = 500;
+    int j = 200;
+    int k = 50;
+    
+    return (i + j) / k;
+}
+```
+
+![](images\1606317801310.png)
+
+
+
+
+
 #### 操作数栈管理指令
+
+> ## 通用(无类型）栈操作
+>
+> nop 不做任何操作
+>
+> pop 弹出栈顶端一个字长的内容
+>
+> pop2 弹出栈顶端两个字长的内容
+>
+> dup 复制栈顶部一个字长内容
+>
+> dup_x1 复制栈顶部一个字长的内容，然后将复制内容及原来弹出的两个字长的内容压入栈
+>
+> dup_x2 复制栈顶部一个字长的内容，然后将复制内容及原来弹出的三个字长的内容压入栈
+>
+> dup2 复制栈顶部两个字长内容
+>
+> dup2_x1 复制栈顶部两个字长的内容，然后将复制内容及原来弹出的三个字长的内容压入栈
+>
+> dup2_x2 复制栈顶部两个字长的内容，然后将复制内容及原来弹出的四个字长的内容压入栈
+>
+> swap 交换栈顶部两个字长内容
 
 - 如同操作一个普通数据结构中的堆栈那样，JVM提供的操作数栈管理指令，可以用于直接操作操作数栈的指令
 
@@ -627,8 +1413,8 @@ public class IAdd {
 
   - 不带 _x 的指令是复制栈顶数据并压入栈顶。包括两个指令，dup 和 dup2，dup 的系数代表要复制的 Slot 个数
 
-  - - dup 开头的指令用于复制1个 Slot 的数据。例如1个 int 或1个 reference 类型数据
-    - dup2 开头的指令用于复制2个 Slot 的数据。例如1个 long，或2个 int，或1个 int 加1个 float 类型数据
+  - - **dup 开头的指令用于复制1个 Slot 的数据。例如1个 int 或1个 reference 类型数据**
+    - **dup2 开头的指令用于复制2个 Slot 的数据。例如1个 long，或2个 int，或1个 int 加1个 float 类型数据**
 
   - 带 _x 的指令是复制栈顶数据并插入栈顶以下的某个位置。共有4个指令，dup_x1、dup2_x1、dup_x2、dup2_x2。对于带 _x 的复制插入指令，只要将指令的 dup 和 x 的系数相加，结果即为需要插入的位置。因此
 
@@ -637,14 +1423,236 @@ public class IAdd {
     - dup2_x1 插入位置：2+1=3，即栈顶3个 Slot 下面
     - dup2_x2 插入位置：2+2=4，即栈顶4个 Slot 下面
 
-  - pop：将栈顶的1个 Slot 数值出栈。例如1个 short 类型数值
-  - pop2：将栈顶的2个 Slot 数值出栈。例如1个 double 类型数值，或者2个 int 类型数值
+  - **pop：将栈顶的1个 Slot 数值出栈。例如1个 short 类型数值**
+  - **pop2：将栈顶的2个 Slot 数值出栈。例如1个 double 类型数值，或者2个 int 类型数值**
+
+```java
+package com.qin;
+
+public class DupAndPop {
+    public void  dup_pop(){
+        Object obj = new Object();
+        obj.toString();
+    }
+}
+
+ 0 new #2 <java/lang/Object>
+ 3 dup //复制
+ 4 invokespecial #1 <java/lang/Object.<init> : ()V>
+ 7 astore_1
+ 8 aload_1
+ 9 invokevirtual #7 <java/lang/Object.toString : ()Ljava/lang/String;>
+12 pop //将栈上多余的弹出 
+13 return
+
+     
+public void pop(){
+   popTest();
+}
+public long popTest(){
+    return 0;
+}
+     
+0 aload_0 //加载this
+1 invokevirtual #11 <com/qin/Pop.popTest : ()J>//调用this.popTest
+4 pop2 //返回的long 占 2个slot,弹出2个slot
+5 return     
+
+```
+
+```java
+private long returnIndex() {
+    return index++;
+}
+
+private long index = 0;
+
+
+ 0 aload_0 //加载 this
+ 1 dup //复制this
+ 2 getfield #7 <com/qin/ReturnIndex.index : J> //消耗一个栈this,获取index: 0 (index是long占2个solt)
+ 5 dup2_x1  
+ 6 lconst_1
+ 7 ladd
+ 8 putfield #7 <com/qin/ReturnIndex.index : J>
+11 lreturn
+```
+
+![](images\1606317801311.png)
+
+![](images\1606317801312.png)
+
+```
+//消耗一个栈this,获取index: 0 (index是long占2个solt)
+getfield #7 <com/qin/ReturnIndex.index : J> 
+```
+
+![](images\1606317801313.png)
+
+```
+dup2_x1 ：复制两个 solt，向下 2 +1 的位置插入得到结果
+```
+
+![](images\1606317801314.png)
+
+```
+lconst_1 
+```
+
+![](images\1606317801315.png)
+
+```
+ ladd 
+```
+
+![](images\1606317801316.png)
+
+
+
+```
+//消耗this和 index:1 得到 this.idex = 1，最终只剩下 index:0
+putfield #7 <com/qin/ReturnIndex.index : J>  ：
+```
+
+![](images\1606317801317.png)
+
+```
+lreturn  :最后返回 0    ，清空当前栈针
+```
+
+
+
+
 
 #### 控制转移指令
 
 - 程序流程离不开条件控制，为了支持条件跳转，虚拟机提供了大量字节码指令，大体上可以分为比较指令（在之前的算术指令）、条件跳转指令、比较条件跳转指令、多条件分支跳转指令、无条件跳转指令等
 
+> ## 比较指令
+>
+> lcmp 比较long类型值
+>
+> fcmpl 比较float类型值（当遇到NaN时，返回-1）
+>
+> fcmpg 比较float类型值（当遇到NaN时，返回1）
+>
+> dcmpl 比较double类型值（当遇到NaN时，返回-1）
+>
+> dcmpg 比较double类型值（当遇到NaN时，返回1）
+>
+> ## 条件分支指令
+>
+> ifeq 如果等于0，则跳转
+>
+> ifne 如果不等于0，则跳转
+>
+> iflt 如果小于0，则跳转
+>
+> ifge 如果大于等于0，则跳转
+>
+> ifgt 如果大于0，则跳转
+>
+> ifle 如果小于等于0，则跳转
+>
+> ## 比较条件分支指令
+>
+> if_icmpeq 如果两个int值相等，则跳转
+>
+> if_icmpne 如果两个int类型值不相等，则跳转
+>
+> if_icmplt 如果一个int类型值小于另外一个int类型值，则跳转
+>
+> if_icmpge 如果一个int类型值大于或者等于另外一个int类型值，则跳转
+>
+> if_icmpgt 如果一个int类型值大于另外一个int类型值，则跳转
+>
+> if_icmple 如果一个int类型值小于或者等于另外一个int类型值，则跳转
+>
+> ifnull 如果等于null，则跳转
+>
+> ifnonnull 如果不等于null，则跳转
+>
+> if_acmpeq 如果两个对象引用相等，则跳转
+>
+> if_acmpne 如果两个对象引用不相等，则跳转
+>
+> ## 多条件分支跳转指令
+>
+> tableswitch 通过索引访问跳转表，并跳转
+>
+> lookupswitch 通过键值匹配访问跳转表，并执行跳转操作
+>
+> ## 无条件跳转指令
+>
+> goto 无条件跳转
+>
+> goto_w 无条件跳转（宽索引）
+
+
+
 ##### 条件跳转指令
+
+> ## 比较指令
+>
+> lcmp 比较long类型值
+>
+> fcmpl 比较float类型值（当遇到NaN时，返回-1）
+>
+> fcmpg 比较float类型值（当遇到NaN时，返回1）
+>
+> dcmpl 比较double类型值（当遇到NaN时，返回-1）
+>
+> dcmpg 比较double类型值（当遇到NaN时，返回1）
+>
+> ## 条件分支指令
+>
+> ifeq 如果等于0，则跳转
+>
+> ifne 如果不等于0，则跳转
+>
+> iflt 如果小于0，则跳转
+>
+> ifge 如果大于等于0，则跳转
+>
+> ifgt 如果大于0，则跳转
+>
+> ifle 如果小于等于0，则跳转
+>
+> ## 比较条件分支指令
+>
+> if_icmpeq 如果两个int值相等，则跳转
+>
+> if_icmpne 如果两个int类型值不相等，则跳转
+>
+> if_icmplt 如果一个int类型值小于另外一个int类型值，则跳转
+>
+> if_icmpge 如果一个int类型值大于或者等于另外一个int类型值，则跳转
+>
+> if_icmpgt 如果一个int类型值大于另外一个int类型值，则跳转
+>
+> if_icmple 如果一个int类型值小于或者等于另外一个int类型值，则跳转
+>
+> ifnull 如果等于null，则跳转
+>
+> ifnonnull 如果不等于null，则跳转
+>
+> if_acmpeq 如果两个对象引用相等，则跳转
+>
+> if_acmpne 如果两个对象引用不相等，则跳转
+>
+> ## 多条件分支跳转指令
+>
+> tableswitch 通过索引访问跳转表，并跳转
+>
+> lookupswitch 通过键值匹配访问跳转表，并执行跳转操作
+>
+> ## 无条件跳转指令
+>
+> goto 无条件跳转
+>
+> goto_w 无条件跳转（宽索引）
+
+
 
 - 条件跳转指令通常和比较指令结合使用。在条件跳转指令执行前，一般可以先用比较指令进行栈顶元素的准备，然后进行条件跳转
 - 条件跳转指令有：ifeq、iflt、ifle、ifne、ifgt、ifge、ifnull、ifnonnull。这些指令都接收两个字节的操作数，用于计算跳转的位置(16位符号整数作为当前位置的 offset)
@@ -654,13 +1662,27 @@ public class IAdd {
 
 ![1605789644065](images/1605789644065.png)
 
+| <    | <=   | ==   | !=   | >=   | >    | null   | not null  |
+| ---- | ---- | ---- | ---- | ---- | ---- | ------ | --------- |
+| iflt | ifle | ifeq | ifng | ifge | ifgt | ifnull | ifnonnull |
+
+
+
 - **注意**
   - 与前面运算规则一致
   - 对于 boolean、byte、char、short 类型的条件分支比较操作，都是使用 int 类型的比较指令完成
   - 对于 long、float、double 类型的条件分支比较操作，则会先执行相应类型的比较运算指令，运算指令会返回一个整型值到操作数栈中，随后再执行 int 类型的条件分支比较操作来完成整个分支跳转
   - 由于各类型的比较最终都会转为 int 类型的比较操作，所以 Java 虚拟机提供的 int 类型的条件分支指令是最为丰富和强大的
 
+
+
 ##### 比较条件跳转指令
+
+| <         | <=        | ==                   | !=                   | >=        | >         |
+| --------- | --------- | -------------------- | -------------------- | --------- | --------- |
+| if_icmplt | if_icmple | if_icmpeq、if_acmpeq | if_icmpne、if_acmpne | if_icmpge | if_icmpgt |
+
+
 
 - 比较条件跳转指令类似于比较指令和条件跳转指令的结合体，它将比较和跳转两个步骤合二为一
 - 这类指令有：if_icmped、if_icmpne、if_icmplt、if_icmpgt、if_icmple、if_icmpge、if_acmped 和 if_acmpne
@@ -670,6 +1692,12 @@ public class IAdd {
 ![1605790378482](images/1605790378482.png)
 
 - 这些指令都接收两个字节的操作数作为参数，用于计算跳转的位置。同时在执行指令时，栈顶需要准备两个元素进行比较。指令执行完成后，栈顶的这两个元素被清空，且没有任何数据入栈。**如果预设条件成立，则执行跳转，否则，继续执行下一条语句** 
+
+
+
+
+
+
 
 ##### 多条件分支跳转
 
@@ -685,9 +1713,159 @@ public class IAdd {
 
 ![1605791140909](images/1605791140909.png)
 
--  指令 lookupswitch 处理的是离散的 case 值，但是出于效率考虑，将 case-offset 对按照 case 值大小排序，给定 index 时，需要查找与 index 相等的 case，获得其 offset，如果找不到则跳转到 default。指令 lookupswitch 如下图所示 
+-  指令 lookupswitch 处理的是离散的 case 值，但是出于**效率考虑**，将 case-offset 对按照 case 值大小排序，给定 index 时，需要查找与 index 相等的 case，获得其 offset，如果找不到则跳转到 default。指令 lookupswitch 如下图所示 
 
 ![1605791172863](images/1605791172863.png)
+
+
+
+连续的使用 tableswitch 
+
+```java
+public void switch1(int select) {
+    int num;
+    switch (select) {
+        case 1:
+            num = 10;
+            break;
+        case 2:
+            num = 20;
+            break;
+        case 3:
+            num = 30;
+            break;
+        default:
+            num = 99;
+    }
+}
+
+ 0 iload_1
+ 1 tableswitch 1 to 3
+	1:  28 (+27)
+	2:  34 (+33)
+	3:  40 (+39)
+	default:  46 (+45)
+28 bipush 10
+30 istore_2
+31 goto 49 (+18)
+34 bipush 20
+36 istore_2
+37 goto 49 (+12)
+40 bipush 30
+42 istore_2
+43 goto 49 (+6)
+46 bipush 99
+48 istore_2
+49 return
+
+
+```
+
+不连续的
+
+```java
+ public void switch2(int select) {
+     int num;
+     switch (select) {
+         case 1:
+             num = 10;
+             break;
+         case 3:
+             num = 20;
+             break;
+         case 7:
+             num = 30;
+             break;
+         default:
+             num = 99;
+     }
+ }
+
+
+ 0 iload_1
+ 1 lookupswitch 3
+	1:  36 (+35)
+	3:  42 (+41)
+	7:  48 (+47)
+	default:  54 (+53)
+36 bipush 10
+38 istore_2
+39 goto 57 (+18)
+42 bipush 20
+44 istore_2
+45 goto 57 (+12)
+48 bipush 30
+50 istore_2
+51 goto 57 (+6)
+54 bipush 99
+56 istore_2
+57 return
+ 
+
+```
+
+hashcode相等，字符串不等的情况
+
+```java
+public static void switch3(String select) {
+    switch (select) {
+        case "3C":
+            break;
+        case "2b":
+            break;
+        case "qinjp":
+            break;
+        default:
+    }
+}
+
+  0 aload_0
+  1 astore_1
+  2 iconst_m1
+  3 istore_2
+  4 aload_1
+  5 invokevirtual #7 <java/lang/String.hashCode : ()I>
+      // hashcode相等定位到语句，下面还有两次equals判断
+  8 lookupswitch 2
+	1648:  36 (+28)
+	107595036:  64 (+56)
+	default:  75 (+67)
+ 36 aload_1
+ 37 ldc #13 <2b>
+        //与 2b equals判断
+ 39 invokevirtual #15 <java/lang/String.equals : (Ljava/lang/Object;)Z>
+ 42 ifeq 50 (+8)
+ 45 iconst_1
+ 46 istore_2
+ 47 goto 75 (+28)
+ 50 aload_1
+ 51 ldc #19 <3C>
+      //与 3C equals判断
+ 53 invokevirtual #15 <java/lang/String.equals : (Ljava/lang/Object;)Z>
+ 56 ifeq 75 (+19)
+ 59 iconst_0
+ 60 istore_2
+ 61 goto 75 (+14)
+ 64 aload_1
+ 65 ldc #21 <qinjp>
+ 67 invokevirtual #15 <java/lang/String.equals : (Ljava/lang/Object;)Z>
+ 70 ifeq 75 (+5)
+ 73 iconst_2
+ 74 istore_2
+ 75 iload_2
+ 76 tableswitch 0 to 2
+	0:  104 (+28)
+	1:  107 (+31)
+	2:  110 (+34)
+	default:  113 (+37)
+104 goto 113 (+9)
+107 goto 113 (+6)
+110 goto 113 (+3)
+113 return
+
+```
+
+
 
 ##### 无条件跳转
 
@@ -697,11 +1875,109 @@ public class IAdd {
 
 ![1605791886429](images/1605791886429.png)
 
+```java
+public static void forMethod() {
+    short i;
+    for (i = 0; i < 100; i++) {
+    }
+}
+
+ 0 iconst_0
+ 1 istore_0
+ 2 iload_0  //value1   
+ 3 bipush 100 //value2   
+ 5 if_icmpge 16 (+11) // 比较value1 ≥ value2 则跳转
+ 8 iload_0
+ 9 iconst_1
+10 iadd //相加
+11 i2s // int 转 short
+12 istore_0 //i 存会局部变量
+13 goto 2 (-11)
+16 return
+```
+
+
+
+```java
+public static void forMethod2() {
+    for (int i = 0; i < 100; i++) {
+    }
+}
+
+ 0 iconst_0
+ 1 istore_0
+ 2 iload_0   //value1   0
+ 3 bipush 100  //value2   100
+ 5 if_icmpge 14 (+9) // 比较value1 ≥ value2 则跳转
+ 8 iinc 0 by 1  // i++ 
+11 goto 2 (-9) //无条件跳回2 
+14 return    
+```
+
+结论：以后for 循环使用 int ,不要使用 short,double，使用short,double多转换和拿出复制
+
+使用int  则直接使用 iinc 0 by 1  一行命令
+
+```java
+public static void forMethod3() {
+    int i = 0;
+    while (i < 100) {
+        i++;
+    }
+}
+
+ 0 iconst_0
+ 1 istore_0
+ 2 iload_0
+ 3 bipush 100
+ 5 if_icmpge 14 (+9)
+ 8 iinc 0 by 1
+11 goto 2 (-9)
+14 return
+
+```
+
+结论：for 循环和while循环一样的，只不过 i 的作用域范围大点
+
+```java
+public static void forMethod4() {
+    int i = 0;
+    do {
+        i++;
+    } while (i < 100);
+}
+ 0 iconst_0
+ 1 istore_0
+ 2 iinc 0 by 1
+ 5 iload_0
+ 6 bipush 100
+ 8 if_icmplt 2 (-6)
+11 return
+```
+
+do  while 循环 执行一次方法体后，才去比较，至少能执行一次方法体
+
+
+
+
+
+
+
+
+
 #### 异常处理指令
+
+> athrow 抛出异常或错误。将栈顶异常抛出
+>
+> jsr 跳转到子例程
+>
+> jsr_w 跳转到子例程（宽索引）
+>
+> rct 从子例程返回
 
 ##### 抛出异常指令
 
-- **athrow 指令**
+- **athrow 指令**：手动拋异常
   - 在 Java 程序中显式抛出异常的操作(throw 语句)都是由 athrow 指令来实现的
   - 除了使用 throw 语句显式抛出异常情况之外，**JVM 规范还规定了许多运行时一场会在其它 Java 虚拟机指令检测到异常状况时自动抛出**。例如，在之前介绍的整数运算时，当除数为零时，虚拟机会在 idiv 或 ldiv 指令中抛出 ArithmeticException 异常
 - **注意**
@@ -722,6 +1998,155 @@ public class IAdd {
   - 被捕获的异常类在常量池中的索引
 - **当一个异常被抛出时，JVM 会在当前的方法里寻找一个匹配的处理，如果没有找到，这个方法会强制结束并弹出当前栈帧，**并且异常会重新抛给上层调用的方法(在调用方法栈帧)。如果在所有栈帧弹出前仍然没有找到合适的异常处理，这个县城将终止。如果这个异常在最后一个非守护线程里抛出，将会导致 JVM 自己终止，比如这个线程是个 main 线程
 - **不管什么时候抛出异常，如果异常处理最终匹配了所有异常类型，代码就会继续执行。**在这种情况下， 如果方法结束后没有抛出异常，仍然执行 finally 块，在 return 前，它直接跳到 finally 块来完成目标
+
+
+
+```java
+public void throwMeth2(int i) throws RuntimeException, IOException {
+    if (i == 0) {
+        try {
+            final int i1 = i / 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public void throwMeth2(int) throws java.lang.RuntimeException, java.io.IOException;
+    descriptor: (I)V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=2, locals=3, args_size=2
+         0: iload_1
+         1: ifne          16
+         4: iload_1
+         5: iconst_0
+         6: idiv
+         7: istore_2
+         8: goto          16
+        11: astore_2
+        12: aload_2
+        13: invokevirtual #16                 // Method java/lang/Exception.printStackTrace:()V
+        16: return
+      // code的 Exception table try catch 或者try finally才会有       
+      Exception table:
+         from    to  target type
+             4     8    11   Class java/lang/Exception
+      LineNumberTable:
+        line 21: 0
+        line 23: 4
+        line 26: 8
+        line 24: 11
+        line 25: 12
+        line 28: 16
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+           12       4     2     e   Ljava/lang/Exception;
+            0      17     0  this   Lcom/qin/BusExceptionTest;
+            0      17     1     i   I
+      StackMapTable: number_of_entries = 2
+        frame_type = 75 /* same_locals_1_stack_item */
+          stack = [ class java/lang/Exception ]
+        frame_type = 4 /* same */
+    // 方法中的异常和 code的 Exception table 还是有区别的
+          
+    Exceptions:
+      throws java.lang.RuntimeException, java.io.IOException
+    MethodParameters:
+      Name                           Flags
+      i
+```
+
+
+
+```java
+public void forException() throws RuntimeException, IOException {
+    for (int j = 0; j < 10000; j++) {
+        try {
+            final int i = j / 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+public void forException2() throws RuntimeException, IOException {
+    for (int j = 0; j < 10000; j++) {
+        final int i = j / 0;
+    }
+}
+
+
+```
+
+| 0 iconst_0           | 0 iconst_0                                                   |
+| -------------------- | ------------------------------------------------------------ |
+| 1 istore_1           | 1 istore_1                                                   |
+| 2 iload_1            | 2 iload_1                                                    |
+| 3 sipush 10000       | 3 sipush 10000                                               |
+| 6 if_icmpge 19 (+13) | 6 if_icmpge 27 (+21)                                         |
+| 9 iload_1            | 9 iload_1                                                    |
+| 10 iconst_0          | 10 iconst_0                                                  |
+| 11 idiv              | 11 idiv                                                      |
+| 12 istore_2          | 12 istore_2                                                  |
+| 13 iinc 1 by 1       | 13 goto 21 (+8)                                              |
+| 16 goto 2 (-14)      | 16 astore_2                                                  |
+| 19 return            | 17 aload_2                                                   |
+|                      | 18 invokevirtual #16 <java/lang/Exception.printStackTrace : ()V> |
+|                      | 21 iinc 1 by 1                                               |
+|                      | 24 goto 2 (-22)                                              |
+|                      | 27 return                                                    |
+
+for try catch 和 for 不try catch 就多了一个 goto 无条件跳转指令
+
+还有就是  Exception table 
+
+##### **常处理的性能问题结论**
+
+1. 在没有发生异常的情况下，try-catch 对性能的影响微乎其微
+2. 但是一旦发生异常，性能上则是灾难性的
+3. 因此，我们应该尽可能的避免通过异常来处理正常的逻辑检查，这样可以确保不会因为发生异常而导致性能问题。
+
+##### **异常表中的 any**
+
+如果命中了 any 之后，因为没有对应的异常处理器，会继续向上抛出去，交由该方法的调用方法处理。
+
+ from 和 to 的范围 ，只有在这个范围出现异常，就会new XXXExcrption，在栈中，然后去异常表中匹配
+
+匹配到了，就找到了对应的异常处理机制，不继续向上拋
+
+
+
+```java
+public String func() {
+    String str = "qin";
+    try {
+        return str;
+    } finally {
+        str = "qinjp";
+        //return str;
+    }
+}
+
+ 0 ldc #19 <qin>
+ 2 astore_1 //局部变量表 1  = qin
+ 3 aload_1
+ 4 astore_2 //局部变量表 2  = qin
+     ////这两句是finaly的
+ 5 ldc #9 <qinjp>
+ 7 astore_1 // //局部变量表 1 被覆盖为 qinjp
+ 8 aload_2 // 加载 局部变量表 2  ： qin
+ 9 areturn // 返回
+   //下面的是 3 -5 出现异常才会执行  
+10 astore_3 // 异常存局部变量表 3
+     //这两句是finaly的和上面的一样
+11 ldc #9 <qinjp> 
+13 astore_1  //局部变量表 1 被覆盖为 qinjp
+14 aload_3 //加载局部变量表 3的异常
+15 athrow //抛出异常
+
+```
+
+
 
 #### 同步控制指令
 
@@ -773,4 +2198,97 @@ public synchronized void add() {
 - 编译器必须确保无论方法通过何种方式完成，方法中调用过的每条 monitorenter 指令都必须执行其对应的 monitorexit 指令，而无论这个方法是正常结束还是异常结束
 
 - 为了保证在方法异常完成时 monitorenter 和 monitorexit 指令依然可以正确配对执行，**编译器会自动产生一个异常处理器，这个异常处理器声明可处理所有的异常**，它的目的就是用来执行 monitorexit 指令
+
+```java
+public class synchronizedTest {
+
+    private int i = 0;
+    public synchronized void method1() {
+        i++;
+    }
+    public void method2() {
+        i++;
+    }
+
+    Object obj = new Object();
+    public void method3() {
+        // obj：当前对象的监视器计数器
+        // 在对象头里面
+        synchronized (obj) {
+            i++;
+        }
+    }
+}
+method1：
+ 0 aload_0
+ 1 dup
+ 2 getfield #7 <com/qin/synchronizedTest.i : I>
+ 5 iconst_1
+ 6 iadd
+ 7 putfield #7 <com/qin/synchronizedTest.i : I>
+10 return
+     
+method2：
+ 0 aload_0
+ 1 dup
+ 2 getfield #7 <com/qin/synchronizedTest.i : I>
+ 5 iconst_1
+ 6 iadd
+ 7 putfield #7 <com/qin/synchronizedTest.i : I>
+10 return
+
+
+```
+
+method1 和 method2的对应字节码都一样
+
+区别在
+
+method1 的方法访问标识多个 ACC_SYNCHRONIZED 
+
+![](images\1606317801318.png)
+
+method2 的方法访问标识没有 ACC_SYNCHRONIZED 
+
+![](images\1606317801319.png)
+
+method3 ：
+
+```java
+  public void method3(); 
+    descriptor: ()V
+    flags: (0x0001) ACC_PUBLIC
+    Code:
+      stack=3, locals=3, args_size=1
+         0: aload_0
+         1: getfield      #13                 // Field obj:Ljava/lang/Object;
+         4: dup
+         5: astore_1
+         6: monitorenter
+         7: aload_0
+         8: dup
+         9: getfield      #7                  // Field i:I
+        12: iconst_1
+        13: iadd
+        14: putfield      #7                  // Field i:I
+        17: aload_1
+        18: monitorexit
+        19: goto          27
+        22: astore_2
+        23: aload_1
+        24: monitorexit
+        25: aload_2
+        26: athrow
+        27: return
+      Exception table:
+         from    to  target type
+             7    19    22   any  
+            22    25    22   any  #循环到22一定要保证  7-19  monitorexit 成功
+             					#  如果7-19  monitorexit 失败 循环继续执行
+
+monitorenter 之后，为了防止异常没有执行monitorexit
+             加了Exception table的处理，保证一定会执行monitorexit
+         
+
+```
 
