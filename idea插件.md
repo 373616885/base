@@ -178,7 +178,15 @@ verbose
 
 
 
+## java 启动参数 
 
+```shell
+-Xms600m -Xmx600m -XX:+UseG1GC -Xlog:gc+heap=trace -Xlog:gc* -Xlog:gc,gc+cpu::uptime -Xcomp -XX:-UseCounterDecay -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -XX:-UsePerfData -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./error.hprof
+```
+
+```shell
+ -Duser.timezone=GMT+08
+```
 
 
 

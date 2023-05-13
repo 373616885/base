@@ -240,10 +240,12 @@ TLAB：
 
 
 
+-XX:-UsePerfData : 关闭PerfData文件，jvm监控信息关闭
+
 
 
 ```shell
--Xms600m -Xmx600m -Xlog:gc+heap=trace -Xlog:gc* -Xlog:gc,gc+cpu::uptime -Xcomp -XX:-UseCounterDecay 
+-Xms600m -Xmx600m -XX:+UseG1GC -Xlog:gc+heap=trace -Xlog:gc* -Xlog:gc,gc+cpu::uptime -Xcomp -XX:-UseCounterDecay -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -XX:-UsePerfData -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./error.hprof
 ```
 
 
