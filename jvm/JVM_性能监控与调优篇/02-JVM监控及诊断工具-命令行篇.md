@@ -950,7 +950,7 @@ num     #instances         #bytes  class name (module)
 
 -XX:HeapDumpPath=<filename.hprof>
 
-
+-XX:+HeapDumpAfterFullGC 或者 -XX:+HeapDumpBeforeFullGC  
 
 
 
