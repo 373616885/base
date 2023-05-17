@@ -1,11 +1,3 @@
-> 笔记来源：[尚硅谷 JVM 全套教程，百万播放，全网巅峰（宋红康详解 java 虚拟机）](https://www.bilibili.com/video/BV1PJ411n7xZ "尚硅谷JVM全套教程，百万播放，全网巅峰（宋红康详解java虚拟机）")
->
-> 同步更新：https://gitee.com/vectorx/NOTE_JVM
->
-> https://codechina.csdn.net/qq_35925558/NOTE_JVM
->
-> https://github.com/uxiahnan/NOTE_JVM
-
 [toc]
 
 # 4. JVM 运行时参数
@@ -133,6 +125,24 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode)
 
 同样地，通过 java -version 命令：可以看到 mixed mode 字样，代表当前系统使用的是混合模式
 
+
+
+-Xint ： 只使用解释器：所有字节码都被解释执行，这个模式的速度是很慢的
+
+-Xcomp ： 只使用编译器：所有字节码第一次使用就被编译成本地代码，然后在执行
+
+-Xmixed  ： 混合模式：这是默认模式，刚开始的时候使用解释器慢慢解释执行，后来让JIT即时编译器根据程序运行的情况，有选择地将某些热点代码提前编译并缓存在本地，在执行的时候效率就非常高了
+
+
+
+-Xms<size>       设置初始Java堆大小，等价于-XX:InitialHeapSize
+
+-Xmx<size>       设置最大Java堆大小，等价于-XX:MaxHeapSize
+
+-Xss<size>         设置Java线程堆栈大小，等价于-XX:ThreadStackSize
+
+
+
 ### 4.1.3. 类型三：-XX 参数选项
 
 **Boolean 类型格式**
@@ -142,12 +152,46 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode)
 -XX:-<option>  禁用option属性
 ```
 
+![img](img\9DBE12D0-A69C-4DF5-8CF0-04DEF354E6F0.png)
+
 **非 Boolean 类型格式**
 
 ```shell
 -XX:<option>=<number>  设置option数值，可以带单位如k/K/m/M/g/G
 -XX:<option>=<string>  设置option字符值
 ```
+
+![img](img\5E2B9CF4-2B3A-4ACE-80B5-35E7C41A7CCF.png)
+
+![img](img\3847DE53-33D3-4428-8662-2192074F20C8.png)
+
+**特殊的**
+
+java -XX:+PrintFlagsFinal ：查看所有JVM参数的最终值
+
+java -XX:+PrintFlagsInitial：查看所有的参数的默认初始值
+
+java -XX:+PrintCommandLineFlags：查看那些已经被用户或者JVM设置过的详细的xx参数的名称和值。
+
+默认不包括Diagnostic（诊断）和Experimental（试验）的参数
+
+可以配合-XX:+UnlockDiagnosticVMOptions和-XX:UnlockExperimentalVMOptions使用
+
+java –XX: +PrintFlagsFinal –version
+
+
+
+上面的一般不用，一般都是在以运行的程序使用
+
+jinfo -flags pid  查看是使用的参数
+
+jps 查看应用自己输入的参数 
+
+jps -v   或者 jps -lvm
+
+
+
+
 
 ## 4.2. 添加 JVM 参数选项
 
@@ -176,6 +220,12 @@ jinfo -flag [+|-]<name> <pid>
 # 设置非Boolean类型参数
 jinfo -flag <name>=<value> <pid>
 ```
+
+
+
+
+
+
 
 ## 4.3. 常用的 JVM 参数选项
 
@@ -225,6 +275,32 @@ jinfo -flag <name>=<value> <pid>
 -XX:OnOutOfMemoryError=<path> 指定可行性程序或脚本的路径，当发生OOM时执行脚本
 ```
 
+
+
+XX:OnOutOfMemoryError
+
+对OnOutOfMemoryError的运维处理
+
+以部署在1inux系统/opt/Server目录下的Server.jar为例
+
+1. 在run.sh启动脚本中添加jvm参数：
+   -XX:OnOutofMemoryError/opt/Server/restart.sh
+2. restart.sh脚本
+   1inux环境：
+   #!/bin/bash
+   pid=$(ps -eflgrep Server.jarlawk {if($8=="java"){print $2)}')
+   kill -9 $pid
+   cd /opt/Server/;sh run.sh
+3. Windows环境：
+   echo off
+   wmic process where Name='java.exe'delete
+   cd D:\Server
+   start run.bat
+
+
+
+
+
 ### 4.3.4. 垃圾收集器相关选项
 
 首先需了解垃圾收集器之间的搭配使用关系
@@ -270,8 +346,8 @@ $$
 ```
 
 ```shell
-# CMS回收器
--XX:+UseConcMarkSweepGC  年轻代使用CMS GC。
+# CMS回收器--只能和ParNewGC搭配，老年代使用的标记-清除算法（有碎片化的问题）
+-XX:+UseConcMarkSweepGC  老年代使用CMS GC。
 	开启该参数后会自动将-XX：＋UseParNewGC打开。即：ParNew（Young区）+ CMS（Old区）+ Serial Old的组合
 -XX:CMSInitiatingOccupanyFraction  设置堆内存使用率的阈值，一旦达到该阈值，便开始进行回收。JDK5及以前版本的默认值为68，DK6及以上版本默认值为92％。
 	如果内存增长缓慢，则可以设置一个稍大的值，大的阈值可以有效降低CMS的触发频率，减少老年代回收的次数可以较为明显地改善应用程序性能。
@@ -304,10 +380,34 @@ $$
 -XX:MaxGCPauseMillis  设置期望达到的最大GC停顿时间指标（JVM会尽力实现，但不保证达到）。默认值是200ms
 -XX:ParallelGCThread  设置STW时GC线程数的值。最多设置为8
 -XX:ConcGCThreads  设置并发标记的线程数。将n设置为并行垃圾回收线程数（ParallelGCThreads）的1/4左右。
+
 -XX:InitiatingHeapOccupancyPercent 设置触发并发GC周期的Java堆占用率阈值。超过此值，就触发GC。默认值是45。
 -XX:G1NewSizePercent  新生代占用整个堆内存的最小百分比（默认5％）
 -XX:G1MaxNewSizePercent  新生代占用整个堆内存的最大百分比（默认60％）
 -XX:G1ReservePercent=10  保留内存区域，防止 to space（Survivor中的to区）溢出
+
+
+G1关于Mixed GC调优常用参数：
+-XX:InitiatingHeapOccupancyPercent:
+设置堆占用率的百分比(g到1gg)达到这个数值的时候触发global concurrent marking(全局并发标记)，默认为45%。值为0 表示间断进行全局并发标记。
+
+-XX:G1MixedGCLiveThresholdPercent: 实验性标记无法使用
+设置old区的region被回收时候的对象占比，默认占用率有65%和85%（不同版本不同）
+只有o1d区的region中存活的对象占用达到了这个百分比,才会在Mixed GC中被回收。
+
+-XX:G1HeapWastePercent:
+在global concurrent marking(全局并发标记)结束之后，可以知道所有的区有多少空间要被回收，在每次young GC之后和再次发
+生Mixed GC.之前，会检查垃圾占比是否达到此参数，默认值5%，只有达到了，下次才会发生Mixed GC。
+
+-XX:G1MixedGCCountTarget
+一次global concurrent marking(全局并发标记)之后，最多执行Mixed GC的次数，默认是8。
+全局并发标记阶段生成的Cset里的Region拆分为最多8部分，然后在每轮Mixed GC里收集一部分
+这个值要和G1OldCSetRegionThresholdPercent参数配合使用，
+8*10%=80%，应该来说会大于每次标记阶段的Cset集合了。一般此参数也不需额外调整。
+
+-XX:G1OldCSetRegionThresholdPercent: 实验性标记无法使用
+设置Mixed GC收集周期中要收集的 old region数的上限。默认值是]ava堆的10%
+
 ```
 
 怎么选择垃圾回收器？
@@ -323,9 +423,12 @@ $$
 - 没有最好的收集器，更没有万能的收集器
 - 调优永远是针对特定场景、特定需求，不存在一劳永逸的收集器
 
+
+
 ### 4.3.5. GC 日志相关选项
 
 ```shell
+-verbose:gc 
 -XX:+PrintGC <==> -verbose:gc  打印简要日志信息
 -XX:+PrintGCDetails            打印详细日志信息
 -XX:+PrintGCTimeStamps  打印程序启动到GC发生的时间，搭配-XX:+PrintGCDetails使用

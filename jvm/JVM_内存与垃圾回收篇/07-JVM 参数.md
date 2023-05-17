@@ -56,10 +56,7 @@ AdaptiveSizePolicy(自适应大小策略) ：Parallel GC 和G1 GC的情况下自
 
 
 ```shell
--XX:+HeapDumpOnOutMemoryError 内存出现OOM时生成Heap转储文件，两者互斥
--XX:+HeapDumpBeforeFullGC 出现FullGC时生成Heap转储文件，两者互斥
--XX:HeapDumpPath=<path> 指定heap转储文件的存储路径，默认当前目录
--XX:OnOutOfMemoryError=<path> 指定可行性程序或脚本的路径，当发生OOM时执行脚本
+
 ```
 
 
@@ -70,9 +67,15 @@ AdaptiveSizePolicy(自适应大小策略) ：Parallel GC 和G1 GC的情况下自
 
 -Xcomp：第一次使用就编译成本地代码
 
--Xmixed：混合模式----解释执行+即时编译
+-Xmixed：混合模式----解释执行+即时编译，java使用它作为默认
+
+JVM可以通过系统的运行进行标准分析（热点探测功能优化）,而不是第一次就编译成地代码
 
 
+
+
+
+java -XX:+PrintVMOptions 打印JVM的参数
 
 java -XX:+PrintFlagsFinal ：查看所有JVM参数的最终值
 
@@ -80,11 +83,23 @@ java -XX:+PrintFlagsInitial：查看所有的参数的默认初始值
 
 java -XX:+PrintCommandLineFlags：查看那些已经被用户或者JVM设置过的详细的xx参数的名称和值。
 
+默认不包括Diagnostic（诊断）和Experimental（试验）的参数
 
+可以配合-XX:+UnlockDiagnosticVMOptions和-XX:UnlockExperimentalVMOptions使用
 
 java –XX: +PrintFlagsFinal –version
 
 ![](images/image-20200705205443995.jpg)
+
+上面的一般不用，一般都是在以运行的程序使用
+
+jinfo -flags pid  查看是使用的参数
+
+jps 查看应用自己输入的参数 
+
+jps -v   或者 jps -lvm
+
+
 
 
 
@@ -122,6 +137,46 @@ jstat -gc  pid
 
 
 
+-XX:+HeapDumpOnOutMemoryError 内存出现OOM时生成Heap转储文件，与下面的互斥
+
+-XX:+HeapDumpBeforeFullGC 出现FullGC之前生成Heap转储文件
+
+-XX:+HeapDumpAfterFullGC  出现FullGC之后生成Heap转储文件
+
+-XX:HeapDumpPath=<path> 指定heap转储文件的存储路径，默认当前目录
+
+-XX:OnOutOfMemoryError=<path> 指定可行性程序或脚本的路径，当发生OOM时执行脚本
+
+
+
+XX:OnOutOfMemoryError
+
+对OnOutOfMemoryError的运维处理
+
+以部署在1inux系统/opt/Server目录下的Server.jar为例
+
+1. 在run.sh启动脚本中添加jvm参数：
+   	-XX:OnOutofMemoryError/opt/Server/restart.sh
+2. restart.sh脚本
+      1inux环境：
+      #!/bin/bash
+      pid=$(ps -eflgrep Server.jarlawk {if($8=="java"){print $2)}')
+      kill -9 $pid
+      cd /opt/Server/;sh run.sh
+3. Windows环境：
+      echo off
+      wmic process where Name='java.exe'delete
+      cd D:\Server
+      start run.bat
+
+
+
+
+
+-XX:+PrintGCApplicationStoppedTime 打印 STW 时间。 
+
+-XX:+PrintTenuringDistribution 打印对象年龄分布
+
 
 
 java -X  :  java -X查看所有非标准参数
@@ -156,8 +211,8 @@ jstack pid  >/tmp/log.txt
 - -XX:+PrintVMOptions 打印JVM的参数
 - -Xms：初始堆空间内存（默认为物理内存的1/64）
 - -Xmx：最大堆空间内存（默认为物理内存的1/4） -Xmx10m  指定了堆空间最大为10MB
-- -Xmn：设置新生代的大小。（初始值及最大值）
-- -XX:NewRatio：配置新生代与老年代在堆结构的占比
+- -Xmn：设置新生代的大小。（初始值及最大值） 等价-XX:NewRatio （初始）和 -XX:MaxNewRatio （最大）设置成一样
+- -XX:NewRatio：配置新生代与老年代在堆结构的占比 （初始）
 - -XX:SurvivorRatio：设置新生代中Eden和S0/S1空间的比例
 - -XX:MaxTenuringThreshold：设置新生代垃圾的最大年龄
 - -XX:+PrintGCDetails：输出详细的GC处理日志
@@ -180,6 +235,10 @@ jstack pid  >/tmp/log.txt
 - -XX:+UseStringDeduplication：G1 专属 开启String去重，默认是不开启的，需要手动开启。
 - -XX:+PrintStringDeduplicationStatistics：打印详细的去重统计信息
 - -XX:StringDeduplicationAgeThreshold=6 ：达到这个GC次数之后的String对象才能被认为是去重的候选对象
+- -XX:MaxGCPauseMillis   JVM最大暂停时间的目标值(以毫秒为单位)
+- -XX:GCTimeRatio 告诉JVM吞吐量要达到的目标值,默认值是99,运行中不停的修改 ，
+  - GCTimeRatio = 1/  N + 1    , N 垃圾回收时间（MaxGCPauseMillis）
+  - 与MaxGCPauseMillis相矛盾
 
 
 
@@ -194,6 +253,10 @@ jstack pid  >/tmp/log.txt
 修改编译模式：-Xcomp
 
 启动慢直接预热好，直接使用JIT即时编译，不使用慢的解释编译
+
+-Xcomp 编译模式，没有让JVM启用JIT编译器的全部功能,
+
+因为有些功能需要执行一定的执行后分析，热点探测，需要一定的分析
 
 
 
@@ -215,7 +278,7 @@ jstack pid  >/tmp/log.txt
 
 
 
-AdaptiveSizePolicy(自适应大小策略) ：Parallel GC的情况下自动计算动态调整 Eden、From 和 To 区的大小
+AdaptiveSizePolicy(自适应大小策略) ：GC的情况下自动计算动态调整 Eden、From 和 To 区的大小
 
 ```
   开启：-XX:+UseAdaptiveSizePolicy
@@ -245,7 +308,7 @@ TLAB：
 
 
 ```shell
--Xms600m -Xmx600m -XX:+UseG1GC -Xlog:gc+heap=trace -Xlog:gc* -Xlog:gc,gc+cpu::uptime -Xcomp -XX:-UseCounterDecay -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -XX:-UsePerfData -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./error.hprof
+-Xms600m -Xmx600m -XX:+UseG1GC -Xlog:ref*=debug -Xlog:gc+heap=trace -Xlog:gc* -Xlog:gc,gc+cpu::uptime Xlog:gc:gc.log -Xcomp -XX:-UseCounterDecay -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -XX:-UsePerfData -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./error.hprof -XX:+UseAdaptiveSizePolicy
 ```
 
 

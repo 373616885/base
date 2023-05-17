@@ -158,12 +158,26 @@ java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dfile.e
 标准参数
 
 verbose
+
 -verbose:class
+
 输出jvm载入类的相关信息，当jvm报告说找不到类或者类冲突时可此进行诊断。
+
 -verbose:gc
+
 输出每次GC的相关情况。
+
 -verbose:jni
+
 输出native方法调用的相关情况，一般用于诊断jni调用错误信息。
+
+
+
+-verbose:gc //在控制台输出GC情况
+
+ -XX:+PrintGCDetails  //在控制台输出详细的GC情况
+
+ -Xloggc: filepath  //将GC日志输出到指定文件中
 
 
 
@@ -181,12 +195,30 @@ verbose
 ## java 启动参数 
 
 ```shell
--Xms600m -Xmx600m -XX:+UseG1GC -Xlog:gc+heap=trace -Xlog:gc* -Xlog:gc,gc+cpu::uptime -Xcomp -XX:-UseCounterDecay -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -XX:-UsePerfData -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./error.hprof
+-Xms600m -Xmx600m -XX:+UseG1GC -Xlog:ref*=debug -Xlog:gc+heap=trace -Xlog:gc* -Xlog:gc,gc+cpu::uptime Xlog:gc:gc.log -Xcomp -XX:-UseCounterDecay -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -XX:-UsePerfData -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./error.hprof -XX:+UseAdaptiveSizePolicy
 ```
 
 ```shell
  -Duser.timezone=GMT+08
 ```
+
+-XX:-UsePerfData ：关闭 jps jstat 这些命令
+
+-XX:-UseCounterDecay ：关闭热点代码衰减
+
+-Xlog:gc* 代替-XX:+PrintGCDetails
+
+-Xlog:gc #查看GC情况
+
+-Xlog:class+load=info  #查看class加载情况
+
+-Xloggc:gc.log 变成了-Xlog:gc:gc.log
+
+-XX:+PrintHeapAtGC 变成了-Xlog:gc+heap=trace
+
+-XX:+PrintReferenceGC  变成了 -Xlog:ref*=debug
+
+-XX:+UseAdaptiveSizePolicy(自适应大小策略) ：GC的情况下自动计算动态调整 Eden、From 和 To 区的大小 ，默认开启
 
 
 

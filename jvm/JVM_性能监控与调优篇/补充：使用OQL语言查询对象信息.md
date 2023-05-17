@@ -12,6 +12,8 @@
 
 MAT 支持一种类似于 SQL 的查询语言 OQL（Object Query Language）。OQL 使用类 SQL 语法，可以在堆中进行对象的查找和筛选。
 
+![](img\fa3c5e41cbf999d261bcf32951831867.png)
+
 ## 1. SELECT 子句
 
 在 MAT 中，Select 子句的格式与 SQL 基本一致，用于指定要显示的列。Select 子句中可以使用“＊”，查看结果对象的引用实例（相当于 outgoing references）。
