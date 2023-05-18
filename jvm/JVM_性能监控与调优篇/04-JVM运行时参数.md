@@ -430,7 +430,7 @@ G1关于Mixed GC调优常用参数：
 ```shell
 -verbose:gc 
 -XX:+PrintGC <==> -verbose:gc  打印简要日志信息
--XX:+PrintGCDetails            打印详细日志信息
+-XX:+PrintGCDetails            打印详细日志信息 + 最终Heap的情况
 -XX:+PrintGCTimeStamps  打印程序启动到GC发生的时间，搭配-XX:+PrintGCDetails使用
 -XX:+PrintGCDateStamps  打印GC发生时的时间戳，搭配-XX:+PrintGCDetails使用
 -XX:+PrintHeapAtGC  打印GC前后的堆信息，如下图
@@ -453,7 +453,7 @@ G1关于Mixed GC调优常用参数：
 ### 4.3.6. 其他参数
 
 ```shell
--XX:+DisableExplicitGC  禁用hotspot执行System.gc()，默认禁用
+-XX:+DisableExplicitGC  禁用hotspot执行System.gc()，默认关闭可以使用System.gc()
 -XX:ReservedCodeCacheSize=<n>[g|m|k]、-XX:InitialCodeCacheSize=<n>[g|m|k]  指定代码缓存的大小
 -XX:+UseCodeCacheFlushing  放弃一些被编译的代码，避免代码缓存被占满时JVM切换到interpreted-only的情况
 -XX:+DoEscapeAnalysis  开启逃逸分析

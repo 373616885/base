@@ -239,6 +239,14 @@ jstack pid  >/tmp/log.txt
 - -XX:GCTimeRatio 告诉JVM吞吐量要达到的目标值,默认值是99,运行中不停的修改 ，
   - GCTimeRatio = 1/  N + 1    , N 垃圾回收时间（MaxGCPauseMillis）
   - 与MaxGCPauseMillis相矛盾
+- -XX:+UseLargePages 开启使用大页面
+  - 现代CPU架构引入了TLB（Translation lookaside buffer，页表寄存器缓冲）
+  - TLB默认将虚拟地址和物理地址按固定大小（4K）分割成页(page)和页帧(page frame)
+  - TLB是有限的，当超出TLB的存储极限时，就会发生 TLB miss，之后，OS就会命令CPU去访问内存上的页表。
+  - 如果频繁的出现TLB miss，程序的性能会下降地很快
+  - 调整：如果一个页4M，对比一个页4K，前者可以让TLB多存储1000个页地址映射关系，性能的提升是比较可观的。
+
+
 
 
 
@@ -522,5 +530,30 @@ UseFastEmptyMethods（使用快速空方法）
 BackEdgeThreshold（后边缘阈值）
 
 PreInflateSpin（预浸旋转）
+```
+
+
+
+### 通过 Java 代码获取 JVM 参数
+
+```java
+public class MemoryMonitor {
+    public static void main(String[] args) {
+        MemoryMXBean memorymbean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage usage = memorymbean.getHeapMemoryUsage();
+        System.out.println("INIT HEAP: " + usage.getInit() / 1024 / 1024 + "m");
+        System.out.println("MAX HEAP: " + usage.getMax() / 1024 / 1024 + "m");
+        System.out.println("USE HEAP: " + usage.getUsed() / 1024 / 1024 + "m");
+        System.out.println("\nFull Information:");
+        System.out.println("Heap Memory Usage: " + memorymbean.getHeapMemoryUsage());
+        System.out.println("Non-Heap Memory Usage: " + memorymbean.getNonHeapMemoryUsage());
+
+        System.out.println("=======================通过java来获取相关系统状态============================ ");
+        System.out.println("当前堆内存大小totalMemory " + (int) Runtime.getRuntime().totalMemory() / 1024 / 1024 + "m");// 当前堆内存大小
+        System.out.println("空闲堆内存大小freeMemory " + (int) Runtime.getRuntime().freeMemory() / 1024 / 1024 + "m");// 空闲堆内存大小
+        System.out.println("最大可用总堆内存maxMemory " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + "m");// 最大可用总堆内存大小
+
+    }
+}
 ```
 
