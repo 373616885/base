@@ -120,3 +120,9 @@ mysql> SELECT val+1 FROM tin3 WHERE id=2;
 1 row in set (0.00 sec)
 ```
 
+
+
+
+
+### 新版本8.0去除了这个特性
+
