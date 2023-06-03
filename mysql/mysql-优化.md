@@ -183,7 +183,7 @@ if ( exist != NULL ) {
 
 ### 强制走索引
 
-force index 函数
+force_index 函数
 
 select order_key ,createtime FROM aaa force index(createtime) group by order_key
 

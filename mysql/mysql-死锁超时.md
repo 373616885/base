@@ -14,7 +14,3 @@ clientB锁定了某一行，删除，未提交事务，
 
 最后Deadlock found when trying to get lock或者 clientB超时
 
-
-
-
-
