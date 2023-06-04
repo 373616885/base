@@ -172,7 +172,7 @@ select count(*) from users where time_long >=1540135964091 and time_long <=15401
 
 - 结论 在InnoDB存储引擎下，通过时间范围查找，性能bigint > datetime > timestamp
 
-### 
+
 
 ## sql分组速率测试
 
@@ -232,9 +232,25 @@ select * from users order by time_long
 
 
 
+## 特殊
+
+long与datetime类型相互转换
+
+```sql
+#时间datetime转换为long格式
+SELECT UNIX_TIMESTAMP(NOW());  #1410403824
+
+#时间long转换为datetime格式
+SELECT FROM_UNIXTIME(1410403824);  #2014-09-11 10:50:24
+
+
+在实际的处理long转换为datetime格式过程中，需要除以1000
+一般long = 毫秒的
+SELECT FROM_UNIXTIME(create_time/1000) AS createTime,TYPE FROM `mobile_code` ORDER BY id DESC; 
 
 
 
+```
 
 
 
