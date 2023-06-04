@@ -461,7 +461,9 @@ acb会走索引吗？
 
 
 
-### 阿里规范 varchar上的索引必须要指定索引长度
+### 前缀索引
+
+#### 阿里规范 varchar上的索引必须要指定索引长度
 
 **索引长度**
 
@@ -815,6 +817,182 @@ SELECT INDEX_NAME, IS_VISIBLE
 | k_idx      | NO         |
 +------------+------------+
 ```
+
+
+
+
+
+
+
+### 降序索引
+
+mysql 8.0 默认升序排序的 asc
+
+例如：员工ID 正排，时间倒排 
+
+那么我们就可以 将时间设置为 降序索引
+
+这种情况在 order by 的情况下很常见
+
+```mysql
+create table t (
+	id int auto_increment primary key ,
+    c1 int ,
+    c2 int ,
+	index(c1 asc, c2 desc)
+);
+
+
+
+explain select * from t order by c1 asc ,c2 asc
+
+
+'1', 'SIMPLE', 't', NULL, 'index', NULL, 'c1', '10', NULL, '458382', '100.00', 'Using index; Using filesort'
+
+```
+
+
+
+Using index; Using filesort
+
+表示：索引之外还需要额外的排序
+
+
+
+```mysql
+explain select * from t order by c1 asc ,c2 desc
+
+
+1	SIMPLE	t		index		c1	10		458382	100.00	Using index
+```
+
+
+
+Using index
+
+这时候就不需要额外的排序
+
+
+
+
+
+### 函数索引
+
+MySQL 8.0.13 之前不支持函数索引
+
+小写函数：创建索引 -- email 字段小写唯一的约束
+
+```sql
+CREATE unique index test1_idx ON test1 (lower(email));
+```
+
+
+
+explain select * from test1 where  lower(email) = lower('QinJP@qq.com')
+
+这时候，email就可以使用索引了
+
+
+
+在 JSON 类型的字段 和 在 DATETIME 类型 ，条件又是函数 date 执行的 很常见
+
+#### 函数索引 处理 DATETIME 类型 ，又函数 date 执行的 
+
+```sql
+
+CREATE TABLE `t1` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `log_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_log_time` (`log_time`)
+) ENGINE=InnoDB ;
+
+select * from t1 where date(log_time) = '2023-06-04';
+
+
+
+
+explain select * from t1 where date(log_time) = '2123-06-04';
+
+'1', 'SIMPLE', 't1', NULL, 'index', NULL, 'idx_log_time', '9', NULL, '139', '100.00', 'Using where; Using index'
+
+虽然走了索引，但是扫描行数为总记录数，相当于全表扫
+
+为列 log_time 加一新索引
+
+alter table t1 add key idx_func_index_1((date(log_time)));
+
+再次执行上面的 SQL 1，瞬间执行完毕。
+
+explain select * from t1 where date(log_time) = '2123-06-04';
+
+'1', 'SIMPLE', 't1', NULL, 'ref', 'idx_func_index_1', 'idx_func_index_1', '4', 'const', '1', '100.00', NULL
+
+```
+
+
+
+
+
+#### **函数索引 处理 JSON 类型**
+
+ JSON 类型 不能创建索引
+
+但可以创建函数索引
+
+```sql
+create table t2 (id int primary key, r1 json);
+
+
+alter table t2 add key idx_func_index_2((cast(r1->>'$.name' as char(30)) collate utf8mb4_bin));
+
+select * from t2 where r1->>'$.name'='qinjp';
+```
+
+
+
+
+
+### 重复索引与冗余索引
+
+重复索引：表示一个列或者顺序相同的几个列上建立的多个索引。
+
+冗余索引：两个索引所覆盖的列重叠
+
+**场景**
+
+比如文章与标签表
+
+```sql
+CREATE TABLE `t16` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `artid` int(10) unsigned NOT NULL DEFAULT '0',
+  `tag` char(20) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `at` (`artid`,`tag`),
+  KEY `ta` (`tag`,`artid`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8
+```
+
+这个表中有两个索引，一个是at，一个是ta，两个索引都用到了artid和tag两个字段。
+
+业务SQL语句：
+
+select tag from t11 where artid=2;
+
+select artid from t11 where tag=’PHP’;
+
+这个业务场景 重复索引与冗余索引 可以覆盖到了 tag 和  artid 不用回表
+
+
+
+
+
+
+
+
+
+
 
 
 
