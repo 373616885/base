@@ -82,7 +82,14 @@ ProxySQL这样的第三方工具很成熟，可以充当中间缓存
 
 
 
+### 操作SQL顺序
 
+- FROM clause
+- WHERE子句
+- GROUP BY子句
+- HAVING条款
+- SELECT子句
+- ORDER BY子句
 
 
 
