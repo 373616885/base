@@ -1,5 +1,7 @@
 ### 优化目的
 
+**最主要优化 减少IO**
+
 mysql连接超时
 
 慢查询导致阻塞
@@ -77,6 +79,40 @@ SQL的内容：SELECT * FROM `actor_info` LIMIT 0, 1000;
 
 
 
+### show profiles 查看性能问题
+
+select 之后使用 ：show profiles 查看可以查看性能
+
+```sql
+show profiles
+```
+
+**开启profile**
+
+```sql
+ set profiling=1;
+```
+
+**查看拿到 Query_ID**
+
+```sql
+show profiles ;
+```
+
+ **`show profile cpu for query Query_ID` 即可查询到 SQL 语句资源使用情况**
+
+```sql
+-- 查看CPU指标
+show profile cpu for query 2
+
+-- 查看所有指标
+show profile ALL for query 2
+```
+
+
+
+
+
 ### MySQL慢查日志分析工具
 
 pt-query-digest
@@ -85,7 +121,23 @@ pt-query-digest
 
 ### explain
 
+
+
+![](img\20220914142941250.png)
+
+
+
 ![](img\20210403131324.png)
+
+
+
+### select_type
+
+一般都是SIMPLE （没有使用union或者子查询）
+
+
+
+
 
 ### type
 
@@ -116,6 +168,10 @@ ALL: 全表扫面
 这两个是需要优化的
 
 **using index** 这是索引覆盖最好的
+
+**using where** ：服务层进行where条件过滤
+
+
 
 【推荐】如果有 order by 的场景，请注意利用索引的有序性。order by 最后的字段是组合索
 
@@ -183,6 +239,8 @@ if ( exist != NULL ) {
 
 ### 强制走索引
 
+查询数据占比整表的比例大，优化器就会全表扫描
+
 force_index 函数
 
 select order_key ,createtime FROM aaa force index(createtime) group by order_key
@@ -193,8 +251,9 @@ select order_key ,createtime FROM aaa force index(createtime) group by order_key
 
 没有在索引或者主键进行oreder by排序 会使用 using filesort
 
-1. 使用索引或者主键进行oreder by排序
-2. 将上一条的最大id传入，用id去过滤
+1. 联合降序（或者默认生序）索引进行oreder by排序 去除 using filesort
+2. 子查询拿到 id ，然后用id 去查询
+3. 将上一条的最大id传入，用id去过滤
 
 
 
@@ -369,21 +428,166 @@ mysqld --verbose --help | grep -A 1 'Default options'
 
 
 
+修改 filesort 内存块大小（面试使用，没人会改）
 
-
- 
-
-
-
+内存大了，文件块就少，IO就少
 
 
 
+修改 filesort 排序行数大小（面试使用，没人会改）
+
+使用固定的排序行数大小去文件块就少，就可以减少IO
+
+
+
+sort_buffer
+
+sort_buffer_size
+
+
+
+
+
+ ### 初级索引调优
+
+当 period = '202302'  数据很多，优化器容易认为不如全表扫描，就没有走索引 period
+
+但如果走索引，后面的 limit 10 是可以很快拿到数据的
+
+```sql
+select * from order_info where period = '202302' order by modified desc limit 0,10
+```
+
+优化使用 force index 走强制索引
+
+```sql
+select * from order_info force index(period_index)  where period = '202302' order by modified desc limit 0,10
+```
+
+
+
+### 中级索引优化
+
+force index 是不推荐的，后面还有  **using filesort**
+
+
+
+联合降序（或者默认生序）索引：去除 **using filesort**
+
+```sql
+alter table order_info add key idx_period_modified(period, modified desc);
+
+
+select * from order_info force index(period_index)  where period = '202302' order by modified desc limit 0,10
+```
+
+
+
+
+
+### 高级索引优化
+
+经过上面优化还有 limit 深分页的问题
+
+深分页主要问题：需要拿到前面页的所有数据，都要进行回表
+
+解决：在索引上拿到 id ，然后使用ID去拿数据，避免了前面的数据回表
+
+
+
+**IN获取id**
+
+```sql
+select * from table_name where id in (select id from table_name where user = xxx ) limit 6000000, 10;
+```
+
+**join方式 + 覆盖索引（推荐）**
+
+```sql
+select * from table_name inner join ( select id from table_name where user = xxx limit 6000000,10) as temp where temp.id = table_name.id
+
+
+
+
+select * from table_name t1, (select id from table_name order by user limit 6000000, 100) t2  WHERE t1.id = t2.id;
+
+```
+
+
+
+**最推荐**
+
+业务上传之前最大的id
+
+```sql
+select * from table_name where id > 10000 limit 10
+```
+
+
+
+
+
+### 什么情况下mysql索引会失效
+
+- **不规范的使用：使用 <>， != ，Not In ，like已 '%...'开头，对字段表达式操作**
+
+  注意：
+
+  is null 是会走索引的 相当与常量，可以走任何索引
+
+  col = key or col is null ，ref_or_null
+
+- **MySQL 优化器发现不用索引，更快**
+
+  原因：查询数据占全表的比例很大-->官方文档说是 30%但不对，实际官方也说了很复杂不固定，优化器认为全表扫描更合适
+
+- **还有一个bug  使用  order by id asc limit 1** 
+
+  原因：优化器认为排序是个昂贵的操作，所以为了避免排序，且它**认为** limit n 的 n 
+
+  如果很小的话即使使用全表扫描也能很快执行完，所以它选择了全表扫描
+
+- **范围查询的时候，这个范围超过一定个数**
+
+  解决：使用 force index ，和上面的查询数据占全表的比例很大一个道理
+
+- **select  * from  order by 无法保证一定走索引**  
+
+  原因：由于是 * 优化器会认为排序的代价大于全表扫描
+
+  解决：select  字段 from  order by 字段
+
+- **order by desc** 索引是生序，你使用的是降序
+
+  
 
 
 
 
 
 
+
+### 面试误区
+
+使用 or 不走索引的，建议使用 union all
+
+这是有误的  or  两边都有索引还是会走索引的，使用的是索引合并（单表有效）
+
+还有 union all 有 两边的并集问题
+
+使用 union  去重性能又达不到
+
+
+
+group by 默认排序，可以使用 order by null 避免
+
+
+
+
+
+### 两个单列索引，不如一个联合索引
+
+冗余一个联合索引
 
 
 
