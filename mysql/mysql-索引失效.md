@@ -32,7 +32,11 @@
 
 - **不规范的使用：使用 <>， != ，Not In ，like已 '%...'开头，对字段表达式操作**
 
-  注意：is null 是会走索引的
+  注意：
+
+  is null 是会走索引的 相当与常量，可以走任何索引
+
+  col = key or col is null ，ref_or_null，优先得到 col = key 的情况（测试加上 limit ）
 
 - **MySQL 优化器发现不用索引，更快**
 
@@ -48,6 +52,14 @@
 
   解决：使用 force index ，和上面的查询数据占全表的比例很大一个道理
 
+- **select  * from  order by 无法保证一定走索引**  
+
+  原因：由于是 * 优化器会认为排序的代价大于全表扫描
+
+  解决：select  字段 from  order by 字段
+
+- **order by desc** 索引是生序，你使用的是降序
+
 
 
 
@@ -56,7 +68,25 @@
 
 ### 面试误区
 
-使用 or 不走索引的，建议使用 uniou all
+使用 or 不走索引的，建议使用 union all
+
+这是有误的  or  两边都有索引还是会走索引的，使用的是索引合并（单表有效）
+
+
+
+or 两边相同列，有索引，走索引
+
+or 两边不同列，有索引，走索引，还是索引合并
+
+
+
+还有 union all 有 两边的并集问题
+
+使用 union  去重性能又达不到
+
+
+
+group by 默认排序，可以使用 order by null 避免
 
 
 
