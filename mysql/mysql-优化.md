@@ -573,13 +573,17 @@ select * from table_name where id > 10000 limit 10
 
 这是有误的  or  两边都有索引还是会走索引的，使用的是索引合并（单表有效）
 
+
+
+or 两边相同列，有索引，走索引
+
+or 两边不同列，有索引，走索引，还是索引合并
+
+
+
 还有 union all 有 两边的并集问题
 
 使用 union  去重性能又达不到
-
-
-
-group by 默认排序，可以使用 order by null 避免
 
 
 
