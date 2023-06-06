@@ -286,7 +286,7 @@ run()  -> for(::)
 
 1. 计算deadline以及任务的穿插逻辑处理（bossGroup服务端的处理accept事件会穿插处理任务）
 2. 阻塞式seelct
-3. 避免jdk空轮的bug
+3. 避免jdk空轮询的bug：解决的办法空轮询一定的次数默认512
 
 
 
