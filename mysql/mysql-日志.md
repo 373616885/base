@@ -169,6 +169,8 @@ show binlog events  in 'binlog.000001';
 
 实际上bin log输出的格式类型有3种，默认是ROW类型，就是上面例子中的格式。
 
+> **目前Mysql日志默认格式是ROW，5.7.7之前STATEMENT**
+
 
 
 **Statement格式：**每一条会修改数据的sql都会记录在bin log中
@@ -220,3 +222,11 @@ bin log ：全量日志，一直增加，Server层生成的日志，所有的存
 
 - `redo log`是在事务执行过程中就会write
 - `bin log`是在事务提交的时候write
+
+
+
+
+
+### relay_log 
+
+主从的中继日志
