@@ -14,6 +14,8 @@ ConcurrentHashMap 的整体架构和HashMap是一样的
 
 锁住Node之前的操作是基于在volatile和CAS 去计算位置的位置的
 
+在initTable ， tabAt ，casTabAt，setTabAt
+
 通过synchronized 锁住Node，然后去更新数据，保证数据安全
 
 
