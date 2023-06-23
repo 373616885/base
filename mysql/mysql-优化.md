@@ -394,7 +394,7 @@ mysqld --verbose --help | grep -A 1 'Default options'
 ### 常用参数
 
 **innodb_buffer_pool_size**  : 缓存池大小
-推荐使用内存的75%
+推荐使用内存的60-80%
 
 
 
@@ -434,7 +434,7 @@ mysqld --verbose --help | grep -A 1 'Default options'
 
 
 
-修改 filesort 排序行数大小（面试使用，没人会改）
+修改 sort_buffer 排序行数大小（面试使用，没人会改）
 
 使用固定的排序行数大小去文件块就少，就可以减少IO
 
@@ -443,6 +443,12 @@ mysqld --verbose --help | grep -A 1 'Default options'
 sort_buffer
 
 sort_buffer_size
+
+
+
+当前连接数（Threads_connected）
+
+最大连接数（max_connections）
 
 
 

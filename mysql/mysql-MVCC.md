@@ -22,6 +22,36 @@ Serializable （串行化）：有事务的时候对行数据加锁，select 需
 
 
 
+### Undo log
+
+**undo log主要用于事务回滚时恢复原来的数据**
+
+mysql在执行sql语句时，会将一条逻辑相反的日志保存到undo log中。因此，undo log中记录的也是逻辑日志。
+
+当sql语句为insert时，会在undo log中记录本次插入的主键id。等事务回滚时，delete此id即可。
+
+当sql语句为update时，会在undo log中记录修改前的数据。等事务回滚时，再执行一次update，得到原来的数据。
+
+当sql语句为delete时，会在undo log中记录删除前的数据。等事务回滚时，insert原来的数据即可。
+
+
+
+undo log 日志是可以被删除的，当产生 insert 语句后，事务一旦提交，
+
+undo log 中的 insert 语句就可以被立即删除，因为 undo log 只会在回滚时用到，
+
+因为`insert`操作的记录，只对事务本身可见，对其他事务不可见
+
+
+
+像 update、delete 语句则不会立即删除，因为还有可能其他事务再读取这些数据，
+
+有专门的`purge`线程进行删除
+
+
+
+
+
 ### 额外
 
 MySQL的innodb每一行都会有三个默认隐藏字段row_id, tx_id ,roll_point
@@ -29,6 +59,8 @@ MySQL的innodb每一行都会有三个默认隐藏字段row_id, tx_id ,roll_poin
 分别是行id，事务id，roll_point回滚指针，指向的是上一个版本的数据
 
 roll_point：每次修改数据（插入没有）都会在 undo日志中写入老数据，这个roll_point就是存在undo日志中上一个版本数据的地址指针
+
+MySQL8.0自带工具 ibd2sdi 可以查看
 
 ![](img\20220914142941238.png)
 
@@ -50,7 +82,7 @@ creator_trx_id : 生成该读写事务的ID
 
 
 
-**mvcc** 
+### **mvcc** 
 
 开启事务时，创建 readView （一个事务一个readView ）
 
