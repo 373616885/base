@@ -93,7 +93,7 @@ https://github.com/flikas/idea-spring-boot-assistant
 
 
 
-## **SequenceDiagram  查看代码调用 社区版没带 可以代替** 
+## **Sequence Diagram  查看代码调用 社区版没带 可以代替** 
 
 
 
@@ -195,14 +195,10 @@ verbose
 ## java 启动参数 
 
 ```shell
--Xms600m -Xmx600m -XX:+UseG1GC -Xlog:ref*=debug -Xlog:gc+heap=trace -Xlog:gc* -Xlog:gc,gc+cpu::uptime Xlog:gc:gc.log -Xcomp -XX:-UseCounterDecay -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -XX:-UsePerfData -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./error.hprof -XX:+UseAdaptiveSizePolicy
+-Xms600m -Xmx600m -XX:+UseG1GC -Xlog:ref*=debug -Xlog:gc+heap=trace -Xlog:gc* -Xlog:gc,gc+cpu::uptime Xlog:gc:gc.log -Xcomp -XX:-UseCounterDecay -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8 -XX:-UsePerfData -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./error.hprof -XX:+UseAdaptiveSizePolicy -Duser.timezone=GMT+08
 ```
 
-```shell
- -Duser.timezone=GMT+08
-```
-
--XX:-UsePerfData ：关闭 jps jstat 这些命令
+-XX:-UsePerfData ：关闭 jps jstat 这些命令，hsperfdata文件，关闭jvmstat工具
 
 -XX:-UseCounterDecay ：关闭热点代码衰减
 
