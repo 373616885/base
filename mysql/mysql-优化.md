@@ -119,6 +119,14 @@ pt-query-digest
 
 
 
+### show warnings
+
+show warnings 
+
+查看explain优化后的语句
+
+
+
 ### explain
 
 
@@ -646,6 +654,15 @@ mysql 8.0 默认升序排序的 asc
 避免 Using filesort
 
 
+
+### Using filesort 出现情况
+
+只有 order by 才会出现的
+
+1. order by 顺序与索引的顺序不对
+2. order by 多个字段的排序没有对应的联合索引（多个单索引是会导致Using filesort）
+
+解决：降序就用降序索引，多个字段的排序要将对应的联合索引
 
 
 

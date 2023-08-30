@@ -59,6 +59,8 @@ https://mp.weixin.qq.com/s/L6LBtYppe6U1ukh_Agc_oQ
 
 ##  AllFormat  格式化插件
 
+## Gsonformat  json与实体对象互转
+
 ## MybatisLog   將mybatis 控制台的sql 打印
 
 ## GenerateAllSetter 自动生成set方法
