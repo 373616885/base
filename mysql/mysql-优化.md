@@ -125,6 +125,8 @@ show warnings
 
 查看explain优化后的语句
 
+navicat  不显示，使用命令行或者 mysql workbench
+
 
 
 ### explain
