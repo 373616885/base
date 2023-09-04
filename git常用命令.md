@@ -4,8 +4,8 @@
 
 ```shell
 git fetch --all
-git reset --hard origin/dev (这里dev要修改为对应的分支名)
-git pull origin dev
+git reset --hard origin/main
+git pull origin main
 ```
 
 **第二种方式：pull --force参数**
@@ -13,7 +13,7 @@ git pull origin dev
 $ git pull --force  <远程主机名> <远程分支名>:<本地分支名>
 
 ```shell
-$ git pull --force origin dev:dev
+$ git pull --force origin main:main
 ```
 
 
