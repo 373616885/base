@@ -38,7 +38,7 @@ git reset --soft HEAD~
 ##先变基
 # feature分支
 git fetch origin
-git rebase develop
+git rebase main
 ## 合并命令
 git pull main --rebase
 
@@ -50,5 +50,18 @@ git push origin main
 
 
 
+### stash
 
+```shell
+//stash指令将其缓存了
+git stash
+//查看当前文件状态，系统提示没有需要提交的内容
+git status 
+//查看本地当前的缓存列表
+git stash list
+//恢复指定id的stash内容,不会删除恢复的缓存条目。
+git stash apply stash@{id}
+//恢复最近的缓存到当前文件中，同时删除恢复的缓存条目
+git stash pop
+```
 
