@@ -40,7 +40,7 @@ git reset --soft HEAD~
 git fetch origin
 git rebase main
 ## 合并命令
-git pull main --rebase
+git pull --rebase main
 
 ##然后push远程
 git push origin main
