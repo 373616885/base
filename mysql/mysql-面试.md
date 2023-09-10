@@ -390,3 +390,16 @@ Innodb_buffer_pool_pages_total：Page 总个数大小
 
 page size 是 16KiB，通过 show variables like "innodb_page_size" 拿到。
 
+
+
+
+
+
+
+
+
+### 什么时候不要使用索引
+
+1. 经常删除改的列
+2. 大量重复的列，辨识度不高
+3. 表记录很少的（千条，万条以内）
