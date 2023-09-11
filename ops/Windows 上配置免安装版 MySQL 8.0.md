@@ -8,7 +8,9 @@
 
 ### 2 下载
 
-[官方下载地址](https://link.zhihu.com/?target=http%3A//dev.mysql.com/downloads/)：`http://dev.mysql.com/downloads/
+[官方下载地址](https://link.zhihu.com/?target=http%3A//dev.mysql.com/downloads/)：http://dev.mysql.com/downloads/
+
+
 
 ### 3 解压，并移动到安装文件夹
 
@@ -126,5 +128,23 @@ W11 我的电脑--属性--系统--系统信息--高级设置
 
 ```
 ./mysqld --console
+```
+
+
+
+### 后台运行
+
+保存成bat文件
+
+```
+@echo off
+
+if "%1"=="h" goto begin
+
+start mshta vbscript:createobject("wscript.shell").run("""%~nx0"" h",0)(window.close)&&exit
+
+:begin
+
+start /b ./mysqld
 ```
 
