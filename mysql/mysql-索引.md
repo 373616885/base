@@ -1018,7 +1018,7 @@ Using index
 
 SHOW INDEX FROM TABLE
 
-Collation   = D  就是倒序索引
+Collation   = D  就是倒序索引   A 为升序
 
 +-----------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
 | Table     | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
