@@ -45,6 +45,14 @@
 
 
 
+#### MariaDB的初始化
+
+```powershell
+mysql_install_db.exe
+```
+
+
+
 ### 5 启动 MySQL
 
 在命令行中执行以下命令，就可以启动 MySQL Server 了：
