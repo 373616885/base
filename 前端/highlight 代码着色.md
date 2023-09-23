@@ -62,7 +62,74 @@ cdn js 导入
 
 
 
+完整例子：
 
+```javascript
+ 	<link rel="stylesheet" href="./github-dark.css" />
+    <script src="highlight/highlight.js"></script>
+    <script src="highlight/languages/javascript.min.js"></script>
+    <script
+        src="https://cdn.bootcdn.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.js"></script>
+    <script>
+    
+        //hljs.highlightAll()
+        const str = 'export default ErrorBoundary';
+
+        const result = hljs.highlight("import React, { Component } from 'react'", {
+            language: "javascript"
+        });
+        
+        window.onload = function () {
+            document.getElementById("code-area").innerHTML = result.value;
+            document.getElementById("code-area").classList = "hljs language-javascript";
+
+            hljs.highlightElement(document.getElementById("component"));
+
+            hljs.initLineNumbersOnLoad();//加上 行号
+        }
+
+    </script>
+
+    <div>Hello world</div>
+
+    <pre>
+        <code id="code-area"> 
+        </code>  
+    </pre>
+
+    <pre>
+        <code id="component" class="hljs language-javascript">  
+// 这里是需要高亮的代码
+import React, { Component } from 'react'
+class ErrorBoundary extends Component {
+    state = {
+    error: null,
+    errorInfo: null,
+    }
+    componentDidCatch (error, errorInfo) {
+    this.setState({
+        error,
+        errorInfo,
+        hasError: true,
+    })
+    }
+    render() {
+    if (this.state.errorInfo) {
+        return (
+        <details>
+            <summary>Something went wrong.</summary>
+            <p>{ JSON.stringify(this.state.errorInfo) }</p>
+        </details>
+        )
+    }
+    return this.props.children
+    }
+}
+export default ErrorBoundary
+    </code>  
+    </pre>
+
+```
 
 
 

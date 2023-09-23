@@ -14,15 +14,28 @@ $ git pull --force  <远程主机名> <远程分支名>:<本地分支名>
 
 ```shell
 $ git pull --force origin main:main
+$ git pull --force origin master:master
 ```
 
 
 
 ### **软重置**
 
+删除 Merge … to
+
 ```shell
 git reset --soft HEAD~
 ```
+
+
+
+### 硬重置
+
+```shell
+git reset --hard HEAD~
+```
+
+
 
 
 
