@@ -129,6 +129,32 @@ navicat  不显示，使用命令行或者 mysql workbench
 
 
 
+### explian analyze
+
+除了，显示执行计划外，还显示额外的信息
+
+```sql
+EXPLAIN (ANALYZE) SELECT count(*) FROM c WHERE pid = 1 AND cid > 200;
+```
+
+显示实际执行时间（以毫秒为单位）、实际行数和显示该节点执行频率的循环计数。
+
+它还显示过滤器已删除的行数
+
+注意：从后面开始看起
+
+
+
+### explian (analyze, buffers)
+
+如果`track_io_timing = on`
+
+```sql
+EXPLAIN (ANALYZE, BUFFERS) SELECT count(*) FROM c WHERE pid = 1 AND cid > 200;
+```
+
+显示每个节点在缓存（hit）中找到的数据块数量、从磁盘读取的数据块数量、写入的数据块数量以及被脏读的数据块数量
+
 ### explain
 
 
@@ -236,6 +262,10 @@ if ( exist != NULL ) {
 ```
 
 
+
+### 特别注意：字符串类型的字段 where 等于 数字（隐式转换）
+
+这种情况很容易不走索引，隐式转换 ，特别需要注意很容易忽略
 
 
 
@@ -566,6 +596,199 @@ select * from table_name t1, (select id from table_name order by user limit 6000
 ```sql
 select * from table_name where id > 10000 limit 10
 ```
+
+
+
+### 优化案例
+
+```sql
+CREATE TABLE orders (
+    o_orderkey INT,
+    o_custkey INT,
+    o_orderstatus CHAR(1),
+    o_totalprice DECIMAL(15 , 2 ),
+    o_orderdate DATE,
+    o_orderpriority CHAR(15),
+    o_clerk CHAR(15),
+    o_shippriority INT,
+    o_comment VARCHAR(79),
+    PRIMARY KEY (o_orderkey)
+)  ENGINE=INNODB;
+```
+
+sql  语句
+
+```sql
+select * from  orders
+where o_orderdate > '2022-01-01' 
+and ( o_orderpriority = 1 or o_shippriority = 1)
+order by o_orderdate desc
+limit 20,10;
+
+-- 订单优先级 o_orderpriority  ， 发货优先级 o_shippriority
+-- 数据在几十万左右 时间均匀分布在 2021-2023之间
+o_orderpriority = 1 or o_shippriority = 1
+--上面条件筛选率在 5%
+
+```
+
+
+
+什么都不优化
+
+执行：时间 1秒多 左右
+
+```sql
+explain 
+select * from  orders
+where o_orderdate > '2022-01-01' 
+and ( o_orderpriority = 1 or o_shippriority = 1)
+order by o_orderdate desc
+limit 20,10;
+```
+
+全表扫描
+
+查看每一步的具体执行时间 explain analyze
+
+```sql
+explain analyze
+select * from  orders
+where o_orderdate > '2022-01-01' 
+and ( o_orderpriority = 1 or o_shippriority = 1)
+order by o_orderdate desc
+limit 20,10;
+```
+
+```sql
+-> Limit/Offset: 10/20 row(s)  (cost=0.35 rows=0) (actual time=0.0203..0.0203 rows=0 loops=1)
+     -> Sort: orders.o_orderdate DESC, limit input to 30 row(s) per chunk  (cost=0.35 rows=1) (actual time=0.0195..0.0195 rows=0 loops=1)
+         -> Filter: ((or...
+```
+
+
+
+#### 第一次优化：创建 o_orderdate 降序索引
+
+```sql
+create index idx_o_orderdate on orders (orders desc);
+```
+
+执行：5ms
+
+很快，基本到这里很好了，但还有优化空间
+
+就是虽然，通过索引可以提高了查询速度，但还是发现，扫描了 19万行
+
+原因 ( o_orderpriority = 1 and o_shippriority = 1) 需要回表进行条件过滤
+
+
+
+执行顺序：
+
+```sql
+explain analyze
+select * from  orders
+where o_orderdate > '2022-01-01' 
+and ( o_orderpriority = 1 or o_shippriority = 1)
+order by o_orderdate desc
+limit 20,10
+
+
+-> Limit/Offset: 10/20 row(s)  (cost=0.71 rows=0) (actual time=0.012..0.012 rows=0 loops=1)
+     -> Filter: ((orders.o_shippriority = 1) and (orders.o_orderpriority = 1))  (cost=0.71 rows=1) (actual time=0.0115..0.0115 rows=0 loops=1)
+         -> Index ran...
+```
+
+explain analyze 后面开始看
+
+首先：Index ran  ，扫描 o_orderdate > '2022-01-01'  所有数据 （19万多条）
+
+然后：条件过滤，(orders.o_shippriority = 1) and (orders.o_orderpriority = 1)
+
+最后：limit 拿到前面30条，抛弃前面20条
+
+
+
+ #### 第二次优化
+
+由于 ( o_orderpriority = 1 or o_shippriority = 1) 条件导致需要回表进行条件过滤，导致limit 无法提前过滤
+
+那就将 or  拆出来，不仅可以使用联合索引，也可以提前 limit 减少扫描表
+
+```sql
+explain analyze
+select * from (
+(
+    select * from  orders
+	where o_orderpriority = '1' and o_orderdate > '2022-01-01' 
+ 	order by o_orderdate desc 
+    limit 30 
+)
+union
+(
+    select * from  orders
+	where o_shippriority = 1 and o_orderdate > '2022-01-01' 
+    order by o_orderdate desc 
+    limit 30 )
+) t
+order by o_orderdate desc
+limit 20,10;
+
+create index idx_o_orderdate1 on orders (o_orderpriority,o_orderdate desc);
+create index idx_o_orderdate2 on orders (o_shippriority,o_orderdate desc);
+
+```
+
+
+
+有坑需要注意：（因为有这样的坑，所以一般第一次优化结束就基本可以了）
+
+1.  union 之间的select需要 （） 包起来，不然 mysql 看到 order by limit 以为sql结束了
+2. 使用 union ，不能使用 union  all ,因为可能有重复的
+3. limit 需要 30 ，因为你的条件是 limit 20,10;
+4. o_orderpriority 是 chat ，不是使用 1 导致隐式转换，不走索引
+5. 最后60条 需要文件排序，60条文件排序可以忽略的
+
+
+
+优化后：
+
+执行时间 4 ms，和第一次优化差不多
+
+优点：扫描行变少了
+
+总共两次索引扫描，
+
+一次  o_orderpriority = '1' and o_orderdate > '2022-01-01'  ，扫描 1万9，过滤 30条
+
+一次  o_shippriority = 1 and o_orderdate > '2022-01-01'   ，扫描 1万8，过滤 30条
+
+最后 60 条 union  + 文件排序
+
+
+
+比较第一次优化：
+
+ o_orderdate > '2022-01-01'  扫描  19万 
+
+然后条件 (orders.o_shippriority = 1) and (orders.o_orderpriority = 1) 
+
+最后拿到 30 条
+
+
+
+比较第一次优化，第二次优化在数据越来越多的情况下，适应性更好
+
+毕竟扫描的行更少了
+
+
+
+同时缺点也很明显：有坑需要注意，实现起来很麻烦，还容易出错
+
+
+
+
 
 
 
