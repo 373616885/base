@@ -21,6 +21,8 @@ $ git pull --force origin master:master
 
 ### **软重置**
 
+删除 Merge … to
+
 ```shell
 git reset --soft HEAD~
 ```
