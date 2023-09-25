@@ -105,6 +105,16 @@ https://github.com/flikas/idea-spring-boot-assistant
 
 
 
+## GitToolBox插件
+
+idea本身的git提示
+
+ntelliJ IDEA>File>Setting>Editor>inlay Hints 
+
+![](img\20200416203833815.png)
+
+
+
 ## IDEA 无法输入中文
 
 点击菜单 "Help | Edit Custom VM options..."
