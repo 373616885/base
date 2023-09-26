@@ -143,6 +143,14 @@ run->Edit Configrations，设置 vm option为 -Dfile.encoding=utf-8
 
 
 
+## idea add custom tag
+
+这里的 @name 和 @date 被 idea 标注为黄色，显示警告信息为 Wrong tag，也就是说 idea 不能识别这个标签，对于有强迫症的开发者来说，不能容忍这种提示标记，如何消除这个标记呢？可以根据提示点击 Add date to custom tags，之后这个黄色的标记就没有了，idea 将这个自定义的标签添加到了 Java doc 的自定义标签中，我们有自定义的标签也可以添加到这里，用逗号分隔
+
+![](img\20200416203833816.png)
+
+
+
 ## 远程bug
 
 java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Dfile.encoding=UTF-8 -jar app.jar
