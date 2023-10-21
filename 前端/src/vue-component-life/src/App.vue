@@ -2,6 +2,12 @@
   <h1>{{ msg }}</h1>
   <life />
   <button @click="changeData" type="button">点击</button>
+  <br />
+  <br />
+  <button @click="fetchData" type="button">异步网络请求</button>
+  <br />
+  <br />
+  <div v-text="commits"></div>
 </template>
 <script>
 import life from './components/Life.vue'
@@ -18,17 +24,27 @@ import life from './components/Life.vue'
  *  销毁期 ：组件将要销毁的时候（组件已经不存在了）
  *
  */
+
+const API_URL = `https://api.github.com/repos/vuejs/core/commits?per_page=3&sha=main`
+
 export default {
   data() {
     return {
       num: 0,
-      msg: '数据'
+      msg: '数据',
+      commits: 'null'
     }
   },
   methods: {
     changeData() {
       this.num++
       this.msg = '数据' + +this.num
+    },
+    // 异步请求
+    async fetchData() {
+      const url = `${API_URL}`
+      console.log(url)
+      this.commits = await (await fetch(url)).json()
     }
   },
   beforeCreate() {
