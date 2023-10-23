@@ -7,12 +7,12 @@
 
   <p v-for="(item, index) of obj" :key="index">{{ item }}</p>
 
-  <P>{{ state.age }}</P>
+  <p>{{ state.age }}</p>
   <button @click="mutateDeeply">mutateDeeply</button>
 </template>
 <script setup>
 // ref 函数：要么在setup() 返回，要么在模板中使用
-import { ref, reactive } from 'vue'
+//import { ref, reactive } from 'vue'
 
 const message = '响应式API'
 
