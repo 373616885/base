@@ -1,3 +1,30 @@
+### 痛点
+
+使用 ref 进行响应式 数据开发
+
+每次修改数据，读取数据都需要 .value
+
+响应性语法糖  $ref()
+
+### 安装
+
+```js
+npm i -D @vue-macros/reactivity-transform
+```
+
+### 使用
+
+vite.config.js
+
+引入 
+
+import ReactivityTransform from ' @vue-macros/reactivity-transform'
+
+plugins ： 配置 ReactivityTransform()
+
+
+
+```vue
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -28,3 +55,12 @@ export default defineConfig({
     }
   }
 })
+
+```
+
+
+
+
+
+
+

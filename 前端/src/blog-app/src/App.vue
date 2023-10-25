@@ -12,7 +12,7 @@
 </template>
 <script setup>
 // ref 函数：要么在setup() 返回，要么在模板中使用
-//import { ref, reactive } from 'vue'
+import { ref, reactive } from 'vue'
 
 const message = '响应式API'
 
