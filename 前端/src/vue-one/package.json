@@ -8,11 +8,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vue-macros/reactivity-transform": "^0.3.23",
     "vue": "^3.3.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
+    "@vue-macros/reactivity-transform": "^0.3.23",
     "vite": "^4.4.11"
   }
 }
