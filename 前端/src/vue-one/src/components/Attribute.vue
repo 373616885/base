@@ -4,7 +4,10 @@
   <div v-bind:id="dynamicId"></div>
   <p>简写语法</p>
   <div :id="dynamicId"></div>
-  <button :disabled="isButtonDisabled">Button</button>
+  <p>布尔型 Attribute</p>
+  <button :disabled="isButtonDisabled" v-on:click="changeDisabled">
+    isButtonDisabled
+  </button>
   <p>动态绑定多个值</p>
   <div v-bind="objectOfAttrs">动态绑定多个值</div>
   <button @click="changObj">Button</button>
@@ -14,7 +17,7 @@
 import { ref } from 'vue'
 const message = ref('Attribute 绑定')
 const dynamicId = ref('container')
-const isButtonDisabled = true
+const isButtonDisabled = ref(false)
 const objectOfAttrs = {
   id: 'container',
   class: 'wrapper'
@@ -33,6 +36,11 @@ function changObj() {
     obj.value.class = 'wrapper'
   }
   num++
+}
+
+function changeDisabled() {
+  console.log(isButtonDisabled.value)
+  isButtonDisabled.value = !isButtonDisabled.value
 }
 </script>
 <style scoped>
