@@ -5,6 +5,7 @@
 
 <script setup>
 import { getCurrentInstance } from 'vue'
+//this
 const { proxy } = getCurrentInstance()
 
 async function handleClick() {

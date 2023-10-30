@@ -9,10 +9,10 @@ import { messageObj } from '@/utils/util.js'
 import util from '@/utils/util.js'
 console.log(messageObj)
 export default {
+  mixins: [util],
   data() {
     return {
-      messageObj: messageObj,
-      sexList: util.data().sexList
+      messageObj: messageObj
     }
   }
 }
