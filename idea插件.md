@@ -4,6 +4,8 @@ talkx--chatgpt-gpt-4-free-ai-code-assistant
 
 ## codegeex :copilot 的平替
 
+## FittenCode AI代码提示
+
 ## Bito ChatGPT 团队开发的代码提示
 
 https://mp.weixin.qq.com/s/L6LBtYppe6U1ukh_Agc_oQ
