@@ -191,8 +191,18 @@ npm create vue@latest
 </script>
 ```
 
+## 2.4. 【vue调试插件】
+
+百度 搜索极简插件
+
+**Vue.js Devtools**
+
+在调试工具里看到vue
+
+
 
 # 3. Vue3核心语法
+
 ## 3.1.  【OptionsAPI 与 CompositionAPI】
 
 - `Vue2`的`API`设计是`Options`（配置）风格的。
@@ -315,7 +325,7 @@ setup(){
   }
 </script>
 ```
-扩展：上述代码，还需要编写一个不写`setup`的`script`标签，去指定组件名字，比较麻烦，我们可以借助`vite`中的插件简化
+扩展：上述代码，还需要编写一个不写`setup`的`script`标签，去指定组件名字，比较麻烦，我们可以借助`vite`中的插件简化，直接在 <script setup lang="ts" name='Person'> 里面写name是不生效的需要借助vite-plugin-vue-setup-extend插件
 
 1. 第一步：`npm i vite-plugin-vue-setup-extend -D`
 2. 第二步：`vite.config.ts`
@@ -329,7 +339,40 @@ export default defineConfig({
 ```
 
 3. 第三步：`<script setup lang="ts" name="Person">`
+
+   
+
+   
+
+扩展2：`defineOptions`是一个宏，是在Vue3.3+中新增的新特性可以直接指定name，可以不用vite-plugin-vue-setup-extend插件
+
+```jsx
+<script setup>
+defineOptions({
+  name: 'ComponentName'
+})
+</script>
+```
+
+
+
+## 3.【响应式数据】
+
+vue2 响应式数据都在data() {} 里面
+
+vue3  响应式数据ref和reactive 
+
+响应式数据：再项目里面，数据需要修改才需要响应式数据，不需要修改的尽量不要做成响应式数据
+
+
+
 ## 3.3. 【ref 创建：基本类型的响应式数据】
+
+
+
+
+
+
 
 - **作用：**定义响应式变量。
 - **语法：**`let xxx = ref(初始值)`。
