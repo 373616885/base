@@ -93,7 +93,7 @@ npm run serve
 
 ```powershell
 ## 1.创建命令
-npm create vue@latest
+npm create vite@latest
 
 ## 2.具体配置
 ## 配置项目名称
@@ -334,7 +334,8 @@ import { defineConfig } from 'vite'
 import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 
 export default defineConfig({
-  plugins: [ VueSetupExtend() ]
+   // 这里加上 VueSetupExtend()
+  plugins: [vue(), VueSetupExtend()]
 })
 ```
 
@@ -372,7 +373,7 @@ vue3  响应式数据ref和reactive
 - **语法：**`let xxx = ref(初始值)`。
 - **返回值：**一个`RefImpl`的实例对象，简称`ref对象`或`ref`，`ref`对象的`value`**属性是响应式的**。
 - **注意点：**
-   - `JS`中操作数据需要：`xxx.value`，但模板中不需要`.value`，直接使用即可。
+   - **`JS`中操作数据需要：`xxx.value`，但模板中不需要`.value`，直接使用即可**。
    - 对于`let name = ref('张三')`来说，`name`不是响应式的，`name.value`是响应式的。
 ```vue
 <template>
@@ -465,7 +466,7 @@ function test(){
 ```
 ## 3.5. 【ref 创建：对象类型的响应式数据】
 
-- 其实`ref`接收的数据可以是：**基本类型**、**对象类型**。
+- 其实`ref`接收的数据可以是：**基本类型**、**对象类型**。（使用源对象数据必须使用.value）
 - 若`ref`接收的是对象类型，内部其实也是调用了`reactive`函数。
 ```vue
 <template>
@@ -529,15 +530,32 @@ function test(){
 >    <img src="images/自动补充value.png" alt="自动补充value" style="zoom:50%;border-radius:20px" /> 
 >
 > 2. `reactive`重新分配一个新对象，会**失去**响应式（可以使用`Object.assign`去整体替换）。
+>
+>    情况：实际项目中，后台返回一个对象，不能一个一个属性重新赋值（太多太麻烦）
+>
+>    ```js
+>    Object.assign(obj,newObj)
+>    Object.assign(car,{name:'小米',price:21})
+>    
+>    或者不使用reactive
+>    使用ref
+>    car.value = {name:'小米',price:21} //直接响应式
+>    
+>    ```
+>
+>    使用原则：
 
-- 使用原则：
 > 1. 若需要一个基本类型的响应式数据，必须使用`ref`。
+>
 > 2. 若需要一个响应式对象，层级不深，`ref`、`reactive`都可以。
+>
+>    层级深的使用 ref 导致 .value 太多，使用 `reactive`可以避免.value 爆炸
+>
 > 3. 若需要一个响应式对象，且层级较深，推荐使用`reactive`。
 
 ## 3.7. 【toRefs 与 toRef】
 
-- 作用：将一个响应式对象中的每一个属性，转换为`ref`对象。
+- 作用：将一个响应式对象中的每一个属性，转换为`ref`对象。还具有和页面联动的响应式数据
 - 备注：`toRefs`与`toRef`功能一致，但`toRefs`可以批量转换。
 - 语法如下：
 ```vue
@@ -580,6 +598,11 @@ function test(){
 
 作用：根据已有数据计算出新数据（和`Vue2`中的`computed`作用一致）。
 
+计算属性：
+
+	1. 表达式的区别，多个的时候，直接拿缓存的数据
+ 	2. 数据发生变化，重新去计算，表达式或者函数需要重新调用一次
+
 <img src="images/computed.gif" style="zoom:20%;" />  
 
 ```vue
@@ -611,10 +634,10 @@ function test(){
       return firstName.value + '-' + lastName.value
     },
     // 修改
-    set(val){
+    set(newValue){
       console.log('有人修改了fullName',val)
-      firstName.value = val.split('-')[0]
-      lastName.value = val.split('-')[1]
+      firstName.value = newValue.split('-')[0]
+      lastName.value = newValue.split('-')[1]
     }
   })
 

@@ -1,5 +1,9 @@
 ### 创建 vue 项目
 
+点击查看[官方文档](https://cli.vuejs.org/zh/guide/creating-a-project.html#vue-create)
+
+> 备注：目前`vue-cli`已处于维护模式，官方推荐基于 `Vite` 创建项目。
+
 官方文档：https://vuejs.org/guide/quick-start.html#using-vue-from-cdn
 
 中文官方文档：https://cn.vuejs.org/guide/quick-start.html#using-vue-from-cdn
