@@ -1,4 +1,14 @@
-### 反向代理解决跨域问题 & 配置项目运行端口
+### 反向代理解决跨域问题 & 配置项目运行端口 & fileURLToPath替换
+
+需要先安装 @types/node
+
+```shell
+npm install --save-dev typescript
+
+npm install --save-dev @types/node
+```
+
+
 
 ```js
 import { fileURLToPath, URL } from 'node:url'

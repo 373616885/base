@@ -549,7 +549,9 @@ function test(){
 >
 > 2. 若需要一个响应式对象，层级不深，`ref`、`reactive`都可以。
 >
->    层级深的使用 ref 导致 .value 太多，使用 `reactive`可以避免.value 爆炸
+>    > 层级深的使用 ref 导致 .value 太多，使用 `reactive`可以避免.value 爆炸
+>    >
+>    > 还有一个复杂的表单，有几十个属性，如果一个一个ref，那是很纯的事情
 >
 > 3. 若需要一个响应式对象，且层级较深，推荐使用`reactive`。
 

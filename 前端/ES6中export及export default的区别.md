@@ -92,3 +92,99 @@ mycow.speak() // moo
 
 ```
 
+#### 暴露方式
+
+1.分别暴露
+这是我个人的export.js 文件
+
+```js
+export let obj={
+    name:"导出"
+}
+
+export const fuc=()=>{
+    console.log('导出')
+}
+
+```
+
+2.统一暴露
+将需要暴露方法写在export对象内
+
+```js
+let obj={
+    name:"导出"
+}
+
+ const fuc=()=>{
+    console.log('导出')
+}
+export{
+    obj,
+    fuc,
+}
+```
+
+
+3.默认暴露
+
+```js
+export default{
+    obj={
+        name:"导出"
+    },
+    fuc:function(){
+        console.log('导出')
+    }
+}
+```
+
+
+注：通用引入方式调用时需加default属性
+
+```js
+javascript复制代码//这里是通用引用方式
+import * as ex from ‘./js/export.js’ //个人文件夹
+console.log(ex.default.obj.name) //导出
+```
+
+
+
+引入方式
+1.通用引入
+//使用关键字as引入
+
+```js
+import * as ex from './js/export.js' //个人文件夹
+console.log(ex.obj.name) //导出
+```
+
+
+ps:将export文件内的所有方法以 ex的属性来引入调用
+
+2.解构赋值
+
+```js
+import { obj,fuc}from './js/export.js'
+```
+
+
+ps:将需要用的方法分别以解构赋值的方式引入
+
+默认暴露的解构赋值引入写法
+
+```js
+import {default as ex} from './js/export.js' 
+console.log(ex.obj.name)//导出
+```
+
+
+ps:这种方式引用，调用时不需要加default
+
+3.简便形式 （只针对默认暴露）
+
+```js
+import ex from './js/export.js'  
+console.log(ex.obj.name)//导出
+```
+
