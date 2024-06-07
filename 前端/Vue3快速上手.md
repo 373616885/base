@@ -383,6 +383,7 @@ vue3  响应式数据ref和reactive
     <button @click="changeName">修改名字</button>
     <button @click="changeAge">年龄+1</button>
     <button @click="showTel">点我查看联系方式</button>
+
   </div>
 </template>
 
@@ -459,11 +460,70 @@ function changeCarPrice() {
 function changeFirstGame() {
   games[0].name = '流星蝴蝶剑'
 }
+ //对象不能直接替换，但是里面的属性可以直接替换
 function test(){
   obj.a.b.c.d = 999
 }
 </script>
 ```
+reactive 重新分配对象地址需要使用 Object.assign，属性的变化，没有重新分配地址就可以直接替换
+
+```vue
+<template>
+  <h2>ReactiveDemo</h2>
+  <input type="text" v-model="user.name" /> <br />
+  <input type="text" v-model="user.age" /><br />
+  <input type="text" v-model="user.car.brand" /><br />
+  <input type="text" v-model="user.car.color" /><br />
+  <button @click="changeName">修改名字</button>
+  <button @click="changeAge">修改年龄</button>
+  <button @click="init">初始化</button>
+  <button @click="changeCar">修改汽车信息</button>
+</template>
+
+<script setup>
+import { reactive, watch } from 'vue'
+let user = reactive({
+  name: '张三',
+  age: 18,
+  car: {
+    brand: 'BMW',
+    color: 'red'
+  }
+})
+
+function changeName() {
+  user.name += '~'
+}
+
+function changeAge() {
+  user.age += 1
+}
+
+// 重新分配对象地址需要使用 Object.assign
+function init() {
+  Object.assign(user, {
+    name: '张三',
+    age: 18,
+    car: {
+      brand: '雅迪电动车',
+      color: '绿色'
+    }
+  })
+}
+// 属性的变化，没有重新分配地址就可以直接替换
+function changeCar() {
+  user.car.brand = '爱码电动车'
+  user.car.color = '黑色'
+}
+</script>
+
+```
+
+
+
+
+
 ## 3.5. 【ref 创建：对象类型的响应式数据】
 
 - 其实`ref`接收的数据可以是：**基本类型**、**对象类型**。（使用源对象数据必须使用.value）
@@ -478,8 +538,11 @@ function test(){
     </ul>
     <h2>测试：{{obj.a.b.c.d}}</h2>
     <button @click="changeCarPrice">修改汽车价格</button>
+    <input type="button" @click="initCar" value="初始化汽车" />
     <button @click="changeFirstGame">修改第一游戏</button>
     <button @click="test">测试</button>
+   
+
   </div>
 </template>
 
@@ -508,9 +571,13 @@ console.log(car)
 function changeCarPrice() {
   car.value.price += 10
 }
+function initCar() {
+  car.value = { brand: '小米', price: 21 }
+}
 function changeFirstGame() {
   games.value[0].name = '流星蝴蝶剑'
 }
+
 function test(){
   obj.value.a.b.c.d = 999
 }
@@ -536,13 +603,15 @@ function test(){
 >    ```js
 >    Object.assign(obj,newObj)
 >    Object.assign(car,{name:'小米',price:21})
+>    需要注意的是：对象不能直接替换，里面的属性可以直接替换
+>    obj.a.b.c.d = 999
 >    
 >    或者不使用reactive
 >    使用ref
 >    car.value = {name:'小米',price:21} //直接响应式
->    
->    ```
 >
+>    ```
+>    
 >    使用原则：
 
 > 1. 若需要一个基本类型的响应式数据，必须使用`ref`。
@@ -699,6 +768,17 @@ function test(){
 > * 若修改的是`ref`定义的对象中的属性，`newValue` 和 `oldValue` 都是新值，因为它们是同一个对象。
 >
 > * 若修改整个`ref`定义的对象，`newValue` 是新值， `oldValue` 是旧值，因为不是同一个对象了。
+>
+> * 由于实际开发中，一般不管旧值，直接 watch(person,(newValue)
+>
+> * 监视`ref`定义的【对象类型】数据，必须要开启深度监视，才完整，不然属性变化，监听不到
+>
+>   ```js
+>   直接 
+>   watch(person,(newValue)=>{
+>   	console.log('person变化了',newValue)
+>   },{deep:true})
+>   ```
 
 ```vue
 <template>
@@ -743,6 +823,11 @@ function test(){
 ```
 ### *  情况三
 监视`reactive`定义的【对象类型】数据，且默认开启了深度监视。
+
+`reactive`定义的数据，默认就开启了深度监视，只要属性发生变化就触发wacth
+
+而且不可以关闭，vue3底层就隐式创建了深度监听
+
 ```vue
 <template>
   <div class="person">
@@ -779,6 +864,7 @@ function test(){
   function changeAge(){
     person.age += 1
   }
+  // 数据变化
   function changePerson(){
     Object.assign(person,{name:'李四',age:80})
   }
@@ -795,13 +881,35 @@ function test(){
   })
 </script>
 ```
+
+
 ### * 情况四
+
 监视`ref`或`reactive`定义的【对象类型】数据中的**某个属性**，注意点如下：
 
 1. 若该属性值**不是**【对象类型】，需要写成函数形式。
-2. 若该属性值是**依然**是【对象类型】，可直接编，也可写成函数，建议写成函数。
 
-结论：监视的要是对象里的属性，那么最好写函数式，注意点：若是对象监视的是地址值，需要关注对象内部，需要手动开启深度监视。
+   一个 有返回值的 get 函数：简写成箭头函数，return 也可以去掉，
+
+   简写：（）=> 属性
+
+2. 若该属性值是**依然**是【对象类型】，可直接写属性对象，也可写成函数，建议写成函数。
+
+   如果 监听对象属性地址，可直接写属性对象，也可写成函数
+
+   直接写属性对象，监视的是地址值
+
+   如果 即监听对象属性地址也监听属性内容变化，必须写成函数，且必须加上 deep:true
+
+   
+
+结论：监视的要是对象里的属性，那么最好写函数式，
+
+注意点：若是对象监视的是地址值，需要关注对象内部，需要手动开启深度监视。
+
+
+
+
 
 ```vue
 <template>
@@ -848,11 +956,21 @@ function test(){
   }
 
   // 监视，情况四：监视响应式对象中的某个属性，且该属性是基本类型的，要写成函数式
-  /* watch(()=> person.name,(newValue,oldValue)=>{
+  /* 
+  watch(()=> {return person.name },(newValue,oldValue)=>{
     console.log('person.name变化了',newValue,oldValue)
-  }) */
+  })
+   */
+  watch(()=> person.name,(newValue,oldValue)=>{
+    console.log('person.name变化了',newValue,oldValue)
+  })
 
   // 监视，情况四：监视响应式对象中的某个属性，且该属性是对象类型的，可以直接写，也能写函数，更推荐写函数
+  // changeCar 修改整个car对象地址 就不行了  
+  watch(person.car,(newValue,oldValue)=>{
+    console.log('person.car变化了',newValue,oldValue)
+  },{deep:true})
+   // 如果修改整个car对象地址改变，就写成函数，如果加上 deep:true，某个属性变化也监听上了
   watch(()=>person.car,(newValue,oldValue)=>{
     console.log('person.car变化了',newValue,oldValue)
   },{deep:true})
@@ -904,13 +1022,17 @@ function test(){
     person.car = {c1:'雅迪',c2:'爱玛'}
   }
 
-  // 监视，情况五：监视上述的多个数据
+  // 监视，情况五：监视上述的多个数据 newValue 和oldValue  是一个name和Car的数组  [person.name,person.car]
   watch([()=>person.name,person.car],(newValue,oldValue)=>{
     console.log('person.car变化了',newValue,oldValue)
   },{deep:true})
 
 </script>
 ```
+
+
+
+
 ## 3.10. 【watchEffect】
 
 * 官网：立即运行一个函数，同时响应式地追踪其依赖，并在依赖更改时重新执行该函数。
