@@ -989,7 +989,13 @@ watch(user, (newVal, oldVal) => {
 
 注意点：若是对象监视的是地址值，需要关注对象内部，需要手动开启深度监视。
 
-
+```js
+  // 如果修改整个car对象地址改变，就写成函数，如果加上 deep:true，某个属性变化也监听上了
+// 加上 deep:true  changeC1 和 changeC2 才能触发
+  watch(()=>person.car,(newValue,oldValue)=>{
+    console.log('person.car变化了',newValue,oldValue)
+  },{deep:true})
+```
 
 
 
@@ -1034,6 +1040,7 @@ watch(user, (newVal, oldVal) => {
     person.car.c2 = '大众'
   }
   function changeCar(){
+    // car 是可以直接修改的
     person.car = {c1:'雅迪',c2:'爱玛'}
   }
 
@@ -1048,10 +1055,10 @@ watch(user, (newVal, oldVal) => {
   })
 
   // 监视，情况四：监视响应式对象中的某个属性，且该属性是对象类型的，可以直接写，也能写函数，更推荐写函数
-  // changeCar 修改整个car对象地址 就不行了  
+  // changeCar 修改整个car对象地址 就不行了  ，只有 changeC1 和 changeC2 触发
   watch(person.car,(newValue,oldValue)=>{
     console.log('person.car变化了',newValue,oldValue)
-  },{deep:true})
+  })
    // 如果修改整个car对象地址改变，就写成函数，如果加上 deep:true，某个属性变化也监听上了
   watch(()=>person.car,(newValue,oldValue)=>{
     console.log('person.car变化了',newValue,oldValue)
@@ -1125,7 +1132,7 @@ watch(user, (newVal, oldVal) => {
   >
   > 2. `watch`：要明确指出监视的数据
   >
-  > 3. `watchEffect`：不用明确指出监视的数据（**函数中用到哪些属性，那就监视哪些属性**）。
+  > 3. `watchEffect`：不用明确指出监视的数据（**函数中用到哪些属性，那就监视哪些属性，没写的就不监视**）。
 
 * 示例代码：
 
