@@ -545,6 +545,9 @@ watch(person,(newValue,oldValue)=>{
 
   // 用watchEffect实现，不用
   const stopWtach = watchEffect(()=>{
+    // 立即运行一个函数，等于 immediate：true
+    console.log('watchEffect执行了')
+      
     // 室温达到50℃，或水位达到20cm，立刻联系服务器
     if(temp.value >= 50 || height.value >= 20){
       console.log(document.getElementById('demo')?.innerText)
