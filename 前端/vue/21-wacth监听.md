@@ -502,10 +502,9 @@ watch(person,(newValue,oldValue)=>{
 `watch`对比`watchEffect`
 
 > 1. 都能监听响应式数据的变化，不同的是监听数据变化的方式不同
->
 > 2. `watch`：要明确指出监视的数据
->
 > 3. `watchEffect`：不用明确指出监视的数据（**函数中用到哪些属性，那就监视哪些属性，没写的就不监视**）。
+> 4. 立即运行一个函数，等于 immediate：true
 
 示例代码：
 
