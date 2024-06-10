@@ -122,7 +122,7 @@ export default {
 import RefDemo4 from './RefDemo4.vue'
 
 export default {
-    // 这里必须注册-不然下面的不认
+  // vue2必须注册才可以使用-不然下面的不认
   components: {
     RefDemo4
   },
