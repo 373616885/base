@@ -60,7 +60,15 @@ export default defineConfig({
 
 
 
+### 代码
 
+```vue
+	import { $ref } from 'vue/macros'
+	let num = $ref(0)
+	const add = ()=>{
+		// 不需要num.value++
+		num++
+	}
 
-
+```
 
