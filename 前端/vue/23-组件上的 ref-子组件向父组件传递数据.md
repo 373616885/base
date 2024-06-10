@@ -63,7 +63,7 @@ function showRefDemo3() {
   <h3>年龄：{{ age }}</h3>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, defineExpose } from 'vue'
 // 数据
 let name = ref('张三')
 let age = ref(18)
