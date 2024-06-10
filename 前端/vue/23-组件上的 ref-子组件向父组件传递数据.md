@@ -56,6 +56,8 @@ function showRefDemo3() {
 
 子组件：通过 defineExpose暴露到子组件实例上，父组件通过 ref 拿到子组件实例，然后拿到暴露的内容
 
+// define 开头的宏函数可以不引用
+
 ```vue
 <template>
   <h2>子组件使用：使用defineExpose暴露内容</h2>
@@ -63,6 +65,7 @@ function showRefDemo3() {
   <h3>年龄：{{ age }}</h3>
 </template>
 <script setup>
+// define 开头的宏函数可以不引用
 import { ref, defineExpose } from 'vue'
 // 数据
 let name = ref('张三')
