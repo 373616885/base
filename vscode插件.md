@@ -6,6 +6,9 @@
 
 ### live-server 边写边看页面效果，不必总刷新
 ### Tabnine AI代码补全
+
+### CodeGeeX: AI
+
 ### Auto Rename Tag XML标签对重命名 （设置linked Editing 达到到同样的效果）
 ### Code Spell Checker 单词拼写检查
 
@@ -20,3 +23,13 @@ ctrl + shift + p
 > Editor：Default-Formatter 选择 Prettier Formatter
 
 ### **CSS Peek  css定位器**
+
+### Vue VSCode Snippets：vue代码片段快捷键
+
+v3 就可以跳出模板
+
+修改模板：C:\Users\Administrator\.vscode\extensions\sdras.vue-vscode-snippets-3.1.1\snippets
+
+vue.json
+
+### Vue - Official ：vue 官方插件
