@@ -2,6 +2,10 @@
 
 component 上的 ref 属性 其实主要配合 defineExpose 来实现子组件向父组件传递数据的
 
+简单理解：
+
+component 上的 ref 属性  相当于 通过 id 获取组件对象，然后才能拿到子组件暴露的内容
+
 
 
 #### vue3 写法
