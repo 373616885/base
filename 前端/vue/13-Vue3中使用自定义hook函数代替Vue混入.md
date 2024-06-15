@@ -1,24 +1,33 @@
 ### 自定义hook函数替换Vue混入（mixin）
 
+**就是 js , ts 结尾的文件**
+
+**命名讲究，use 开头**
+
 hooks文件名 一般 以 use 开头，叫做 useStore.js
 
-在 src 下新建一个 hooks 目录专门存放 hooks 函数
-
-```js
-import { reactive } from 'vue'
-
-export const store = reactive({
-  count: 0,
-  increment() {
-    this.count++
-  }
-})
+**必须 export 暴露出去**
 
 ```
+// 没有名字 。默认暴露
+export default function(){} 
+// 有名字
+export function add(){} 
+```
+
+**必须有 return** 
+
+不然别人调着没意义
+
+
+
+**在 src 下新建一个 hooks 目录专门存放 hooks 函数**
+
+
 
 hooks 中生命周期与组件中的生命周期执行顺序其实很好判断
 
-就看它们谁的同级生命周期函数先创建那就先执行谁的,比如在 useAdd 中加几个生命周期
+就看它们谁的同级生命周期函数先创建那就先执行谁的
 
 
 
@@ -38,50 +47,105 @@ hooks 引入一些生命周期函数,watch 等在 mixin 中都有体现
 
 ### 使用
 
-```vue
-<template>From A: {{ store.count }}</template>
-
-<script setup>
-import { store } from '@/hooks/useStore.js'
-</script>
-
-```
-
-
-
-
-
-### useAdd
-
- hooks 目录专门存放 hooks 函数, useAdd.js
+`useSum.ts`中内容如下：
 
 ```js
-import { ref } from 'vue'
-export const useAdd = () => {
-  const a = ref(1)
-  setInterval(() => {
-    a.value++
-  }, 1000)
-  return a
-}
+import {ref,onMounted,computed} from 'vue'
 
+export default function(){
+  let sum = ref(0)
+	
+  const bigSum = computed(() => {
+  	return sum * 100
+  })
+  
+  const increment = ()=>{
+    sum.value += 1
+  }
+  const decrement = ()=>{
+    sum.value -= 1
+  }
+  onMounted(()=>{
+    // 初始化
+    increment()
+  })
+
+  //向外部暴露数据
+  return {sum,increment,decrement,bigSum}
+}	
+```
+
+`useDog.ts`中内容如下
+
+```js
+import {reactive,onMounted} from 'vue'
+import axios,{AxiosError} from 'axios'
+
+export default function(){
+  let dogList = reactive<string[]>([])
+
+  // 方法
+  async function getDog(){
+    try {
+      // 发请求
+      let data = await axios.get('https://dog.ceo/api/breed/pembroke/images/random')
+      // 维护数据
+      dogList.push(data.message)
+    } catch (error) {
+      // 处理错误
+      const err = <AxiosError>error
+      console.log(err.message)
+    }
+  }
+
+  // 挂载钩子--初始化
+  onMounted(()=>{
+    getDog()
+  })
+	
+  //向外部暴露数据
+  return {dogList,getDog}
+}
 ```
 
 
 
-### vue 中使用
+组件中具体使用：
 
 ```vue
 <template>
-  <div>{{ a }}</div>
+  <h2>当前求和为：{{sum}}</h2>
+  <h2>放大100倍后为：{{bigSum}}</h2>
+  <button @click="increment">点我+1</button>
+  <button @click="decrement">点我-1</button>
+  <hr>
+  <img v-for="(u,index) in dogList.urlList" :key="index" :src="(u as string)"> 
+  <span v-show="dogList.isLoading">加载中......</span><br>
+  <button @click="getDog">再来一只狗</button>
 </template>
 
-<script setup>
-import { useAdd } from '@/hooks/useAdd'
-const a = useAdd()
+<script lang="ts">
+  import {defineComponent} from 'vue'
+
+  export default defineComponent({
+    name:'App',
+  })
 </script>
 
+<script setup lang="ts">
+  import useSum from './hooks/useSum'
+  import useDog from './hooks/useDog'
+	
+  let {sum,increment,decrement,bigSum} = useSum()
+  let {dogList,getDog} = useDog()
+</script>
 ```
+
+
+
+
+
+
 
 
 
