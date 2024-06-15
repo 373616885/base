@@ -1679,6 +1679,16 @@ export default {
 
 父子组件的挂载组件，先子后父的
 
+先解析APP ，APP `onBeforeMount`
+
+--> Child  `onBeforeMount`
+
+--> Child  `onMounted`
+
+--> APP  `onMounted`
+
+
+
 
 
 ## 3.14. 【自定义hook】
