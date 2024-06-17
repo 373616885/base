@@ -146,7 +146,15 @@ const post = {
 
 [基于类型的 prop 声明](https://cn.vuejs.org/api/sfc-script-setup.html#type-only-props-emit-declarations)  TS 类型声明
 
-举例来说，`defineProps<{ msg: string }>` 会被编译为 `{ msg: { type: String, required: true }}`  
+如果使用了 ts ，defineProps 最好声明一下类型：
+
+```js
+const props = defineProps<{ msg: string ,count?: number}>()
+```
+
+
+
+注意`defineProps<{ msg: string }>` 会被编译为 `{ msg: { type: String, required: true }}`  
 
 在 ts 使用 ？ 号表示是否可传可不传   
 withDefaults 使用默认值    , withDefaults 是宏函数，可以不用引入
