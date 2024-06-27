@@ -33,3 +33,6 @@ v3 就可以跳出模板
 vue.json
 
 ### Vue - Official ：vue 官方插件
+
+### comate 百度AI组手，自动改bug和接口自动生成
+

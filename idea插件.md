@@ -6,6 +6,8 @@ talkx--chatgpt-gpt-4-free-ai-code-assistant
 
 ## FittenCode AI代码提示
 
+## comate 百度AI组手，自动改bug和接口自动生成
+
 ## Bito ChatGPT 团队开发的代码提示
 
 https://mp.weixin.qq.com/s/L6LBtYppe6U1ukh_Agc_oQ
