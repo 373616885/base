@@ -1943,6 +1943,8 @@ routes:[
 
 2. 配置路由规则，使用`children`配置项：
 
+3. children 的path 是没有 / 斜杠的
+
    ```ts
    const router = createRouter({
      history:createWebHistory(),
@@ -1959,6 +1961,7 @@ routes:[
    			children:[
    				{
    					name:'xiang',
+                       // 
    					path:'detail',
    					component:Detail
    				}
@@ -1973,8 +1976,8 @@ routes:[
    })
    export default router
    ```
-   
-3. 跳转路由（记得要加完整路径）：
+
+4. 跳转路由（记得要加完整路径）：
 
    ```vue
    <router-link to="/news/detail">xxxx</router-link>
@@ -1982,7 +1985,7 @@ routes:[
    <router-link :to="{path:'/news/detail'}">xxxx</router-link>
    ```
 
-4. 记得去`Home`组件中预留一个`<router-view>`
+5. 记得去`Home`组件中预留一个`<router-view>`
 
    ```vue
    <template>
@@ -2070,6 +2073,55 @@ routes:[
       // 打印params参数
       console.log(route.params)
       ```
+
+   3. 需要再路由里占位 : ? 可传可不传
+
+      ```ts
+      // 创建一个路由器，并暴露出去
+      
+      // 第一步：引入createRouter
+      import {createRouter,createWebHistory,createWebHashHistory} from 'vue-router'
+      // 引入一个一个可能要呈现组件
+      import Home from '@/pages/Home.vue'
+      import News from '@/pages/News.vue'
+      import About from '@/pages/About.vue'
+      import Detail from '@/pages/Detail.vue'
+      
+      // 第二步：创建路由器
+      const router = createRouter({
+        history:createWebHistory(), //路由器的工作模式（稍后讲解）
+        routes:[ //一个一个的路由规则
+          {
+            name:'zhuye',
+            path:'/home',
+            component:Home
+          },
+          {
+            name:'xinwen',
+            path:'/news',
+            component:News,
+            children:[
+              {
+                name:'xiang',
+                path:'detail/:id/:title/:content?',
+                component:Detail
+              }
+            ]
+          },
+          {
+            name:'guanyu',
+            path:'/about',
+            component:About
+          }
+        ]
+      })
+      
+      // 暴露出去router
+      export default router
+      
+      ```
+
+      
 
 > 备注1：传递`params`参数时，若使用`to`的对象写法，必须使用`name`配置项，不能用`path`。
 >
@@ -2522,7 +2574,7 @@ export const useTalkStore = defineStore('talk',()=>{
 
 ## 6.3. 【mitt】
 
-概述：与消息订阅与发布（`pubsub`）功能类似，可以实现任意组件间通信。
+概述：与消息订阅与发布（`pubsub`）功能类似，可以实现**任意**组件间通信。（**任意组件，同级组件**）
 
 安装`mitt`
 
@@ -2576,7 +2628,7 @@ emitter.on('send-toy',(value)=>{
 })
 
 onUnmounted(()=>{
-  // 解绑事件
+  // 解绑事件,组件卸载时，要解绑事件，释放内存
   emitter.off('send-toy')
 })
 ```
@@ -2604,7 +2656,7 @@ function sendToy(){
    <!-- 使用v-model指令 -->
    <input type="text" v-model="userName">
    
-   <!-- v-model的本质是下面这行代码 -->
+   <!-- v-model的本质是下面这行代码--vue2 -->
    <input 
      type="text" 
      :value="userName" 
@@ -2618,7 +2670,11 @@ function sendToy(){
    <!-- 组件标签上使用v-model指令 -->
    <AtguiguInput v-model="userName"/>
    
-   <!-- 组件标签上v-model的本质 -->
+   <!-- 组件标签上v-model的本质 ：update:model-value 是一个完整的事件名，:没有分割的意思 -->
+   <!-- $event 是 emit 提供的数据 -->
+   <!-- vue2 本质:value 和 @input-->
+   <!-- vue3 :value 变成 :modelValue  @input 变成 @update:model-value-->
+   <!-- 开发都写上面的 v-model-->
    <AtguiguInput :modelValue="userName" @update:model-value="userName = $event"/>
    ```
 
@@ -2682,7 +2738,22 @@ function sendToy(){
    <AtguiguInput v-model:abc="userName" v-model:xyz="password"/>
    ```
 
+6. @input (或是v-on:input) 一般用于监听事件，只要输入的值变化了就会触发
+
+   ```vue
+   适⽤于实时查询，输⼊每⼀个字符都会触发该事件
+   <input type="text" placeholder="通过乘车⼈/订单号查询" v-model="inputVal"  v-on:input="search" value="" />;
    
+   function search(){
+   	// 业务
+   }
+   ```
+
+   
+
+
+
+
 
 
 ## 6.5.【$attrs 】
@@ -2693,12 +2764,17 @@ function sendToy(){
 
    >  注意：`$attrs`会自动排除`props`中声明的属性(可以认为声明过的 `props` 被子组件自己“消费”了)
 
+3. **孙→祖**：通过函数的形式，祖向孙传函数，孙调用祖的函数，在函数里拿到孙的数据
+
+
+
 父组件：
 
 ```vue
 <template>
   <div class="father">
     <h3>父组件</h3>
+      <!--  v-bind="{x:100,y:200}" 等价 :x=100 :y=200  -->
 		<Child :a="a" :b="b" :c="c" :d="d" v-bind="{x:100,y:200}" :updateA="updateA"/>
   </div>
 </template>
@@ -2766,6 +2842,10 @@ function sendToy(){
    | --------- | -------------------------------------------------------- |
    | `$refs`   | 值为对象，包含所有被`ref`属性标识的`DOM`元素或组件实例。 |
    | `$parent` | 值为对象，当前组件的父组件实例对象。                     |
+
+3. 配合 defineExpose 拿到--暴露到实例对象上的数据
+
+
 
 ## 6.7. 【provide、inject】
 
