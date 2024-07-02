@@ -3016,7 +3016,7 @@ function sendToy(){
    let myVar = shallowRef(initialValue);
    ```
 
-3. 特点：只跟踪引用值的变化，不关心值内部的属性变化。
+3. 特点：只跟踪引用值的变化，不关心值内部的属性变化。每次都换了个新对象
 
 ### `shallowReactive`
 
@@ -3058,6 +3058,49 @@ function sendToy(){
    * 创建不可变的状态快照。
    * 保护全局状态或配置不被修改。
 
+
+
+常用情况：
+
+```vue
+<template>
+  <div>readonly</div>
+  <h5>sum ：{{ sum }}</h5>
+  <h5>sum2 ：{{ sum2 }}</h5>
+  <button @click="changSum">加一</button>
+  <button @click="changUser">修改user</button>
+</template>
+
+<script setup lang="ts">
+import { ref, readonly } from 'vue'
+const sum = ref(0)
+const sum2 = readonly(sum)
+function changSum() {
+  sum.value++
+}
+function changUser() {
+  console.log(sum2)
+}
+</script>
+
+<style scoped></style>
+
+```
+
+
+
+sum 我自己控制，可以修改，
+
+sum2 暴露给同事可以用，不可修改，
+
+我自己修改sum，sum2也跟着变，防止别人随意修改，但我可以修改
+
+sum：是钱的情况，很多
+
+
+
+
+
 ### **`shallowReadonly`**
 
 1. 作用：与 `readonly` 类似，但只作用于对象的顶层属性。
@@ -3076,6 +3119,56 @@ function sendToy(){
    * 适用于只需保护对象顶层属性的场景。
 
      
+
+
+
+常用情况：
+
+自己可以修改 user1,暴露给别人的只能修改地址
+
+修改 user1，user2也跟着变化
+
+```vue
+<template>
+  <div>shallowReadonly</div>
+  <br />
+  <h5>user ：{{ user }}</h5>
+  <h5>user2 ：{{ user2 }}</h5>
+  <button @click="updateUser">updateUser</button>
+  <button @click="updateUser2">updateUser</button>
+</template>
+
+<script setup lang="ts">
+import { ref, readonly, shallowReadonly } from 'vue'
+
+
+const user = ref({
+  name: 'qinjp',
+  age: 36,
+  info: {
+    address: '中三巷'
+  }
+})
+
+function updateUser() {
+  user.value.info.address += user.value.info.address + '~~~'
+}
+
+const user2 = shallowReadonly(user)
+function updateUser2() {
+  user2.value.info.address += user2.value.info.address + '~~~'
+}
+</script>
+
+<style scoped></style>
+
+```
+
+
+
+
+
+
 
 ## 7.3.【toRaw 与 markRaw】
 
@@ -3137,6 +3230,8 @@ function sendToy(){
 ## 7.4.【customRef】
 
 作用：创建一个自定义的`ref`，并对其依赖项跟踪和更新触发进行逻辑控制。
+
+配合 track和trigger 使用
 
 实现防抖效果（`useSumRef.ts`）：
 
@@ -3219,8 +3314,10 @@ const Child = defineAsyncComponent(()=>import('./Child.vue'))
 ## 8.3.【全局API转移到应用对象】
 
 - `app.component`
-- `app.config`
+- `app.config` 
+  - app.config.globalProperties.x = 99
 - `app.directive`
+  - 自定义指令
 - `app.mount`
 - `app.unmount`
 - `app.use`
