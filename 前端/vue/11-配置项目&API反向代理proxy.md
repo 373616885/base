@@ -41,3 +41,11 @@ export default defineConfig({
 
 ```
 
+
+
+### 原理使用 http-proxy-middleware 
+
+
+
+
+

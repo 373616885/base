@@ -285,6 +285,28 @@ function changeCar() {
 
 
 
+### reactive  内嵌 ref
+
+解构出来不需要 .value
+
+```ts
+let user = reactive({
+  name: '张三',
+  age: ref(18)
+})
+
+console.log(user.name)
+console.log(user.age) // 这里不需要 .value
+
+
+
+
+```
+
+
+
+
+
 ## 【ref 对比 reactive】
 
 宏观角度看：
@@ -297,7 +319,7 @@ function changeCar() {
 
 > 1. `ref`创建的变量必须使用`.value`（可以使用`volar`插件自动添加`.value`）。
 >
->    <img src="D:/GitHub/base/前端/images/自动补充value.png" alt="自动补充value" style="zoom:50%;border-radius:20px" /> 
+>    <img src="../images/自动补充value.png" alt="自动补充value" style="zoom:50%;border-radius:20px" /> 
 >
 > 2. `reactive`重新分配一个新对象，会**失去**响应式（可以使用`Object.assign`去整体替换）。
 >
@@ -328,6 +350,115 @@ function changeCar() {
    > 还有一个复杂的表单，有几十个属性，如果一个一个ref，那是很蠢的事情
 
 3. 若需要一个响应式对象，且层级较深，推荐使用`reactive`。
+
+
+
+
+
+### 本质
+
+数据和函数的关联（数据一变，界面跟新，这是其中一种表象）
+
+简单理解：数据变化，函数重新运行
+
+数据一变，界面跟新，其实是数据变化，重新运行了render函数，这个函数重新去渲染视图
+
+
+
+哪些数据：
+
+1. 函数用到的数据（读取到某个属性）
+2. 读取的对象是响应式的 （ref 或者 reactive）
+
+
+
+哪些函数（被监控的函数）：
+
+1. render 函数
+2. watch 
+3. watchEffect
+4. computed
+
+
+
+```
+const a =ref(0)
+//这个函数用到响应式的数据，但是没有被监控起来,就是 a 数字变了 f 没有重新运行
+function f(){
+	a.value = 2
+}
+```
+
+
+
+### 常见情况（错误）
+
+```vue
+<template>
+  <h2>{{ count }}</h2>
+  <h2>{{ doubleCount }}</h2>
+  <button @click="updateCount">updateCount</button>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const count = ref(5)
+
+/** 情况 start **/
+// 这个本质 ref(一个数字)
+// 没有跟 count 关联起来
+const doubleCount = ref(count.value * 2)
+
+function updateCount() {
+  count.value++
+}
+// 修改
+watch(count, (newVal) => {
+  doubleCount.value = newVal * 2
+})   
+/** 情况 end **/
+
+    
+</script>
+
+<style scoped></style>
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,28 @@
+1.在Vscode插件中安装prettier
+
+2.在根目录下导入配置文件
+
+3.在vscode的设置里 搜索save 就能看到并勾上format on save
+
+4.右键 使用...格式化文档 配置默认格式化文档程序 选择prettier
+
+5.在配置下.eslintrc.js里的rules 新增  为了解决eslint与prettier冲突
+'indent': 0,
+'space-before-function-paren': 0
+
+
+6.使用husky强制代码格式化  创建配置文件
+npx husky add .husky/pre-commit
+
+7.往第六步生成的文件中写入
+npx lint-staged
+
+8.把package.json文件的lint-staged修改为
+
+"lint-staged": {
+   "src/**/*.{js,vue}": [      //src目录下所有的js和vue文件
+     "eslint --fix",           // 自动修复
+     "git add"                 // 自动提交时修复
+   ]
+ }
+
