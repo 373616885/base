@@ -1,5 +1,7 @@
 ### 升级到Spring 5.3.x之后，使用BeanUtils 导致性能下降，GC次数急剧增加
 
+（现在  [6.0.14](https://github.com/spring-projects/spring-framework/milestone/340) 已经解决这个问题了）
+
 从 Spring 5.3.x 开始，BeanUtils  开始通过创建 ResolvableType这个 进行属性复制
 
 > Spring 5.3.x 版本的 对象复制
@@ -264,6 +266,12 @@ ns         %     Task name
 针对这个问题，spring-framework github 里有 [Issue](https://github.com/spring-projects/spring-framework/issues/27246).
 
 https://github.com/spring-projects/spring-framework/issues/27246
+
+（现在  [6.0.14](https://github.com/spring-projects/spring-framework/milestone/340) 已经解决这个问题了）
+
+
+
+
 
 ### 解决
 

@@ -2562,6 +2562,93 @@ export const useTalkStore = defineStore('talk',()=>{
 </script>
 ```
 
+## 6.1.5 【Expose】
+
+子组件：暴露内容，可以是内容也可以方法
+
+父组件：通过 ref 对象拿到
+
+子组件
+
+```vue
+<template>  
+  <div>  
+    <p>Child Component</p>  
+    <button @click="exposedMethod">调用公开方法</button>  
+  </div>  
+</template>  
+  
+<script setup>  
+import { defineExpose } from 'vue';  
+  
+// 假设这是内部变量  
+const internalValue = 'Internal Value';  
+  
+// 假设这是内部方法，但它并未在模板中使用  
+const internalMethod = () => {  
+  console.log('Internal Method');  
+};  
+  
+// 公开给父组件的内容  
+defineExpose({  
+  // 公开属性  
+  exposedValue: 'Exposed Value',  
+  // 公开方法  
+  exposedMethod: () => {  
+    console.log('Exposed Method');  
+    // 如果需要的话，也可以访问和修改内部变量  
+    console.log(internalValue);  
+    // 但请注意，在 setup 中，我们通常不直接修改响应式状态之外的变量  
+  }  
+});  
+</script>  
+  
+<style scoped>  
+/* 这里可以添加组件的样式 */  
+</style>
+```
+
+父组件
+
+```vue
+<template>  
+  <div>  
+    <p>Parent Component</p>  
+    <child-component ref="childComponent"></child-component>  
+    <button @click="callExposedMethod">调用子组件公开方法</button>  
+  </div>  
+</template>  
+  
+<script setup>  
+import { ref } from 'vue';  
+  
+// 使用 ref 来创建对子组件的引用  
+const childComponent = ref(null);  
+  
+// 定义一个方法来调用子组件的 exposedMethod  
+const callExposedMethod = () => {  
+  // 确保 childComponent 已经被挂载，即不是 null  
+  if (childComponent.value) {  
+    // 调用子组件的 exposedMethod 方法  
+    childComponent.value.exposedMethod();  
+  } else {  
+    console.error('子组件尚未挂载');  
+  }  
+};  
+</script>  
+  
+<!-- 如果需要，可以在这里添加子组件的样式 -->  
+<style scoped>  
+/* 子组件样式 */  
+</style>
+```
+
+
+
+
+
+
+
 ## 6.2. 【自定义事件】
 
 1. 概述：自定义事件常用于：**子 => 父。**
@@ -2585,13 +2672,31 @@ export const useTalkStore = defineStore('talk',()=>{
    ```
 
    ```js
-   //子组件中，触发事件：
+   //vue2子组件中，触发事件：
    this.$emit('send-toy', 具体数据)
+   //vue3触发事件：
+   //声明事件
+   const emit =  defineEmits(['send-toy'])
+   //触发事件
+   emit('send-toy',toy)
    ```
+
+
 
 ## 6.3. 【mitt】
 
 概述：与消息订阅与发布（`pubsub`）功能类似，可以实现**任意**组件间通信。（**任意组件，同级组件**）
+
+**注意这个重要的内置关系**
+
+1. **提供数据的组件，在合适的时候触发事件**
+2. **接收数据的组件中：绑定事件、同时在销毁前解绑事件**
+
+**接收数据的组件，同时在销毁前解绑事件（释放内存）**
+
+
+
+
 
 安装`mitt`
 
@@ -2690,7 +2795,8 @@ function sendToy(){
    <!-- 组件标签上v-model的本质 ：update:model-value 是一个完整的事件名，:没有分割的意思 -->
    <!-- $event 是 emit 提供的数据 -->
    <!-- vue2 本质:value 和 @input-->
-   <!-- vue3 :value 变成 :modelValue  @input 变成 @update:model-value-->
+   <!-- vue3 :value 改成 :modelValue= 
+   	@input 变成 @update:model-value 或者 @update:modelValue-->
    <!-- 开发都写上面的 v-model-->
    <AtguiguInput :modelValue="userName" @update:model-value="userName = $event"/>
    ```
@@ -2864,6 +2970,40 @@ function sendToy(){
 
 
 
+$refs在模板中使用，与$event 类似 
+
+Child.vue 暴露 defineExpose({  book })
+
+```vue
+<button @click="getAllChild($refs)">让所有子节点</button>
+<Child1 ref="c1" />
+<Child2 ref="c2" />
+
+function getAllChild(refs: { [key: string]: any }) {
+  console.log(refs)
+  for (let key in refs) {
+    refs[key].book += 3
+  }
+}
+
+```
+
+$parent 在模板中使用，与$event 类似 
+
+Father.vue 暴露 defineExpose({ house })
+
+```vue
+<button @click="minusHouse($parent)">干掉父亲的一套房产</button>
+
+// 方法
+function minusHouse(parent: any) {
+  parent.house -= 1
+}
+
+```
+
+
+
 ## 6.7. 【provide、inject】
 
 1. 概述：实现**祖孙组件**直接通信
@@ -2929,6 +3069,7 @@ function sendToy(){
      let car = inject('car')
 </script>
    ```
+
 
 
 ## 6.8. 【pinia】
@@ -3248,7 +3389,7 @@ function updateUser2() {
 
 作用：创建一个自定义的`ref`，并对其依赖项跟踪和更新触发进行逻辑控制。
 
-配合 track和trigger 使用
+配合 track （跟踪）和trigger （触发）使用
 
 实现防抖效果（`useSumRef.ts`）：
 

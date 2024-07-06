@@ -1,6 +1,6 @@
 ## readonly()
 
-接受一个对象 (不论是响应式还是普通的) 或是一个 [ref](https://cn.vuejs.org/api/reactivity-core.html#ref)，返回一个原值的只读代理
+接受一个对象 (不论是响应式还是普通的) 或是一个 [ref](https://cn.vuejs.org/api/reactivity-core.html#ref) 对象，返回一个原值的只读代理
 
 只读代理是深层的：对任何嵌套属性的访问都将是只读的。
 

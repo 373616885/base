@@ -1,5 +1,7 @@
 $refs vue2中配合 ref 获取 DOM元素
 
+ **必须在mounted中才能使用**
+
 ```vue
 <template>
   <div>
@@ -19,6 +21,8 @@ export default {
 
 
 vue3中直接 const myElement = ref(null);
+
+ **必须在onMounted 中才能使用**
 
 ```vue
 <template>

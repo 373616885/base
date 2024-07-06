@@ -62,7 +62,24 @@ javac -verbose --module-path target -d target\pojo pojo\src\*.java pojo\src\pojo
 
 -verbose打印详细日志便于我们观察编译的具体过程
 
+例子：
+javac --module-source-path src -d out src/packt.addressbook/packt/addressbook/Main.java src/packt.addressbook/module-info.java
 ```
+
+
+
+### 执行模块
+
+```shell
+java --module-path out --module packt.addressbook/packt.addressbook.Main
+
+```
+
+–module-path可以用-p代替，–module可以用-m代替
+
+如果执行成功，可以在控制台看到Hello World!
+
+
 
 
 
@@ -71,6 +88,8 @@ javac -verbose --module-path target -d target\pojo pojo\src\*.java pojo\src\pojo
 需要使用者也必须有 module-info.java 这个文件
 
 如何使用者没有 module-info.java 这个文件是可以无视的
+
+使用moudule-info.java来声明一个模块，一个模块只能有一个文件，且在顶层包同目录下
 
 
 
@@ -113,7 +132,15 @@ module com.qin.a {
 
 
 
+关键词requires（输入）
 
+exports（输出）
+
+users（使用服务：消费者）
+
+providers（提供服务：服务实现者）
+
+transtive（传递性）
 
 
 

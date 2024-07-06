@@ -100,8 +100,13 @@ fetch("https://v0.yiketianqi.com/free/day?appid=&appsecret=&unescape=1")
 tsconfig.json 中 "compilerOptions" 下面 加上
 
 ```js
-"allowJs": true
+"allowJs": true,
+"checkJs": false
 ```
+
+最后在 env.d.ts  加上你的 js 文件
+
+declare module '@/utils/SmartAxios'
 
 
 

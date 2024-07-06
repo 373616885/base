@@ -36,3 +36,7 @@ vue.json
 
 ### comate 百度AI组手，自动改bug和接口自动生成
 
+### common-intellisense ：UI组件提示库
+
+### error lens ：vscode错误提示增强
+

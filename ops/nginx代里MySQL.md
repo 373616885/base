@@ -4,16 +4,16 @@
 
 
 
-```
+```conf
 stream {        
     upstream mysql {
         server 127.0.0.1:3306;
     }
     server {
-	listen 9003;
-	proxy_connect_timeout 10s;
-	proxy_timeout 30s;
-	proxy_pass mysql;
+		listen 9003;
+		proxy_connect_timeout 10s;
+		proxy_timeout 30s;
+		proxy_pass mysql;
     }
 }
 ```
@@ -44,10 +44,10 @@ stream {
         server 127.0.0.1:3306;
     }
     server {
-	listen 9003;
-	proxy_connect_timeout 10s;
-	proxy_timeout 30s;
-	proxy_pass mysql;
+		listen 9003;
+		proxy_connect_timeout 10s;
+		proxy_timeout 30s;
+		proxy_pass mysql;
     }
 }
 

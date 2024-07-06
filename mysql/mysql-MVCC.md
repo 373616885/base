@@ -145,3 +145,131 @@ select 的时候，与第一次的版本是一致的，称为快照读
 select 的时候，与第一次的版本是一致的，称为快照读
 
 select 的时候，通过最新的readView ，读到最新的数据，称为当前读
+
+
+
+### 现实中常出现的问题
+
+
+
+```java
+@Transactional
+public void updateCourse(UpdateCourseDto courseDto) {
+
+    // 查询数据
+    Course course = examCourseMapper.selectByCourseId(courseDto.getId());
+
+    // 锁数据 select for-update
+    examCourseMapper.selectForUpdate(courseDto.getId());
+
+    // 判断数据的状态--再次查询数据（一个事务里的可重复读之前的数据了）
+    Boolean isStatus = examCourseMapper.selectStatus(courseDto.getId());
+
+    // 可以插人充值记录
+    if (isStatus) {
+        examMemoyMapper.insert(new Memoy());
+        //修改主表几率
+        examCourseMapper.updateStatus(courseDto.getId());
+    }
+}
+```
+
+常见错误：
+
+以为两个线程进来是 select for-update 锁住了，
+
+第一个线程，先往下执行，判断是否可以插人几率
+
+判断完成插人新记录，修改状态，事务提交，第二个线程是否锁
+
+然后往下执行，读取到数据的状态已经变了，就可以控制住
+
+
+
+其实是错误的，因为mysql默认是可重复读
+
+在一个事务中，前后两次读取是不会读到，别人提交的数据的，只会与第一次读的数据一致
+
+上面的错误就是
+
+第一层读到的数据和下面的读到的数据 其实是一样的，并不会读到另一个事务提交的数据
+
+
+
+
+
+
+
+
+
+### 还有一种情况就是分布式锁与事务不同步
+
+```java
+@Transactional
+public void updateCourse(UpdateCourseDto courseDto) {
+
+    // 其他业务
+
+    // 分布式锁的力度比事务小，导致别的线程读到的数据还是没有扣减的数据
+	boolean isLock = redis.lock("key:"+courseDto.getId())
+    if(isLock) {
+        try {
+            //查询扣点数据
+		    Integer num =examCourseMapper.selectNum(courseDto.getId());
+            //数据扣减逻辑
+            examCourseMapper.deduct(courseDto.getId(),num)
+        }
+        finally {
+            redis.releaseLock("key:"+courseDto.getId())
+        }
+    }
+        
+	    
+    // 其他业务
+    
+    .....
+    // 提交事务    
+        
+}
+```
+
+
+
+
+
+### 总结
+
+#### 锁的使用粒度一定要大于事务
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

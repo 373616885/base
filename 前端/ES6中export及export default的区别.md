@@ -8,7 +8,7 @@
 
 5. export default 默认导出就不需要name了，但是一个js文件中只能有一个export default
 
-6. as 别名 import * as mycow from './cow.js' // import this file into mycow 
+6. as 别名 import * as mycow from './cow.js' 
 
 
 
