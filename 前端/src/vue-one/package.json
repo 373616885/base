@@ -1,0 +1,18 @@
+{
+  "name": "vue-one",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.4.0",
+    "@vue-macros/reactivity-transform": "^0.3.23",
+    "vite": "^4.4.11"
+  }
+}

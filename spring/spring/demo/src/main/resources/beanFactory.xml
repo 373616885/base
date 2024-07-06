@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--    <bean id="myTestBean" class="com.qin.demo.bean.MyTestBean">-->
+    <!--        <constructor-arg ref="myBean"/>-->
+    <!--    </bean>-->
+    <bean id="myTestBean" class="com.qin.demo.bean.MyTestBean">
+        <constructor-arg index="0" ref="myBean"/>
+        <!--        <property name="myBean" ref="myBean"/>-->
+    </bean>
+    <bean id="myBean" class="com.qin.demo.bean.MyBean">
+        <meta key="str" value="qinjiepeng"/>
+    </bean>
+
+
+    <bean id="car" class="com.qin.demo.bean.CarFactoryBean">
+        <property name="info" value="超级跑车,400,200000"></property>
+    </bean>
+</beans>

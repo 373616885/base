@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+</head>
+
+<body>
+  <h1>vue</h1>
+
+  <div id="app">
+    <h3>{{message}}</h3>
+    <button type="button" @click="changeMsg">点击</button>
+    <input v-model="message" />
+  </div>
+
+  <script type="module">
+    import { createApp } from './petite-vue.es.js'
+    createApp({
+      message: 'Hello Vue!',
+      changeMsg() {
+        this.message = 'qinjp'
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+### 监控TCP/IP网络的
+netstat -a      # 列出所有端口
+
+netstat -at     # 列出所有TCP端口
+
+netstat -au    # 列出所有UDP端口

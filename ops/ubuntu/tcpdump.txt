@@ -1,0 +1,20 @@
+﻿## 安装
+apt-get -y install tcpdump
+
+## 监听端口22
+tcpdump tcp port 22
+
+##保存到文件
+tcpdump tcp port 22 -w tcp.log
+##查看tcp文件
+tcpdump -r ./tcp.log
+
+###  -tt 时间戳 -X 文件内容
+tcpdump tcp port 80 -t -XX -w tcp.log
+
+nc 127.0.0.1 8080
+
+
+tcpdump tcp port 22 -tt -XX -vv
+
+

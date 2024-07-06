@@ -1,0 +1,15 @@
+﻿docker build -t ubuntu-qin:1.0 .
+
+cd ./docker
+// 根据Dockerfile构建镜像
+docker build . -t docker-qin:1.0
+// 查看本地images
+docker images 
+// 给镜像重新打标签
+$ docker tag docker-qin:1.0 hub.docker.com/docker-qin:1.0
+// 推送到registry
+$ docker push hub.docker.com/docker-qin:1.0 
+
+docker run --name ubuntu -it -d -p 2222:22 ubuntu-qin:1.0
+
+docker logs ubuntu 

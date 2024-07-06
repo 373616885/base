@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>基本框架</title>
+    <script src="./vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h2>{{msg}}</h2>
+        <button type="button" @click="changeMsg">点击</button>
+        <input v-model="msg" />
+    </div>
+    <script type="text/javascript">
+        let app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    msg: 'Hello Vue.js!'
+                }
+            },
+            methods: {
+                changeMsg() {
+                    this.msg = "qinjp";
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
