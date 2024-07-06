@@ -321,6 +321,8 @@ AtomicLong 还具有 compareAndSet 等高级方法，可以应对除了加减之
 
 
 在低并发情况下，`AtomicLong`的读写效率跟`LongAdder`基本相同，甚至略优于`LongAdder`；
+
  `AtomicLong`的读效率总是优于`LongAdder`的；
+
  但`AtomicLong`的写效率会随着竞争的激烈程度线性降低，但`LongAdder`的写效率几乎可以保持地很好。
 
