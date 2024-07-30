@@ -1,29 +1,8 @@
-### 安装
-
-```shell
-npm install mockjs --save-dev
-```
-
-
-
-### 创建配置文件
-
-在 src 下 创建 mock 文件夹下创建一个配置文件`index.ts`
-
-```ts
 import Mock from 'mockjs'
 
 Mock.setup({
   // 延迟时间200毫秒
   timeout: '200-600' // 设置响应时间随机范围
-})
-
-Mock.mock('/api/get/token', 'post', {
-  code: 200,
-  msg: 'ok',
-  data: {
-    token: '@id'
-  }
 })
 
 Mock.mock('/api/login', 'post', {
@@ -54,7 +33,7 @@ Mock.mock('/api/menu/list', 'post', {
   data: [
     {
       id: '1815667362815164416',
-      name: '首页1',
+      name: '首页',
       url: '/home',
       seq: 10,
       type: '菜单',
@@ -63,14 +42,14 @@ Mock.mock('/api/menu/list', 'post', {
     },
     {
       id: '1815667403843956736',
-      name: '用户管理1',
+      name: '用户管理',
       url: '/user',
       seq: 20,
       type: '菜单',
       childMenu: [
         {
           id: '1815669263254386736',
-          name: '用户列表1',
+          name: '用户列表',
           url: '/user/list',
           seq: 200,
           type: '菜单',
@@ -82,14 +61,14 @@ Mock.mock('/api/menu/list', 'post', {
     },
     {
       id: '1815667436479807488',
-      name: '系统管理1',
+      name: '系统管理',
       url: '/system',
       seq: 30,
       type: '菜单',
       childMenu: [
         {
           id: '1815669700334427488',
-          name: '角色管理1',
+          name: '角色管理',
           url: '/system/role',
           seq: 300,
           type: '菜单',
@@ -98,7 +77,7 @@ Mock.mock('/api/menu/list', 'post', {
         },
         {
           id: '1815670186483587488',
-          name: '菜单管理1',
+          name: '菜单管理',
           url: '/system/menu',
           seq: 301,
           type: '菜单',
@@ -107,7 +86,7 @@ Mock.mock('/api/menu/list', 'post', {
         },
         {
           id: '1815670819005627488',
-          name: '权限管理1',
+          name: '权限管理',
           url: '/system/permission',
           seq: 302,
           type: '菜单',
@@ -119,7 +98,7 @@ Mock.mock('/api/menu/list', 'post', {
     },
     {
       id: '1815668165693050880',
-      name: '数据统计1',
+      name: '数据统计',
       url: '/data',
       seq: 40,
       type: '菜单',
@@ -128,16 +107,3 @@ Mock.mock('/api/menu/list', 'post', {
     }
   ]
 })
-
-
-```
-
-
-
-### main.ts中添加配置
-
-```ts
-// 正式的时候需要注释掉
-import '@/mock'
-```
-

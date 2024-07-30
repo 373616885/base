@@ -319,7 +319,7 @@ console.log(user.age) // 这里不需要 .value
 
 > 1. `ref`创建的变量必须使用`.value`（可以使用`volar`插件自动添加`.value`）。
 >
->    <img src="/images/自动补充value.png" alt="自动补充value" style="zoom:50%;border-radius:20px" /> 
+>    <img src="../images/自动补充value.png" alt="自动补充value" style="zoom:50%;border-radius:20px" /> 
 >
 > 2. `reactive`重新分配一个新对象，会**失去**响应式（可以使用`Object.assign`去整体替换）。
 >
