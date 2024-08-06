@@ -1,7 +1,9 @@
+import { computed } from 'vue'
 import { createI18n } from 'vue-i18n'
 import { localRead, localSave } from '@/lib/local-util'
 import EN from './en'
 import ZH from './zh'
+
 const messages = {
   en: {
     ...EN
@@ -23,6 +25,10 @@ const getLocaleLangCode = () => {
 }
 
 export type LangCode = 'zh' | 'en'
+
+export const currentLanguage = computed(() => {
+  return i18n.global.locale.value
+})
 
 // 切换语言
 export function switchLang(value: LangCode) {

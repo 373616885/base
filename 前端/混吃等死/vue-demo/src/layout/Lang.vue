@@ -14,12 +14,7 @@
 
 <script setup lang="ts">
 import SvgIcon from '@/components/SvgIcon.vue'
-import { i18n, switchLang, type LangCode } from '@/i18n'
-import { computed } from 'vue'
-
-const currentLanguage = computed(() => {
-  return i18n.global.locale.value
-})
+import { currentLanguage, switchLang, type LangCode } from '@/i18n'
 
 function switchLangCode(val: LangCode) {
   switchLang(val)
