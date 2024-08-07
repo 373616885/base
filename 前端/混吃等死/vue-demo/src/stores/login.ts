@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { localRead, localSave, localClear, sessionClear } from '@/lib/local-util'
+import { localRead, localSave, localClear } from '@/lib/local-util'
 import { TOKEN_HEADER } from '@/constants/common-const'
 
 export const useLoginStore = defineStore('login', () => {
@@ -20,7 +20,7 @@ export const useLoginStore = defineStore('login', () => {
 
   function logout(router?: any) {
     token.value = ''
-    sessionClear()
+    //sessionClear()
     localClear()
     if (router) {
       router.push('/login')

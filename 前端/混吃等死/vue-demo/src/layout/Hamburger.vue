@@ -17,7 +17,6 @@ const hamburgerStore = useHamburgerStore()
   overflow: hidden;
   /** 防止选中 附近的文字 **/
   user-select: none;
-  pointer-events: none;
   height: 100%;
   width: 30px;
   vertical-align: middle;

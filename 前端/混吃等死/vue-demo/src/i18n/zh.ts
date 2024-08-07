@@ -19,5 +19,18 @@ export default {
   login: {
     title: '用 户 登 录',
     btnTitle: '登录'
+  },
+  driver: {
+    doneBtnText: '完成',
+    closeBtnText: '关闭',
+    nextBtnText: '下一步',
+    prevBtnText: '上一步',
+    step: '步骤：',
+    of: '-',
+    guide: '引导按钮',
+    hamburger: '汉堡按钮',
+    screenfull: '全屏按钮',
+    language: '语言切换',
+    avatar: '头像'
   }
 }

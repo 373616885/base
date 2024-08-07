@@ -403,7 +403,7 @@ talkStore.$subscribe((mutate,state)=>{
 })
 
 取：加上 || [] 防止 null 对象的情况
-talkList = JSON.parse(localStorage.getItem('talk') as string) || []
+talkList = JSON.parse(localStorage.getItem('talk') as string) || '[]'
 ```
 
 

@@ -19,5 +19,18 @@ export default {
   login: {
     title: 'user login',
     btnTitle: 'login'
+  },
+  driver: {
+    doneBtnText: 'done',
+    closeBtnText: 'close',
+    nextBtnText: 'next',
+    prevBtnText: 'prev',
+    step: '',
+    of: 'of',
+    guide: 'guide',
+    hamburger: 'hamburger',
+    screenfull: 'screenfull',
+    language: 'language',
+    avatar: 'avatar'
   }
 }

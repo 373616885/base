@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
-import { menuList, type MenuResponse } from '@/api/menu-api'
+import { menuList } from '@/api/menu-api'
 import { sessionRead, sessionSave } from '@/lib/local-util'
 
 export const useAsideStore = defineStore('aside', () => {
@@ -12,7 +12,7 @@ export const useAsideStore = defineStore('aside', () => {
     sessionSave('defaultActiveMenu', url)
   }
   // 菜单
-  const menus = reactive<MenuResponse[]>(JSON.parse(sessionRead('menus') as string) || [])
+  const menus = reactive(JSON.parse(sessionRead('menus') || '[]'))
 
   // 初始化菜单
   const initMenus = async () => {

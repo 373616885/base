@@ -1,7 +1,7 @@
 <template>
   <el-dropdown @command="switchLangCode">
     <span class="el-dropdown-link">
-      <SvgIcon icon="language" />
+      <SvgIcon icon="language" class="language" />
     </span>
     <template #dropdown>
       <el-dropdown-menu>
@@ -24,6 +24,7 @@ function switchLangCode(val: LangCode) {
 <style scoped>
 .el-dropdown-link {
   font-size: 20px;
+  margin-top: -2px;
 }
 /** 下拉菜单 移入会有黑色边框问题 **/
 .el-dropdown-link:focus {

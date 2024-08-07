@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown :hide-on-click="false">
+  <el-dropdown :hide-on-click="false" class="avatar">
     <span class="el-dropdown-link">
       <el-avatar fit="contain" shape="square" :size="40" src="./avatar.webp" />
     </span>

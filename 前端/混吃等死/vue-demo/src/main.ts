@@ -13,7 +13,7 @@ import App from './App.vue'
 import { i18n } from '@/i18n'
 
 // 正式的时候注释掉
-import '@/mock'
+//import '@/mock'
 
 import './router/permission'
 

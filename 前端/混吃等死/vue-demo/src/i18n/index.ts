@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { createI18n } from 'vue-i18n'
-import { localRead, localSave } from '@/lib/local-util'
+import { sessionRead, sessionSave } from '@/lib/local-util'
 import EN from './en'
 import ZH from './zh'
 
@@ -14,13 +14,13 @@ const messages = {
 }
 
 const getLocaleLangCode = () => {
-  let code = localRead('lang')
+  let code = sessionRead('lang')
   if (code) {
     return code
   }
   code = navigator.language
   code = code.indexOf('zh') > -1 ? 'zh' : 'en'
-  localSave('lang', code)
+  sessionSave('lang', code)
   return code
 }
 
@@ -33,8 +33,10 @@ export const currentLanguage = computed(() => {
 // 切换语言
 export function switchLang(value: LangCode) {
   i18n.global.locale.value = value
-  localSave('lang', value)
+  sessionSave('lang', value)
 }
+
+export function getLang() {}
 
 export const i18n = createI18n({
   legacy: false,
