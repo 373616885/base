@@ -256,15 +256,23 @@ for (let i = 0; i < 10000; i++) {
 // 将任务分片
 for (let i = 0; i < dates.length; i++) {
   requestIdleCallback((idle) => {
+    //还有剩余时间  
     if (idle.timeRemaining() > 0) {
-      // 执行耗时的任务
+      // 执行耗时的任务--继续执行
       console.log('requestIdleCallback')
     }
+    
   })
 }
 ```
 
+某种程度上功能相似，写法也相似
 
+```js
+// 某种程度上功能相似，写法也相似
+requestIdleCallback(() => console.log(1));
+setTimeout(() => console.log(2));
+```
 
 requestIdleCallback是一个Web API，允许开发者在主线程空闲时去执行低优先级回调函数。
 
@@ -272,6 +280,10 @@ requestIdleCallback是一个Web API，允许开发者在主线程空闲时去执
 
 window.requestIdleCallback(callback, [options]);
 
+> 返回值 一个ID，可以把它传入 Window.cancelIdleCallback() 方法来结束回调
+>
+> 
+>
 > callback 是一个函数，表示在空闲时段执行的回调函数。
 >
 > 当callback被调用时，会接受一个参数 deadline 对象，
@@ -282,13 +294,13 @@ window.requestIdleCallback(callback, [options]);
 >
 > timeRemaining 属性是一个函数，
 >
-> 函数的返回值表示当前空闲时间还剩下多少时间；
+> 函数的返回值表示当前空闲时间还剩下多少时间；（以毫秒为单位）
 >
 > 
 >
 > didTimeout属性是一个布尔值，
 >
-> 如果didTimeout是true，那么表示本次callback的执行是因为超时的原因
+> 如果didTimeout是true，那么表示本次callback的执行是因为超时的原因（配合 options 的 timeout属性）
 >
 > 
 >
