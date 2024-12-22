@@ -38,3 +38,5 @@ vue.json
 
 ### common-intellisense ：UI组件提示库
 
+### error lens ：vscode错误提示增强
+
