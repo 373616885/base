@@ -15,10 +15,11 @@ import { visualizer } from 'rollup-plugin-visualizer'
 //console.log(import.meta.env.VITE_NODE_ENV)
 //console.log(process.env.VITE_NODE_ENV)
 //console.log(process.env.NODE_ENV)
-
+const isDev = process.env.NODE_ENV !== 'production'
+console.log(isDev)
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: './',
+  base: isDev ? '/' : './',
   plugins: [
     vue(),
     createSvgIconsPlugin({

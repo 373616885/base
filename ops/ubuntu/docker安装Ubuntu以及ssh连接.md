@@ -182,6 +182,10 @@ https://mobaxterm.mobatek.net/download-home-edition.html
 
 ### 链接
 
+```
+ifconfig 查看ip,不一定是127.0.0.1
+```
+
 IP: 127.0.0.1
 
 port : 3316

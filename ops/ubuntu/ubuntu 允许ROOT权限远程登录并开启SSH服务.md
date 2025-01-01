@@ -9,7 +9,7 @@ sudo passwd root
 
 ```
 
-#### 修改50-ubuntu.conf
+#### 修改 lightdm 配置文件： 50-ubuntu.conf
 
 ```shell
 vi /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf
@@ -20,6 +20,17 @@ greeter-show-manual-login=true
 all-guest=false
 
 ```
+
+#### 修改 gdm 配置文件：   /etc/gdm3/custom.conf
+
+```shell
+vi  /etc/gdm3/custom.conf
+
+在 [security] 部分添加
+AllowRoot=true
+```
+
+
 
 #### 修改 gdm-autologin 
 
@@ -103,6 +114,11 @@ vim /etc/ssh/sshd_config
 
 在打开sshd_config后，找到PermitRootLogin without-password 修改为PermitRootLogin yes
 
+PermitRootLogin yes
+打开注释
+Port 22
+打开注释
+PasswordAuthentication yes
 
 ```
 
@@ -114,3 +130,18 @@ vim /etc/ssh/sshd_config
  service ssh restart
 ```
 
+
+
+
+
+### 查看ip
+
+```
+ifconfig
+由于虚拟机上的ip不一定是127.0.0.1
+所以要查看ip
+```
+
+
+
+### 使用 MobaXterm 登录
