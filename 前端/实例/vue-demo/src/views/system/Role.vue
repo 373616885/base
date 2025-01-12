@@ -1,9 +1,19 @@
 <template>
   <el-tree style="max-width: 600px" :props="props" :load="loadNode" lazy show-checkbox />
+  <h3>name</h3>
+  <h4 v-html="content"></h4>
 </template>
 
 <script lang="ts" setup>
 import type Node from 'element-plus/es/components/tree/src/model/node'
+import { getRole } from '@/api/role-api'
+import { ref } from 'vue'
+
+const content = ref('')
+getRole({ id: 1 }).then((res: any) => {
+  console.log(res)
+  content.value = res
+})
 
 interface Tree {
   name: string

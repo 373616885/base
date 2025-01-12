@@ -10,9 +10,15 @@
 
 ![](img/2022-08-20 031452.jpg)
 
+**端口号**
+
+源端口号：发生请求的端口号是随机的 1024-49151之间，因为 0-1023 属于**公认端口**
+
+目标端口号：服务器的端口号
 
 
 
+####  序号
 
 1) 序号：Seq（Sequence Number）序号占32位，用来标识从计算机A发送到计算机B的数据包的序号，计算机发送数据时对此进行标记。
 
@@ -69,7 +75,7 @@ SYN 报文内容：首部的同步位 SYN = 1，初始序号 Sequence number = x
 
 同时会把客户端的seq+1作为ACK的值，表示自己已经收到了客户端的SYN，此时服务器处于 SYN_REVD 状态
 
-SYN报文内容：SYN = 1，ACK = 1， Sequence number = y, Acknowledgment number = x + 1
+SYN报文内容：SYN = 0，ACK = 1， Sequence number = y, Acknowledgment number = x + 1
 
 #### 第三次握手：
 

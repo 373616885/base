@@ -258,3 +258,15 @@ Mock.mock('/api/user/insert', 'post', { code: 200, msg: null, data: null })
 Mock.mock('/api/user/delete', 'post', { code: 200, msg: null, data: null })
 
 Mock.mock('/api/user/update', 'post', { code: 200, msg: null, data: null })
+
+// Mockjs 本身对 GET 请求的支持并不是很友好
+//它只会拦截url等于 /user/getUserInfo 的请求，而对于带参数的请求，如/user/getUserInfo?id=12，因为不等于 /user/getUserInfo 就拦截不到
+//所以需要使用正则表达式来匹配
+Mock.mock(RegExp('/api/system/role' + '.*'), 'get', (res: any) => {
+  console.log(res)
+  return {
+    code: 200,
+    msg: null,
+    data: 'qinjpeng<'
+  }
+})
