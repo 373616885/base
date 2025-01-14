@@ -102,11 +102,132 @@ CPU密集的则没有提升（还降了一些）
 
 
 
+### **直接创建虚拟线程并立即运行**
+
+```
+// 创建虚拟线程并立即运行
+Thread vt = Thread.startVirtualThread(() -> {
+    System.out.println("Start virtual thread...");
+    Thread.sleep(10);
+    System.out.println("End virtual thread.");
+});
+
+Thread.ofVirtual().start(() -> {
+	System.out.println(Thread.currentThread());
+});
+```
+
+
+
+### **创建虚拟线程但不立即运行**
+
+```
+// 创建虚拟线程，但不立即运行
+Thread vt = Thread.ofVirtual().unstarted(() -> {
+    System.out.println("Start virtual thread...");
+    Thread.sleep(1000);
+    System.out.println("End virtual thread.");
+});
+// 手动启动虚拟线程
+vt.start();
+```
+
+
+
+### **通过ThreadFactory创建虚拟线程**
+
+```
+// 使用ThreadFactory创建虚拟线程
+ThreadFactory tf = Thread.ofVirtual().factory();
+Thread vt = tf.newThread(() -> {
+    System.out.println("Start virtual thread...");
+    Thread.sleep(1000);
+    System.out.println("End virtual thread.");
+});
+// 启动虚拟线程
+vt.start();
+```
+
+
+
+### **使用Executor调度虚拟线程**
+
+```
+// 创建Executor服务来调度虚拟线程
+ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+
+// 创建大量虚拟线程并提交到Executor中
+for (int i = 0; i < 100000; i++) {
+    executor.submit(() -> {
+        Thread.sleep(1000);
+        System.out.println("End virtual thread.");
+        return true;
+    });
+}
+```
 
 
 
 
 
+### 在 SpringBoot 中，我们可以通过自定义 TaskExecutor 来支持虚拟线程。
+
+```
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+@Configuration
+public class VirtualThreadConfig {
+
+    @Bean
+    public Executor taskExecutor() {
+        return Executors.newVirtualThreadPerTaskExecutor();
+    }
+}
+```
+
+通过 @Async 注解或者直接使用配置的 Executor 来执行任务
+
+```
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+@Service
+public class VirtualThreadService {
+
+    @Async
+    public void executeTask() {
+        System.out.println("Task executed by: " + Thread.currentThread());
+    }
+}
+```
 
 
+
+手动提交任务
+
+```
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.concurrent.Executor;
+
+@Component
+public class VirtualThreadTask {
+
+    @Autowired
+    private Executor taskExecutor;
+
+    public void runTask() {
+        taskExecutor.execute(() -> {
+            System.out.println("Task executed by: " + Thread.currentThread());
+        });
+    }
+}
+```
 
