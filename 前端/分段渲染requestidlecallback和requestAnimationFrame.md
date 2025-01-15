@@ -236,6 +236,12 @@ console.log('global');
 
 ### **requestIdleCallback**
 
+requestIdleCallback 任务只在一帧的空闲时间执行任务，防止阻塞主线程造成卡顿
+
+若当前帧的空闲时间结束，则暂停批量任务时间，让出主线程，让页面的渲染变的丝滑
+
+
+
 `render`完后这一帧如果还有剩余时间，就会调用 requestIdleCallback 的任务，属于低优先级任务
 
 （最低，如果没有剩余时间，还不会执行）.
@@ -245,8 +251,6 @@ console.log('global');
 ![img](images\v2-fcd66a6e92d4f1784d224ad174736592_720w.webp)
 
 此时你可以使用`requestIdleCallback`API，**如果渲染完成后还有空闲时间**，则这个`API`会被调用。
-
-
 
 ```js
 let dates = []
@@ -277,6 +281,12 @@ setTimeout(() => console.log(2));
 requestIdleCallback是一个Web API，允许开发者在主线程空闲时去执行低优先级回调函数。
 
 这个函数的主要目的是使得开发者能够在不影响关键事件如动画和输入响应的情况下，执行后台或低优先级的任务。
+
+避免耗时的计算，导致渲染的不及时，造成卡顿
+
+若当前帧的空闲时间结束，则暂停批量任务时间，让出主线程，让页面的渲染变的丝滑
+
+
 
 window.requestIdleCallback(callback, [options]);
 
@@ -336,7 +346,7 @@ window.requestIdleCallback(callback, [options]);
 
 
 
-**注意：不是每一帧都会执行，只有在浏览器主线程空闲的时候才会执行。就是渲染完成后还有空闲时间，还有requestIdleCallback  执行时间过长也会导致阻塞页面**
+**注意：不是每一帧都会执行，只有在浏览器主线程空闲的时候才会执行。就是渲染完成后还有空闲时间，还有requestIdleCallback  执行时间过长也有可能会导致阻塞页面，毕竟还是在主线程上执行，来回切换**
 
 
 
@@ -345,7 +355,18 @@ window.requestIdleCallback(callback, [options]);
 **1. 埋点日志相关**
 
 - 在用户有操作行为时（如点击按钮、滚动页面）进行数据分析并上报
+
 - 处理数据时往往会调用 JSON.stringify ，如果数据量较大，可能会有性能问题。
+
+- 配合setTimeout 延迟执行第一层确保不影响渲染，再加上requestIdleCallback第二层保险
+
+  ```js
+  setTimeout(() => {
+    requestIdleCallback(() => console.log(1))
+  }, 1000)
+  ```
+
+  
 
 ```js
 const queues = [];
@@ -369,9 +390,6 @@ function schedule() {
         // 还有空闲时间
         const data = queues.pop();
         // 这里就可以处理数据（格式化数据，清洗数据），上传数据
-        // 注意这里必须要不耗时的，上传数据如果耗时，不能再这里做
-        // 另起一个setInterval循环任务，去上传，这里只处理数据
-        // 总体思路：合并数据，那边一次上传多条，不在一条一条上传
     }
     
     if (queues.length !== 0) {
@@ -405,30 +423,23 @@ function prefetch(entry: Entry, opts?: ImportEntryOpts): void {
 
 ```
 
-**3. 延迟执行**
+**3. 首次渲染屏卡顿的情况**
 
 当你有一些非必须立刻执行的代码时，比如初始化某些非关键的UI组件
 
 可以使用 `requestIdleCallback` 来推迟这些任务的执行
 
+例如：
 
+页面有很多用户的评论要处理完毕后才能看到内容，首次渲染时间就会因为等待处理而变的卡顿
 
-#### 不合适情形
-
-不适合操作dom&更新UI
-
-- 执行时机不确定可能导致视觉难以预测
-- 空闲回调执行的时候，当前帧已经结束绘制了，所有布局的更新和计算也已经完成。可能会引发回流重绘。
-
-不适合做一些耗时的长任务
-
-- 虽然是在浏览器空闲执行，但依然运行在主线程上，耗时的长任务同样会导致帧率降低， 造成页面卡顿。
+将评论处理分解多个小任务，利用`requestIdleCallback` 在浏览器空闲的时候去执行，避免一次性处理导致的主线程阻塞
 
 
 
-`requestIdleCallback` 不适合执行 DOM 操作
 
-因为修改了 DOM 之后下一帧不一定会触发修改，主线程可能还被占据着
+
+
 
 
 

@@ -1,5 +1,9 @@
 ### 为了不阻塞渲染使用requestIdleCallback进行分时任务
 
+requestIdleCallback 任务只在一帧的空闲时间执行任务，防止阻塞主线程造成卡顿
+
+若当前帧的空闲时间结束，则暂停批量任务时间，让出主线程，让页面的渲染变的丝滑
+
 
 
 首先明确requestIdleCallback是 `render`（渲染）完后这一帧如果还有剩余空闲时间，才会调用 requestIdleCallback 的任务，属于低优先级任务
@@ -8,7 +12,13 @@
 
 
 
-如果是耗时任务，使用 setTimeout 延迟执行（渲染都完成才去执行）
+如果是耗时任务，也可以使用 setTimeout 延迟执行（渲染都完成才去执行）区别setTimeout 很难判断页面渲染都完成
+
+
+
+大量计算的，不涉及DOM的，可以使用 new  worker 去执行（）区别worker 不能涉及DOM
+
+
 
 
 
@@ -39,17 +49,78 @@ setTimeout(function () {
 
 上传日志是耗时的网络请求，setTimeout 延迟执行第一层确保不影响渲染，加上requestIdleCallback第二层保险
 
-缺点：
-
-如果setTimeout 延迟执行加上requestIdleCallback之后有渲染帧（交互产生的渲染帧），上传日志的耗时操作就会影响到下一帧
-
-所以有说法requestIdleCallback不适合做一些耗时的长任务
-
 ```js
 setTimeout(() => {
   requestIdleCallback(() => console.log(1))
 }, 1000)
 ```
+
+
+
+### 主要用法
+
+```js
+requestIdleCallback((idle) => {
+    // idle.timeRemaining() > 0 表示有空闲时间 
+    // 第一次进入肯定是空闲的：idle.timeRemaining() > 0 = true
+    // while循环就是执行完这次任务，还剩空闲时间 ，可以继续执行任务
+    // 如果怕极限值，可以idle.timeRemaining() > 1 （以毫秒为单位，1毫秒对应计算来说是很长的）
+    while (idle.timeRemaining() > 0 || idle.didTimeout) {
+        // 执行耗时任务
+        console.log('执行任务', i)
+    }
+	
+})
+```
+
+
+
+
+
+### 使用场景
+
+**1. 埋点日志相关**
+
+配合 setTimeout 延迟执行第一层确保不影响渲染，加上requestIdleCallback第二层保险
+
+```
+setTimeout(() => {
+  requestIdleCallback(() => console.log(1))
+}, 1000)
+```
+
+**2. 预加载CSS，JS**
+
+```js
+function prefetch(entry: Entry, opts?: ImportEntryOpts): void {
+  if (!navigator.onLine || isSlowNetwork) {
+    // Don't prefetch if in a slow network or offline
+    return;
+  }
+
+  // 异步加载js 和 css  
+  requestIdleCallback(async () => {
+    const { getExternalScripts, getExternalStyleSheets } = await importEntry(entry, opts);
+    
+    requestIdleCallback(getExternalStyleSheets);
+    requestIdleCallback(getExternalScripts);
+  });
+}
+```
+
+**3. 首次渲染屏卡顿的情况**
+
+当你有一些非必须立刻执行的代码时，比如初始化某些非关键的UI组件
+
+可以使用 `requestIdleCallback` 来推迟这些任务的执行
+
+例如：
+
+页面有很多用户的评论要处理完毕后才能看到内容，首次渲染时间就会因为等待处理而变的卡顿
+
+将评论处理分解多个小任务，利用`requestIdleCallback` 在浏览器空闲的时候去执行，避免一次性处理导致的主线程阻塞
+
+
 
 
 
