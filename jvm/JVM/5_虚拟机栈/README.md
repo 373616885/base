@@ -438,7 +438,7 @@ Java中任何一个普通的方法其实都具备虚函数的特征，它们相�
 
 - invokestatic：调用静态方法，解析阶段确定唯一方法版本
 - invokespecial：调用<init>方法、私有及父类方法，解析阶段确定唯一方法版本
-- invokevirtual：调用所有虚方法
+- invokevirtual：调用对象的实例方法
 - invokeinterface：调用接口方法
 
 #### 动态调用指令：
