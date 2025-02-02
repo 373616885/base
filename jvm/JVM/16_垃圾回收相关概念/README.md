@@ -348,6 +348,9 @@ Object obj = new Object();
 // 创建一个软引用
 SoftReference<Object> sf = new SoftReference<>(obj);
 obj = null; //销毁强引用，这是必须的，不然会存在强引用和软引用
+
+// 别的地方使用
+System.out.println(sf.get());
 ```
 
 ## 再谈引用：弱引用
@@ -370,6 +373,10 @@ Object obj = new Object();
 // 创建一个弱引用
 WeakReference<Object> sf = new WeakReference<>(obj);
 obj = null; //销毁强引用，这是必须的，不然会存在强引用和弱引用
+
+
+// 别的地方使用
+System.out.println(sf.get());
 ```
 
 弱引用对象与软引用对象的最大不同就在于，当GC在进行回收时，需要通过算法检查是否回收软引用对象，而对于弱引用对象，GC总是进行回收。弱引用对象更容易、更快被GC回收。
