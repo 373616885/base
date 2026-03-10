@@ -145,3 +145,5 @@ ifconfig
 
 
 ### 使用 MobaXterm 登录
+
+### 使用 WindTerm 登录
