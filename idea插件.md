@@ -89,6 +89,10 @@ https://github.com/manifold-systems/manifold
 
 Manifold 的原理和 Lombok 是类似的
 
+Lombok有一个注解叫@ExtendMethod 也可以实现的
+
+
+
 ## Spring Boot Assistant  ：spring boot 配置文件和注解的提示
 
 https://github.com/flikas/idea-spring-boot-assistant
@@ -383,7 +387,7 @@ Inspection profile→...
 
 
 
-### IntelliJ IDEA小技巧之代码折叠
+## IntelliJ IDEA小技巧之代码折叠
 
 //**region** 
 
